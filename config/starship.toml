@@ -1,0 +1,42 @@
+# https://starship.rs/config
+
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+###################################################################################################
+# Line Break
+###################################################################################################
+[line_break]
+
+#disabled = true
+disabled = false
+
+###################################################################################################
+# Directory
+###################################################################################################
+[directory]
+
+# Whether or not to truncate to the root of the git repo that you're currently in.
+truncate_to_repo = false
+
+# The symbol indicating current directory is read only.
+read_only = "🔒"
+
+# The style for the read only symbol.
+read_only_style = "red"
+
+# The symbol to prefix to truncated paths. eg: "…/"
+truncation_symbol = ""
+
+# The symbol indicating home directory.
+home_symbol = "~"
+
+###################################################################################################
+# Git Branch
+###################################################################################################
+[git_branch]
+
+# A format string representing the symbol of git branch.
+#symbol = " "
+symbol = ""
+

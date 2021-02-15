@@ -1,0 +1,9 @@
+[submodule "scripts/backupScript"]
+	path = scripts/backupScript
+	url = git@github.com:bzgec/backupScript.git
+[submodule "scripts/nvim"]
+	path = scripts/nvim
+	url = git@github.com:bzgec/nvim.git
+[submodule "wallpapers-collection"]
+	path = wallpapers-collection
+	url = git@github.com:bzgec/wallpapers-collection.git
