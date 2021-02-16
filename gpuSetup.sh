@@ -13,4 +13,4 @@ xrandr --setprovideroutputsource modesetting NVIDIA-0
 xrandr --auto
 """ >> /etc/lightdm/display_setup.sh
 sudo chmod +x /etc/lightdm/display_setup.sh
-sudo sed 's/#display-setup-script=/display-setup-script=/etc/lightdm/display_setup.sh/' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#display-setup-script=/display-setup-script=/etc/lightdm/display_setup.sh/' /etc/lightdm/lightdm.conf

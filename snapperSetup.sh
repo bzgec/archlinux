@@ -24,12 +24,15 @@ sudo chown :bzgec /.snapshots
 
 # Add user + change limits for snapshots to keep
 read -p "Enter user: " user
-sudo sed 's/ALLOW_USERS=""/ALLOW_USERS="'$user'"' /etc/snapper/configs/root
-sudo sed 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"' /etc/snapper/configs/root
-sudo sed 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"' /etc/snapper/configs/root
-sudo sed 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"' /etc/snapper/configs/root
-sudo sed 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"' /etc/snapper/configs/root
-sudo sed 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"' /etc/snapper/configs/root
+echo $user
+addUserSedCmd="s/ALLOW_USERS=\"\"/ALLOW_USERS=\"${user}\"/"
+echo $addUserSedCmd
+sudo sed -i $addUserSedCmd /etc/snapper/configs/root
+sudo sed -i 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"/' /etc/snapper/configs/root
+sudo sed -i 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"/' /etc/snapper/configs/root
+sudo sed -i 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"/' /etc/snapper/configs/root
+sudo sed -i 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"/' /etc/snapper/configs/root
+sudo sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /etc/snapper/configs/root
 
 sudo systemctl enable --now snapper-timeline.timer
 sudo systemctl enable --now snapper-cleanup.timer
