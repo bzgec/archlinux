@@ -1,5 +1,5 @@
 # /bin/bash
 
 mkdir -p ~/.config
-cp -r config/* ~/.config/
+cp dotfiles/* ~/
 cp -r scripts/nvim ~/.config/
