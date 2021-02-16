@@ -66,12 +66,16 @@ Section "InputClass"
         Identifier "libinput touchpad catchall"
         MatchIsTouchpad "on"
         MatchDevicePath "/dev/input/event*"
-        Option "NaturalScrolling" "true"
         Driver "libinput"
+        Option "NaturalScrolling" "true"
+        Option "Tapping" "on"
+        Option "DisableWhileTyping" "on"
 EndSection
 ```
 
 ### Brightness control with xbacklight
+If you don't have permission check [arch wiki](https://wiki.archlinux.org/index.php/Backlight)
+(know that user must be in `video` group (`usermod -aG video <user>`))
 If you get `No outputs have backlight property` error when running it `xbacklight`.
 - Add `/usr/share/X11/xorg.conf.d/50-backlight.conf`
 ```

@@ -13,7 +13,7 @@ sudo pacman $pacmanParams amd-ucode
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
-sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen
+sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen acpilight picom
 
 # Window manager - awesome
 echo "####################################################################################"

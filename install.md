@@ -86,19 +86,19 @@ Note that for installation you need internet connection
     127.0.1.1    arch.localdomain arch
     ```
 19. Create root password: `passwd`, enter root password
---20. Add user to groups (in order to use `sudo`...): `usermod -aG wheel,audio,video,optical,storage bzgec`
-21. `pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bluez bluez-utils pulseaudio-bluetooth reflector snapper`
-22. Btrfs only:
+20. `pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bluez bluez-utils pulseaudio-bluetooth reflector snapper`
+21. Btrfs only:
     1. Add `btrfs` into modules in `vim /etc/mkinitcpio.conf` file (`MODULES=(btrfs)`)
     2. Recreate kernel image with btrfs module included: `mkinitcpio -p linux`
-23. Init grub: `grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB`
-24. Generate grub configuration: `grub-mkconfig -o /boot/grub/grub.cfg`
+22. Init grub: `grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB`
+23. Generate grub configuration: `grub-mkconfig -o /boot/grub/grub.cfg`
     (you should see Linux and Windows 10 images)
-25. Enable previously installed packages:
+24. Enable previously installed packages:
     1. `systemctl enable NetworkManager`
     2. `systemctl enable bluetooth`
     3. `systemctl enable wpa_supplicant`
-26. Create user: `useradd -mG wheel bzgec`, `passwd bzgec`, enter password
+25. Create user: `useradd -mG wheel bzgec`, `passwd bzgec`, enter password
+26. Add user to groups: `usermod -aG wheel,audio,video,optical,storage bzgec`
 27. Add user to use sudo privileges: `EDITOR=vim visudo`, uncomment line `%wheel ALL=(ALL) ALL`
 28. `exit`
 29. `unmount -R /mnt`

@@ -629,7 +629,7 @@ globalkeys = my_table.join(
     ),
 
     -- xrandr monitor selection
-    awful.key({ modkey, "Control" }, "m", function() xrandr.xrandr() end, 
+    awful.key({ modkey, "Control" }, "m", function() xrandr.xrandr() end,
               {description = "Select monitor setup", group = "Hotkeys"}
     ),
 
@@ -933,12 +933,15 @@ client.connect_signal("focus",
                       function(c)
                           c.border_color = beautiful.border_focus
                           c.opacity = 1
-                      end)
+                      end
+)
+
 client.connect_signal("unfocus",
                       function(c)
                           c.border_color = beautiful.border_normal
                           c.opacity = 0.8
-                      end)
+                      end
+)
 
 -- Show titlebar only for floating windows
 --client.connect_signal("property::floating", function(c)
@@ -958,7 +961,7 @@ local wallpapersCollectionPath = string.format("%s/wallpapers-collection", os.ge
 
 -- Autostart Applications
 awful.spawn.with_shell("setxkbmap -layout 'si,us'")
-awful.spawn.with_shell("compton")
+awful.spawn.with_shell("picom")
 --awful.spawn.with_shell("nitrogen --restore")
 --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
 awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
