@@ -77,8 +77,9 @@ Note that for installation you need internet connection
     `echo "LANG=en_US.UTF-8" >> /etc/locale.conf`)
 16. Make Arch Linux remember keyboard layout: `vim /etc/vconsole.conf`, enter `KEYMAP=slovene.map.gz`
     (or simpler: `echo "KEYMAP=slovene.map.gz" >> /etc/vconsole.conf`)
-17. Create hostname: `vim /etc/hostname`, input just the hostname: `arch`
-18. Add hostname to hosts: `nano /etc/hosts`, add this lines:
+17. Create hostname: `vim /etc/hostname`, input just the hostname: `arch` (or simpler:
+    `echo "arch" >> /etc/hostname`)
+18. Add hostname to hosts: `vim /etc/hosts`, add this lines:
     ```
     127.0.0.1    localhost
     ::1          localhost
@@ -86,17 +87,17 @@ Note that for installation you need internet connection
     ```
 19. Create root password: `passwd`, enter root password
 --20. Add user to groups (in order to use `sudo`...): `usermod -aG wheel,audio,video,optical,storage bzgec`
-21. `pacman -S sudo grub networkmanager networkmanager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bluez bluez-utils pulseaudio-bluetooth reflector snapper`
+21. `pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bluez bluez-utils pulseaudio-bluetooth reflector snapper`
 22. Btrfs only:
     1. Add `btrfs` into modules in `vim /etc/mkinitcpio.conf` file (`MODULES=(btrfs)`)
     2. Recreate kernel image with btrfs module included: `mkinitcpio -p linux`
 23. Init grub: `grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB`
 24. Generate grub configuration: `grub-mkconfig -o /boot/grub/grub.cfg`
-    (you should see linux and Windows 10 images)
+    (you should see Linux and Windows 10 images)
 25. Enable previously installed packages:
     1. `systemctl enable NetworkManager`
     2. `systemctl enable bluetooth`
-    3. `systemctl enable wpa_supplicant.service`
+    3. `systemctl enable wpa_supplicant`
 26. Create user: `useradd -mG wheel bzgec`, `passwd bzgec`, enter password
 27. Add user to use sudo privileges: `EDITOR=vim visudo`, uncomment line `%wheel ALL=(ALL) ALL`
 28. `exit`
