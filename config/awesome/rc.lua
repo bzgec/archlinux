@@ -22,6 +22,7 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
                       require("awful.hotkeys_popup.keys")
 local my_table      = awful.util.table or gears.table -- 4.{0,1} compatibility
 local dpi           = require("beautiful.xresources").apply_dpi
+local xrandr        = require("xrandr")
 -- }}}
 
 -- {{{ Error handling
@@ -91,12 +92,12 @@ local themes = {
 local chosen_theme = themes[9]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
-local terminal     = "x-terminal-emulator"
+local terminal     = "alacritty"
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
-local editor       = os.getenv("EDITOR") or "vim"
+local editor       = os.getenv("EDITOR") or "nvim"
 local gui_editor   = os.getenv("GUI_EDITOR") or "gvim"
-local browser      = os.getenv("BROWSER") or "firefox"
+local browser      = os.getenv("BROWSER") or "brave"
 local scrlocker    = "slock"
 
 awful.util.terminal = terminal
@@ -597,15 +598,15 @@ globalkeys = my_table.join(
         {description = "show rofi", group = "launcher"}),
     --]]
 
-    -- Dmenu
+    -- Application launcher
     awful.key({ modkey }, "r",
-              function () awful.util.spawn("dmenu_run") end,
-              {description = "run dmenu", group = "launcher"}
+              function () awful.util.spawn("rofi -show drun -show-icons") end,
+              {description = "run rofi", group = "launcher"}
     ),
 
     -- Brave browser
     awful.key({ modkey }, "b",
-              function () awful.util.spawn("brave-browser") end,
+              function () awful.util.spawn("brave") end,
               {description = "run browser (Brave)", group = "Applications"}
     ),
 
@@ -625,6 +626,11 @@ globalkeys = my_table.join(
     awful.key({ altkey, "Shift" }, "s",
               function () awful.util.spawn("flameshot gui") end,
               {description = "screenshot software (flameshot)", group = "Applications"}
+    ),
+
+    -- xrandr monitor selection
+    awful.key({ modkey, "Control" }, "m", function() xrandr.xrandr() end, 
+              {description = "Select monitor setup", group = "Hotkeys"}
     ),
 
     awful.key({ modkey }, "x",
