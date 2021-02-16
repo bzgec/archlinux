@@ -111,6 +111,7 @@ Note that for installation you need internet connection
     5. Disconnect network: `nmcli device disconnect [DEVICE]`
     6. Re-connect with a network: `nmcli connection show`
     7. Disable WiFi: `nmcli radio wifi off`
+32. Clone other automated Arch linux setup: `git clone https://github.com/bzgec/archlinux.git && cd archlinux && git submodule update --init --recursive`
 
 ### References
 - [video - Arch Linux Installation Guide 2020](https://www.youtube.com/watch?v=PQgyW10xD8s)
