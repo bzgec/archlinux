@@ -13,5 +13,4 @@ xrandr --setprovideroutputsource modesetting NVIDIA-0
 xrandr --auto
 """ >> /etc/lightdm/display_setup.sh
 sudo chmod +x /etc/lightdm/display_setup.sh
-sudo echo "display-setup-script=/etc/lightdm/display_setup.sh" >> /etc/lightdm/lightdm.conf
-sudo echo "greeter-session=webkit2-greeter" >> /etc/lightdm/lightdm.conf
+sudo sed 's/#display-setup-script=/display-setup-script=/etc/lightdm/display_setup.sh/' /etc/lightdm/lightdm.conf

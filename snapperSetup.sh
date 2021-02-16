@@ -22,23 +22,14 @@ sudo chmod 750 /.snapshots
 sudo chmod a+rx /.snapshots
 sudo chown :bzgec /.snapshots
 
-echo 'Add your user to `ALLOW_USERS=""` -> `ALLOW_USERS="bzgec"'
-echo 'Define how many snapshots you want to keep in the system -> change `TIMELINE_LIMIT...`'
-echo '''
-TIMELINE_MIN_AGE="1800"
-TIMELINE_LIMIT_HOURLY="5"
-TIMELINE_LIMIT_DAILY="7"
-TIMELINE_LIMIT_WEEKLY="0"
-TIMELINE_LIMIT_MONTHLY="0"
-TIMELINE_LIMIT_YEARLY="0"
-'''
-read -p "You understand?" yn
-case $yn in
-    [Yy]* ) ;;
-    [Nn]* ) exit;;
-    * ) echo "Please anwser yes or no.";;
-esac
-sudo vim /etc/snapper/configs/root
+# Add user + change limits for snapshots to keep
+read -p "Enter user: " user
+sudo sed 's/ALLOW_USERS=""/ALLOW_USERS="'$user'"' /etc/snapper/configs/root
+sudo sed 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"' /etc/snapper/configs/root
+sudo sed 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"' /etc/snapper/configs/root
+sudo sed 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"' /etc/snapper/configs/root
+sudo sed 's/TIMELINE_LIMIT_MONTHLY="10"/TIMELINE_LIMIT_MONTHLY="0"' /etc/snapper/configs/root
+sudo sed 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"' /etc/snapper/configs/root
 
 sudo systemctl enable --now snapper-timeline.timer
 sudo systemctl enable --now snapper-cleanup.timer

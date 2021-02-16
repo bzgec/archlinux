@@ -31,8 +31,9 @@ sudo pacman $pacmanParams alacritty
 echo "####################################################################################"
 echo "Display manager"
 echo "####################################################################################"
-sudo pacman $pacmanParams lightdm-webkit2-greeter lightdm-webkit-theme-litarvan
+sudo pacman $pacmanParams xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan
 systemctl enable lightdm
+sudo sed 's/#greeter-sesstoin=example-gtk-gnome/greeter-session=webkit2-greeter/' /etc/lightdm/lightdm.conf
 
 # AUR helper
 echo "####################################################################################"
