@@ -1,45 +1,43 @@
-# /bin/bash
+#!/bin/sh
+pacmanParams="-S --needed --noconfirm"
+
 
 sudo pacman -Syy
 
-sudo pacman -S --needed base-devel
+sudo pacman $pacmanParams base-devel
 
 # Microcode
-#sudo pacman -S --needed amd-ucode
+sudo pacman $pacmanParams amd-ucode
 
 # Random stuff
 echo "####################################################################################"
 echo "Random stuff"
-sudo pacman -S --needed rsync rofi openssh xclip nitrogen
+echo "####################################################################################"
+sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen
 
 # Window manager - awesome
 echo "####################################################################################"
 echo "Window manager"
-sudo pacman -S xorg-server awesome
+echo "####################################################################################"
+sudo pacman $pacmanParams xorg-server awesome
 
 # Terminal emulator - Alacritty
 echo "####################################################################################"
 echo "Terminal emulator"
-sudo pacman -S --needed alacritty
+echo "####################################################################################"
+sudo pacman $pacmanParams alacritty
 
 # Display manager - LightDhttps://wiki.archlinux.org/index.php/DiscordM
 echo "####################################################################################"
 echo "Display manager"
-sudo pacman -S --needed lightdm-webkit2-greeter lightdm-webkit-theme-litarvan
+echo "####################################################################################"
+sudo pacman $pacmanParams lightdm-webkit2-greeter lightdm-webkit-theme-litarvan
 systemctl enable lightdm
-
-# https://wiki.archlinux.org/index.php/NVIDIA_Optimus#LightDM
-sudo echo """#!/bin/sh
-xrandr --setprovideroutputsource modesetting NVIDIA-0
-xrandr --auto
-""" >> /etc/lightdm/display_setup.sh
-sudo chmod +x /etc/lightdm/display_setup.sh
-sudo echo "display-setup-script=/etc/lightdm/display_setup.sh" >> /etc/lightdm/lightdm.conf
-sudo echo "greeter-session=webkit2-greeter" >> /etc/lightdm/lightdm.conf
 
 # AUR helper
 echo "####################################################################################"
 echo "AUR helper"
+echo "####################################################################################"
 git clone https://aur.archlinux.org/paru.git ~/paru
 cd ~/paru
 makepkg -si
@@ -50,55 +48,60 @@ cd -
 # Terminal code editor - nigltly neovim
 echo "####################################################################################"
 echo "Terminal code editor - nightly neovim"
-paru -S --needed neovim-nightly-bin
+echo "####################################################################################"
+paru $pacmanParams neovim-nightly-bin
 
 # Shell prompt
 echo "####################################################################################"
 echo "Shell prompt"
-paru -S --needed starship
+echo "####################################################################################"
+paru $pacmanParams starship
 
 # Browser
 echo "####################################################################################"
 echo "Browser"
-paru -S --needed brave-bin
+echo "####################################################################################"
+paru $pacmanParams brave-bin
 
 # GUI file manager
 echo "####################################################################################"
 echo "GUI file manager"
-sudo pacman -S --needed pcmanfm
+echo "####################################################################################"
+sudo pacman $pacmanParams pcmanfm
 
 # GUI code editor
 echo "####################################################################################"
 echo "GUI code editor"
-paru -S --needed vscodium-bin
-sudo pacman -S --needed notepadqq
+echo "####################################################################################"
+paru $pacmanParams vscodium-bin
+sudo pacman $pacmanParams notepadqq
 
 # Media programs
 echo "####################################################################################"
 echo "Media programs"
-sudo pacman -S --needed vlc obs-studio peek flameshot
-
-# Other
 echo "####################################################################################"
-echo "Other"
-sudo pacman -S --needed redshift python-gobject qbittorrent element-desktop discord
+sudo pacman $pacmanParams vlc obs-studio peek flameshot
 
-# GPU stuff
+# Other (python-gobject is needed by redshift-gtk)
 echo "####################################################################################"
-echo "GPU stuff"
-sudo pacman -S --needed nvidia nvidia-utils nvidia-settings
-sudo pacman -S --needed nvidia-prime
-paru -S --needed optimus-manager optimus-manager-qt
+echo "Other GUI apps"
+echo "####################################################################################"
+sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord
 
 # Copy wallpapers collection
 echo "####################################################################################"
 echo "Copy wallpapers collection"
+echo "####################################################################################"
 cp -r ./wallpapers-collection ~/wallpapers-collection
 
-# Fix some snapper stuff (btrfs)
+# Setup snapper (btrfs)
+echo "####################################################################################"
+echo "Setup snapper"
+echo "####################################################################################"
 bash ./snapperSetup.sh
 
 # Copy configuration files
 echo "####################################################################################"
 echo "Copy configuration files"
+echo "####################################################################################"
 bash ./copyConfig.sh

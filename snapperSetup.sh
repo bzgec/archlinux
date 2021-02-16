@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # https://www.youtube.com/watch?v=Xynotc9BKe8
 # https://wiki.archlinux.org/index.php/snapper
 
