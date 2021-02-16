@@ -27,7 +27,7 @@ NUCLEO_UART_115200() {
 }
 
 git_log() {
-  git log --pretty=format:'%C(yellow)%h %Cred%ad %C(cyan)%an%C(auto
+  git log --pretty=format:'%C(yellow)%h %Cred%ad %C(cyan)%an%C(auto)%d %C(reset)%s' --date=format:'%Y/%m/%d %H:%M:%S' --all --graph
 }
 
 # Set `w` to set new background picture
