@@ -13,7 +13,7 @@ sudo pacman $pacmanParams amd-ucode
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
-sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen acpilight picom
+sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen acpilight picom sxiv
 
 # Window manager - awesome
 echo "####################################################################################"
@@ -90,6 +90,15 @@ echo "##########################################################################
 echo "Other GUI apps"
 echo "####################################################################################"
 sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord
+
+# Compress and archive apps
+# https://wiki.archlinux.org/index.php/Archiving_and_compression
+# handle files - https://wiki.archlinux.org/index.php/P7zip
+# GUI only - https://archlinux.org/packages/community/x86_64/xarchiver/
+echo "####################################################################################"
+echo "Compress and archive apps"
+echo "####################################################################################"
+sudo pacman $pacmanParams p7zip xarchiver
 
 # Copy wallpapers collection
 echo "####################################################################################"
