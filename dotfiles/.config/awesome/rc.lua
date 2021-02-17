@@ -892,7 +892,11 @@ awful.rules.rules = {
     { rule = { instance = "snappergui" },
           properties = { floating = true } },
     { rule = { instance = "Steam" },
-          properties = { floating = true } },
+          properties = { floating = true, tag = "5", switchtotag = false } },
+    { rule = { instance = "vscodium" },
+          properties = { tag = "2", switchtotag = true } },
+    { rule = { instance = "brave-browser" },
+          properties = { tag = "1", switchtotag = true } },
 }
 -- }}}
 
