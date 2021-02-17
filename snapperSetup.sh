@@ -17,7 +17,6 @@ sudo mkdir /.snapshots
 sudo mount -a
 sudo chmod 750 /.snapshots
 
-
 # Enable users to view snapshots
 sudo chmod a+rx /.snapshots
 sudo chown :bzgec /.snapshots
@@ -66,3 +65,9 @@ case $yn in
     * ) echo "Please anwser yes or no.";;
 esac
 sudo vim /etc/mkinitcpio.conf
+
+
+
+
+# Enable snapshots for /home subvolume
+sudo snapper -c home create-config /home
