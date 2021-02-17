@@ -88,6 +88,31 @@ EndSection
 [This](https://askzorin.com/t/error-while-setting-up-custom-brightness-keys-with-xbacklight/105/3) link helped me.
 I had `/sys/class/backlight/intel_backlight`.
 
+### Can't control sound with amixer
+My error was: `amixer: Unable to find simple control 'Master',0`
+1. Print available cards: `cat /proc/asound/cards`
+```
+/proc/asound/cards
+---------------------------------------------------------------
+ 0 [NVidia         ]: HDA-Intel - HDA NVidia
+                      HDA NVidia at 0xd1000000 irq 96
+ 1 [Generic        ]: HDA-Intel - HD-Audio Generic
+                      HD-Audio Generic at 0xd15c0000 irq 97
+```
+   We can see that our card is `1` and not `0`
+
+2. Edit `/usr/share/alsa/alsa.conf` and change `defaults.ctl.card` and `defaults.pcm.card`:
+   (previously it was `0` now set it to `1`)
+```
+/usr/share/alsa/alsa.conf
+----------------------------------
+defaults.ctl.card 1
+defaults.pcm.card 1
+```
+#### Resources
+- [askubuntu.com](https://askubuntu.com/a/673334)
+- [bss.asrchlinux.org - Alsa audio won't work](https://bbs.archlinux.org/viewtopic.php?id=200806)
+
 
 ## Using
 ### pacman
