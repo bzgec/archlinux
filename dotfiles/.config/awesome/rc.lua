@@ -884,6 +884,15 @@ awful.rules.rules = {
 
     { rule = { class = "Gimp", role = "gimp-image-window" },
           properties = { maximized = true } },
+
+    -- https://awesomewm.org/doc/api/libraries/awful.rules.html
+    -- To get `instance` of a window use: `xprop | grep "WM_CLASS(STRING)"`
+    -- First string is `instance` and the second is `class`
+    -- https://www.reddit.com/r/awesomewm/comments/2kxmph/where_do_you_get_the_instance_name_of_a_client/clpwrdz?utm_source=share&utm_medium=web2x&context=3
+    { rule = { instance = "snappergui" },
+          properties = { floating = true } },
+    { rule = { instance = "Steam" },
+          properties = { floating = true } },
 }
 -- }}}
 
@@ -994,7 +1003,27 @@ awful.spawn.with_shell("picom")
 --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
 awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
 awful.spawn.with_shell("setxkbmap -option caps:backspace")
-awful.spawn.with_shell("redshift-gtk -P")
+
+cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
+cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
+awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
+    function(out)
+        if(out == "1") then
+            -- No active redshift-gtk
+        else
+            -- Active redshift-gtk - kill old one and start new
+            -- Get PID
+            awful.spawn.easy_async_with_shell(cmd_getActiveRedshiftPID,
+                function(out)
+                    -- Kill old redshift
+                    awful.spawn.with_shell("kill "..out)
+                end
+            )
+        end
+
+        awful.spawn.with_shell("redshift-gtk -P")
+    end
+)
 
 -- possible workaround for tag preservation when switching back to default screen:
 -- https://github.com/lcpz/awesome-copycats/issues/251
