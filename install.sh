@@ -13,7 +13,8 @@ sudo pacman $pacmanParams amd-ucode
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
-sudo pacman $pacmanParams rsync rofi openssh xclip nitrogen acpilight picom sxiv
+sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv
+sudo pacman $pacmanParams rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper
 
 # Window manager - awesome
 echo "####################################################################################"

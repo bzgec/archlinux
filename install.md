@@ -86,7 +86,7 @@ Note that for installation you need internet connection
     127.0.1.1    arch.localdomain arch
     ```
 19. Create root password: `passwd`, enter root password
-20. `pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bluez bluez-utils pulseaudio-bluetooth reflector snapper`
+20. `pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git`
 21. Btrfs only:
     1. Add `btrfs` into modules in `vim /etc/mkinitcpio.conf` file (`MODULES=(btrfs)`)
     2. Recreate kernel image with btrfs module included: `mkinitcpio -p linux`
