@@ -651,7 +651,7 @@ globalkeys = my_table.join(
     ),
 
     -- Screenshot software
-    awful.key({ altkey, "Shift" }, "s",
+    awful.key({ modkey, "Shift" }, "s",
               function () awful.util.spawn("flameshot gui") end,
               {description = "screenshot software (flameshot)", group = "Applications"}
     ),
@@ -1028,6 +1028,9 @@ awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
         awful.spawn.with_shell("redshift-gtk -P")
     end
 )
+
+awful.spawn.with_shell("sudo mount /dev/sda1 /home/bzgec/SlimBoi")
+
 
 -- possible workaround for tag preservation when switching back to default screen:
 -- https://github.com/lcpz/awesome-copycats/issues/251

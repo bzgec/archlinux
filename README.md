@@ -55,6 +55,11 @@ My ArchLinux setup...
 - `setxkbmap -option caps:backspace`
 - automatically ran on startup
 
+### Second keyboard doesn't have the same layout
+- get the device number: `libinput list-devices`
+  (the number after `/dev/input/event`)
+- set new keyboard layout: `setxkbmap -device [device_number] si`
+
 ### Get key events/codes
 - `xev` (xorg-xev package)
 
