@@ -497,6 +497,27 @@ globalkeys = my_table.join(
               end,
               {description = "Volume control - mute (amixer)", group = "Hotkeys"}
     ),
+    awful.key({ }, "XF86AudioRaiseVolume",
+              function ()
+                  os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
+                  beautiful.volume.update()
+              end,
+              {description = "+1%", group = "Hotkeys"}
+    ),
+    awful.key({ }, "XF86AudioLowerVolume",
+              function ()
+                  os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
+                  beautiful.volume.update()
+              end,
+              {description = "-1%", group = "Hotkeys"}
+    ),
+    -- TODO add other controls
+    -- https://www.reddit.com/r/awesomewm/comments/7wlej1/newbie_media_keys_and_audio_managment_problems/
+    --awful.key({}, "XF86AudioMute", function() os.execute("pactl set-sink-mute 0 toggle") end),
+    --awful.key({ }, "XF86AudioNext", function () awful.spawn("cmus-remote -n") end),
+    --awful.key({ }, "XF86AudioPrev", function () awful.spawn("cmus-remote -r") end),
+    --awful.key({ }, "XF86AudioPlay", function () awful.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") end),
+
 
     -- Brightness control:
     --   - increase - PgUp
@@ -519,10 +540,12 @@ globalkeys = my_table.join(
               function () awful.util.spawn("xbacklight -set 100") end,
               {description = "Bightness control - maximal (xbacklight)", group = "Hotkeys"}
     ),
-    awful.key({ }, "XF86MonBrightnessUp", function () os.execute("xbacklight -inc 10") end,
-              {description = "+10%", group = "Hotkeys"}),
-    awful.key({ }, "XF86MonBrightnessDown", function () os.execute("xbacklight -dec 10") end,
-              {description = "-10%", group = "Hotkeys"}),
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 10") end,
+              {description = "+10%", group = "Hotkeys"}
+    ),
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 10") end,
+              {description = "-10%", group = "Hotkeys"}
+    ),
 
     -- MPD control
     awful.key({ altkey, "Control" }, "Up",
@@ -530,25 +553,29 @@ globalkeys = my_table.join(
             os.execute("mpc toggle")
             beautiful.mpd.update()
         end,
-        {description = "mpc toggle", group = "widgets"}),
+        {description = "mpc toggle", group = "widgets"}
+    ),
     awful.key({ altkey, "Control" }, "Down",
         function ()
             os.execute("mpc stop")
             beautiful.mpd.update()
         end,
-        {description = "mpc stop", group = "widgets"}),
+        {description = "mpc stop", group = "widgets"}
+    ),
     awful.key({ altkey, "Control" }, "Left",
         function ()
             os.execute("mpc prev")
             beautiful.mpd.update()
         end,
-        {description = "mpc prev", group = "widgets"}),
+        {description = "mpc prev", group = "widgets"}
+    ),
     awful.key({ altkey, "Control" }, "Right",
         function ()
             os.execute("mpc next")
             beautiful.mpd.update()
         end,
-        {description = "mpc next", group = "widgets"}),
+        {description = "mpc next", group = "widgets"}
+    ),
     awful.key({ altkey }, "0",
         function ()
             local common = { text = "MPD widget ", position = "top_middle", timeout = 2 }
@@ -561,7 +588,8 @@ globalkeys = my_table.join(
             end
             naughty.notify(common)
         end,
-        {description = "mpc on/off", group = "widgets"}),
+        {description = "mpc on/off", group = "widgets"}
+    ),
 
     -- Copy primary to clipboard (terminals to gtk)
     awful.key({ modkey, "Shift" }, "c", function () awful.spawn.with_shell("xsel | xsel -i -b") end,

@@ -56,7 +56,7 @@ My ArchLinux setup...
 - automatically ran on startup
 
 ### Get key events/codes
-- `xev`
+- `xev` (xorg-xev package)
 
 ### Touchpad reverse scrolling direction
 - Edit `/usr/share/X11/xorg.conf.d/40-libinput.conf` and add
