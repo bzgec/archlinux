@@ -55,6 +55,9 @@ echo "Terminal code editor - nightly neovim"
 echo "####################################################################################"
 paru $pacmanParams neovim-nightly-bin
 
+# Set git editor to be nvim
+git config --global core.editor nvim
+
 # Shell prompt
 echo "####################################################################################"
 echo "Shell prompt"
