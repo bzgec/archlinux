@@ -118,6 +118,33 @@ defaults.pcm.card 1
 - [askubuntu.com](https://askubuntu.com/a/673334)
 - [bss.asrchlinux.org - Alsa audio won't work](https://bbs.archlinux.org/viewtopic.php?id=200806)
 
+### Mount disk at boot
+We are doing the right way - with `fstab`
+1. Get UUID of the disk: `ls -al /dev/disk/by-uuid/`
+2. Get file system format of the partition: `file -sL /dev/sd*`
+3. Configure `fstab` file: `sudo vim /etc/fstab`
+```
+/etc/fstab
+----------------------------------------------------------------------------------------------------
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/nvme0n1p3
+UUID=C25684FB5684F189	/win10    	ntfs      	rw,nosuid,nodev,user_id=0,group_id=0,allow_other,blksize=4096	0 0
+
+# /dev/nvme0n1p7
+UUID=20cce99b-5a1f-4e98-9a1e-351f31df1c4c	/home     	btrfs     	rw,noatime,compress=lzo,ssd,space_cache=v2,subvolid=257,subvol=/@home,subvol=@home	0 0
+
+# /dev/nvme0n1p6
+UUID=eb530593-0307-4678-a1f2-9c9065574950	none      	swap      	defaults  	0 0
+
+# /dev/sda1
+UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
+```
+#### Resources
+- [random post](https://confluence.jaytaala.com/display/TKB/Mount+drive+in+linux+and+set+auto-mount+at+boot)
+- [get partition (fs) format - unix.stackexchange.com](https://unix.stackexchange.com/a/60783)
 
 ## Using
 ### pacman

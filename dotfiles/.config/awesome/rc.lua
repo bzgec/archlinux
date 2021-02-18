@@ -1029,8 +1029,6 @@ awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
     end
 )
 
-awful.spawn.with_shell("sudo mount /dev/sda1 /home/bzgec/SlimBoi")
-
 
 -- possible workaround for tag preservation when switching back to default screen:
 -- https://github.com/lcpz/awesome-copycats/issues/251
