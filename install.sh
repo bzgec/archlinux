@@ -93,7 +93,8 @@ sudo pacman $pacmanParams vlc obs-studio peek flameshot
 echo "####################################################################################"
 echo "Other GUI apps"
 echo "####################################################################################"
-sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord
+sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord \
+                          qalculate-gtk libreoffice-fresh
 
 # Compress and archive apps
 # https://wiki.archlinux.org/index.php/Archiving_and_compression

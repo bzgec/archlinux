@@ -58,7 +58,7 @@ local function run_once(cmd_arr)
     end
 end
 
-run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
+--run_once({ "urxvtd", "unclutter -root" }) -- entries must be separated by commas
 
 -- This function implements the XDG autostart specification
 --[[
@@ -342,9 +342,9 @@ globalkeys = my_table.join(
     --          {description = "swap with next client by index", group = "client"}),
     --awful.key({ modkey, "Shift"   }, "k", function () awful.client.swap.byidx( -1)    end,
     --          {description = "swap with previous client by index", group = "client"}),
-    awful.key({ modkey, "Control" }, "j", function () awful.screen.focus_relative( 1) end,
+    awful.key({ modkey, }, "y", function () awful.screen.focus_relative( 1) end,
               {description = "focus the next screen", group = "screen"}),
-    awful.key({ modkey, "Control" }, "k", function () awful.screen.focus_relative(-1) end,
+    awful.key({ modkey, }, "x", function () awful.screen.focus_relative(-1) end,
               {description = "focus the previous screen", group = "screen"}),
     awful.key({ modkey,           }, "u", awful.client.urgent.jumpto,
               {description = "jump to urgent client", group = "client"}),
@@ -661,7 +661,14 @@ globalkeys = my_table.join(
               {description = "Select monitor setup", group = "Hotkeys"}
     ),
 
-    awful.key({ modkey }, "x",
+    -- Switch keyboard layout
+    awful.key({ modkey }, "BackSpace",
+              --function () awful.widget.keyboardlayout.next_layout() end,
+              function () mykeyboardlayout.next_layout() end,
+              {description = "Next keyboard layout", group = "Hotkeys"}
+    ),
+
+    awful.key({ modkey }, "g",
               function ()
                   awful.prompt.run {
                     prompt       = "Run Lua code: ",
@@ -738,7 +745,7 @@ clientkeys = my_table.join(
     ),
 
     -- Resize windows
-    awful.key({ modkey, "Control" }, "Up",
+    awful.key({ modkey, "Control" }, "k",
               function (c)
                   if c.floating then
                       c:relative_move( 0, 0, 0, -10)
@@ -748,7 +755,7 @@ clientkeys = my_table.join(
               end,
               {description = "Resize Vertical -", group = "client"}
     ),
-    awful.key({ modkey, "Control" }, "Down",
+    awful.key({ modkey, "Control" }, "j",
               function (c)
                   if c.floating then
                       c:relative_move( 0, 0, 0, 10)
@@ -758,7 +765,7 @@ clientkeys = my_table.join(
               end,
               {description = "Resize Vertical +", group = "client"}
     ),
-    awful.key({ modkey, "Control" }, "Left",
+    awful.key({ modkey, "Control" }, "h",
               function (c)
                   if c.floating then
                       c:relative_move( 0, 0, -10, 0)
@@ -768,7 +775,7 @@ clientkeys = my_table.join(
               end,
               {description = "Resize Horizontal -", group = "client"}
     ),
-    awful.key({ modkey, "Control" }, "Right",
+    awful.key({ modkey, "Control" }, "l",
               function (c)
                   if c.floating then
                       c:relative_move( 0, 0,  10, 0)
@@ -980,7 +987,7 @@ client.connect_signal("focus",
 client.connect_signal("unfocus",
                       function(c)
                           c.border_color = beautiful.border_normal
-                          c.opacity = 0.8
+                          c.opacity = 0.9
                       end
 )
 
@@ -1012,7 +1019,7 @@ cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
 cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
 awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
     function(out)
-        if(out == "1") then
+        if(out == "1" or out == "2" or out == "") then
             -- No active redshift-gtk
         else
             -- Active redshift-gtk - kill old one and start new
@@ -1020,6 +1027,7 @@ awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
             awful.spawn.easy_async_with_shell(cmd_getActiveRedshiftPID,
                 function(out)
                     -- Kill old redshift
+                    print("kill "..out)
                     awful.spawn.with_shell("kill "..out)
                 end
             )

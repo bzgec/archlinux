@@ -16,7 +16,7 @@ local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
 local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-my"
---theme.wallpaper                                 = theme.dir .. "/starwars.jpg"
+theme.wallpaper                                 = theme.dir .. "/starwars.jpg"
 theme.font                                      = "Mononoki Nerd Font 9"
 theme.taglist_font                              = "Droid Sans Bold 7"
 
@@ -83,10 +83,10 @@ theme.menu_width                                = dpi(140)
 --theme.layout_floating                           = theme.dir .. "/icons/layouts/floating.png"
 
 -- White icons
-theme.menu_submenu_icon                         = theme.dir .. "/icons/submenuw.png"
-theme.awesome_icon                              = theme.dir .. "/icons/awesomew.png"
-theme.taglist_squares_sel                       = theme.dir .. "/icons/square_selw.png"
-theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unselw.png"
+theme.menu_submenu_icon                         = theme.dir .. "/icons/submenu.png"
+theme.awesome_icon                              = theme.dir .. "/icons/awesome.png"
+theme.taglist_squares_sel                       = theme.dir .. "/icons/square_sel.png"
+theme.taglist_squares_unsel                     = theme.dir .. "/icons/square_unsel.png"
 theme.layout_tile                               = theme.dir .. "/icons/layouts/tilew.png"
 theme.layout_tileleft                           = theme.dir .. "/icons/layouts/tileleftw.png"
 theme.layout_tilebottom                         = theme.dir .. "/icons/layouts/tilebottomw.png"
@@ -179,6 +179,9 @@ local clock = awful.widget.watch(
         widget:set_markup(" " .. markup.font(theme.font, stdout))
     end
 )
+
+-- Keyboard map indicator and switcher
+mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- Calendar
 theme.cal = lain.widget.cal({
@@ -458,6 +461,7 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
+            mykeyboardlayout,
             --[[ using shapes
             pl(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, "#343434"),
             pl(task, "#343434"),
