@@ -175,3 +175,15 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
 
 ## Random
 **linux-lts** long term support kernel
+- [Multi-head, multi-screen, multi-display or multi-monitor](https://wiki.archlinux.org/index.php/Multihead)
+- Keyboard configuration:
+  - [Xorg](https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration) - only for Desktop
+    Environment
+  - [Linux console](https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration) -
+    only for virtual console
+
+## TODO list
+- Microphone ON/OFF
+- Fix bad DPI
+- Display GPU temperature
+- Widget for volume control, and play buttons

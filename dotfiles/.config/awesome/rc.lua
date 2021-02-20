@@ -1008,12 +1008,10 @@ beautiful.useless_gap = 2
 local wallpapersCollectionPath = string.format("%s/wallpapers-collection", os.getenv("HOME"))
 
 -- Autostart Applications
-awful.spawn.with_shell("setxkbmap -layout 'si,us'")
 awful.spawn.with_shell("picom")
 --awful.spawn.with_shell("nitrogen --restore")
 --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
 awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
-awful.spawn.with_shell("setxkbmap -option caps:backspace")
 
 cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
 cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"

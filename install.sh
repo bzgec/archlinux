@@ -16,6 +16,12 @@ echo "##########################################################################
 sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv
 sudo pacman $pacmanParams rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper
 
+echo "####################################################################################"
+echo "Copying xorg keyboard configuration files"
+echo "####################################################################################"
+# https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration
+sudo cp 00-keyboard.conf /etc/X11/xorg.conf.d/
+
 # Window manager - awesome
 echo "####################################################################################"
 echo "Window manager"
