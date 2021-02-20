@@ -181,6 +181,9 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
     Environment
   - [Linux console](https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration) -
     only for virtual console
+- Connect to WiFI - [Network Manager](https://wiki.archlinux.org/index.php/NetworkManager)
+  - `nmcli` - command line interface
+  - `nmtui` - ncurses base interface
 
 ## TODO list
 - Microphone ON/OFF
