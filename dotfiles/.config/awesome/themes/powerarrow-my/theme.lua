@@ -134,6 +134,8 @@ theme.widget_mail_on                            = theme.dir .. "/icons/mail_on.p
 theme.widget_task                               = theme.dir .. "/icons/task.png"
 theme.widget_scissors                           = theme.dir .. "/icons/scissors.png"
 theme.widget_weather                            = theme.dir .. "/icons/dish.png"
+theme.widget_micMuted                           = theme.dir .. "/icons/mic_muted.png"
+theme.widget_micUnmuted                         = theme.dir .. "/icons/mic_unmuted.png"
 --theme.tasklist_plain_task_name                  = true
 --theme.tasklist_disable_icon                     = true
 theme.tasklist_plain_task_name                  = false
@@ -179,6 +181,7 @@ local clock = awful.widget.watch(
         widget:set_markup(" " .. markup.font(theme.font, stdout))
     end
 )
+local widget_
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -267,6 +270,7 @@ theme.mpd = lain.widget.mpd({
         end
     end
 })
+local widget_mpd = wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
@@ -275,6 +279,7 @@ local mem = lain.widget.mem({
         widget:set_markup(markup.font(theme.font, " " .. mem_now.used .. "MB "))
     end
 })
+local widget_mem = wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
@@ -283,6 +288,7 @@ local cpu = lain.widget.cpu({
         widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
     end
 })
+local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }
 
 --[[ Coretemp (lm_sensors, per core)
 local tempwidget = awful.widget.watch({awful.util.shell, '-c', 'sensors | grep Core'}, 30,
@@ -295,13 +301,14 @@ function(widget, stdout)
 end)
 --]]
 -- Coretemp (lain, average)
+local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     settings = function()
         widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
     end
 })
 --]]
-local tempicon = wibox.widget.imagebox(theme.widget_temp)
+local widget_temp = wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }
 
 --[[ Weather
 https://openweathermap.org/
@@ -320,6 +327,7 @@ theme.weather = lain.widget.weather({
         widget:set_markup(markup.fontfg(theme.font, "#ffffff", descr .. " @ " .. units .. "°C "))
     end
 })
+local widget_weather = wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }
 
 --[[ / fs
 local fsicon = wibox.widget.imagebox(theme.widget_hdd)
@@ -355,6 +363,7 @@ local bat = lain.widget.bat({
         end
     end
 })
+local widget_bat = wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
@@ -373,6 +382,20 @@ theme.volume = lain.widget.alsa({
         widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
     end
 })
+local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
+
+-- Microphone
+local naughty  = require("naughty")
+theme.mic = lain.widget.mic({
+    settings = function()
+        if mic_now.state == "muted" then
+            widget:set_image(theme.widget_micMuted)
+        else
+            widget:set_image(theme.widget_micUnmuted)
+        end
+    end
+})
+local widget_mic = wibox.widget { nil, theme.mic.widget, layout = wibox.layout.align.horizontal }
 
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
@@ -384,6 +407,7 @@ local net = lain.widget.net({
                           markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
     end
 })
+local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }
 
 -- Separators
 local arrow = separators.arrow_left
@@ -479,23 +503,25 @@ function theme.at_screen_connect(s)
             --arrow(theme.bg_normal, "#343434"),
            -- wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
             arrow("alpha", arrowColor1),
-            wibox.container.background(wibox.container.margin(wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }, 3, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_net, 3, 3), arrowColor2),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, 3, 6), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_mpd, 3, 6), arrowColor1),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, 2, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_mem, 2, 3), arrowColor2),
             arrow(arrowColor1, arrowColor2),
             -- TODO: add GPU status
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, 3, 4), arrowColor1),
-            arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, 4, 4), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_cpu, 3, 4), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }, 3, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_temp, 4, 4), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, 3, 3), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_weather, 3, 3), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }, 2, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_bat, 3, 3), arrowColor1),
+            arrow(arrowColor1, arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_mic, 2, 3), arrowColor2),
+            arrow(arrowColor2, arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_vol, 2, 3), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             wibox.container.background(wibox.container.margin(clock, 4, 8), arrowColor2),
             arrow(arrowColor2, "alpha"),

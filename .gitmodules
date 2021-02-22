@@ -7,3 +7,6 @@
 [submodule "wallpapers-collection"]
 	path = wallpapers-collection
 	url = https://github.com/bzgec/wallpapers-collection.git
+[submodule "dotfiles/.config/awesome/lain"]
+	path = dotfiles/.config/awesome/lain
+	url = https://github.com/bzgec/lain.git

@@ -146,6 +146,10 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
 - [random post](https://confluence.jaytaala.com/display/TKB/Mount+drive+in+linux+and+set+auto-mount+at+boot)
 - [get partition (fs) format - unix.stackexchange.com](https://unix.stackexchange.com/a/60783)
 
+### Disable microphone
+- [ALSA - Advanced Linux Sound Architecture](https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture)
+- Toggle microphone: `amixer set Capture toggle`
+
 ## Using
 ### pacman
 - `--needed`: Do not reinstall the targets that are already up-to-date.
@@ -186,7 +190,9 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
   - `nmtui` - ncurses base interface
 
 ## TODO list
-- Microphone ON/OFF
 - Fix bad DPI
 - Display GPU temperature
 - Widget for volume control, and play buttons
+
+### Done
+- Microphone ON/OFF
