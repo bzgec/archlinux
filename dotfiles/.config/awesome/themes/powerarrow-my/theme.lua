@@ -146,6 +146,12 @@ theme.wifihigh                                  = theme.icon_dir .. "/wireless-h
 theme.wifilow                                   = theme.icon_dir .. "/wireless-low.png"
 theme.wifimed                                   = theme.icon_dir .. "/wireless-medium.png"
 theme.wifinone                                  = theme.icon_dir .. "/wireless-none.png"
+theme.volhigh                                   = theme.icon_dir .. "/volume-high.png"
+theme.vollow                                    = theme.icon_dir .. "/volume-low.png"
+theme.volmed                                    = theme.icon_dir .. "/volume-medium.png"
+theme.volmutedblocked                           = theme.icon_dir .. "/volume-muted-blocked.png"
+theme.volmuted                                  = theme.icon_dir .. "/volume-muted.png"
+theme.voloff                                    = theme.icon_dir .. "/volume-off.png"
 --theme.tasklist_plain_task_name                  = true
 --theme.tasklist_disable_icon                     = true
 theme.tasklist_plain_task_name                  = false
@@ -380,13 +386,17 @@ local volicon = wibox.widget.imagebox(theme.widget_vol)
 theme.volume = lain.widget.alsa({
     settings = function()
         if volume_now.status == "off" then
-            volicon:set_image(theme.widget_vol_mute)
-        elseif tonumber(volume_now.level) == 0 then
-            volicon:set_image(theme.widget_vol_no)
-        elseif tonumber(volume_now.level) <= 50 then
-            volicon:set_image(theme.widget_vol_low)
+            volicon:set_image(theme.volmutedblocked)
+        elseif volume_now.level == 0 then
+            volicon:set_image(theme.volmuted)
+        elseif volume_now.level <= 5 then
+            volicon:set_image(theme.voloff)
+        elseif volume_now.level <= 25 then
+            volicon:set_image(theme.vollow)
+        elseif volume_now.level <= 75 then
+            volicon:set_image(theme.volmed)
         else
-            volicon:set_image(theme.widget_vol)
+            volicon:set_image(theme.volhigh)
         end
 
         widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))

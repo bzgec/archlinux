@@ -521,18 +521,17 @@ globalkeys = my_table.join(
     --awful.key({ }, "XF86AudioPrev", function () awful.spawn("cmus-remote -r") end),
     --awful.key({ }, "XF86AudioPlay", function () awful.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") end),
 
-
     -- Brightness control:
     --   - increase - PgUp
     --   - decrease - PgDn
     --   - min      - End
     --   - max      - Home
     awful.key({ modkey, "Control" }, "Prior",
-              function () awful.util.spawn("xbacklight -inc 10") end,
+              function () awful.util.spawn("xbacklight -inc 5") end,
               {description = "Bightness control - increase (xbacklight)", group = "Hotkeys"}
     ),
     awful.key({ modkey, "Control" }, "Next",
-              function () awful.util.spawn("xbacklight -dec 10") end,
+              function () awful.util.spawn("xbacklight -dec 5") end,
               {description = "Bightness control - decrease (xbacklight)", group = "Hotkeys"}
     ),
     awful.key({ modkey, "Control" }, "End",
@@ -543,11 +542,11 @@ globalkeys = my_table.join(
               function () awful.util.spawn("xbacklight -set 100") end,
               {description = "Bightness control - maximal (xbacklight)", group = "Hotkeys"}
     ),
-    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 10") end,
-              {description = "+10%", group = "Hotkeys"}
+    awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 5") end,
+              {description = "+5%", group = "Hotkeys"}
     ),
-    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 10") end,
-              {description = "-10%", group = "Hotkeys"}
+    awful.key({ }, "XF86MonBrightnessDown", function () awful.util.spawn("xbacklight -dec 5") end,
+              {description = "-5%", group = "Hotkeys"}
     ),
 
     -- MPD control
