@@ -35,15 +35,20 @@ echo "Terminal emulator"
 echo "####################################################################################"
 sudo pacman $pacmanParams alacritty
 
-# Display manager - LightDhttps://wiki.archlinux.org/index.php/DiscordM
+# Display manager (login manager) - LightDM
 echo "####################################################################################"
 echo "Display manager"
 echo "####################################################################################"
-sudo pacman $pacmanParams xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan
+sudo pacman $pacmanParams xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan \
+                          numlockx
 systemctl enable lightdm
 sudo sed -i 's/#greeter-sesstoin=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
 # https://wiki.archlinux.org/index.php/LightDM#LightDM_does_not_appear_or_monitor_only_displays_TTY_output
 sudo sed -i 's/#logind-check-graphical=false/logind-check-graphical=true/' /etc/lightdm/lightdm.conf
+# Enable numlock at boot
+# https://wiki.archlinux.org/index.php/Activating_numlock_on_bootup
+# https://wiki.archlinux.org/index.php/LightDM#NumLock_on_by_default
+sudo sed -i 's/#greeter-setup-script=/greeter-setup-script=\/usr\/bin\/numlockx on/' /etc/lightdm/lightdm.conf
 
 # AUR helper
 echo "####################################################################################"
