@@ -30,7 +30,8 @@ theme.bg_focus                                  = "#313131"
 theme.bg_urgent                                 = "#1A1A1A"
 theme.border_width                              = dpi(1)
 theme.border_normal                             = "#3F3F3F"
-theme.border_focus                              = "#7F7F7F"
+--theme.border_focus                              = "#7F7F7F"
+theme.border_focus                              = "#cc6600"
 theme.border_marked                             = "#CC9393"
 theme.titlebar_bg_focus                         = theme.bg_focus
 theme.titlebar_bg_normal                        = theme.bg_normal
@@ -419,7 +420,7 @@ local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layou
 
 -- Wireless Quality link (converted quality link to percentages) and status
 theme.wirelessStatus = lain.widget.wirelessStatus({
-    notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
+    notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
 
     settings = function()
         --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="status: "..wirelessStatus_now.status})
@@ -440,9 +441,16 @@ theme.wirelessStatus = lain.widget.wirelessStatus({
                 widget:set_image(theme.wififull)
             end
         end
-    end
+    end,
 })
 local widget_wirelessStatus = wibox.widget { nil, theme.wirelessStatus.widget, layout = wibox.layout.align.horizontal }
+
+
+--theme.wirelessStatusTest = wibox.widget({
+--    icon = wibox.widget.imagebox()
+--    icon:set_image(theme.wifidisc)
+--})
+--local widget_wirelessStatusTest = wibox.widget { nil, theme.wirelessStatusTest.icon, layout = wibox.layout.align.horizontal }
 
 -- Separators
 local arrow = separators.arrow_left
@@ -537,6 +545,7 @@ function theme.at_screen_connect(s)
             -- using separators
             --arrow(theme.bg_normal, "#343434"),
            -- wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
+            wibox.container.background(wibox.container.margin(widget_wirelessStatusTest, 3, 3), arrowColor1),
             arrow("alpha", arrowColor1),
             wibox.container.background(wibox.container.margin(widget_net, 3, 3), arrowColor1),
             arrow(arrowColor1, arrowColor2),

@@ -93,12 +93,15 @@ local chosen_theme = themes[9]
 local modkey       = "Mod4"
 local altkey       = "Mod1"
 local terminal     = "alacritty"
+local wallpapersCollectionPath = string.format("%s/wallpapers-collection", os.getenv("HOME"))  -- Path to wallpapers
 local vi_focus     = false -- vi-like client focus - https://github.com/lcpz/awesome-copycats/issues/275
 local cycle_prev   = true -- cycle trough all previous client or just the first -- https://github.com/lcpz/awesome-copycats/issues/274
 local editor       = os.getenv("EDITOR") or "nvim"
 local gui_editor   = os.getenv("GUI_EDITOR") or "gvim"
 local browser      = os.getenv("BROWSER") or "brave"
 local scrlocker    = "slock"
+
+beautiful.useless_gap = dpi(1)
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "4", "5" }
@@ -907,13 +910,27 @@ awful.rules.rules = {
     -- First string is `instance` and the second is `class`
     -- https://www.reddit.com/r/awesomewm/comments/2kxmph/where_do_you_get_the_instance_name_of_a_client/clpwrdz?utm_source=share&utm_medium=web2x&context=3
     { rule = { instance = "snappergui" },
-          properties = { floating = true } },
+      properties = { floating = true }
+    },
     { rule = { instance = "Steam" },
-          properties = { floating = true, tag = "5", switchtotag = false } },
+      properties = { floating = true, tag = "5", switchtotag = false }
+    },
     { rule = { instance = "vscodium" },
-          properties = { tag = "2", switchtotag = true } },
+      properties = { tag = "2", switchtotag = true }
+    },
     { rule = { instance = "brave-browser" },
-          properties = { tag = "1", switchtotag = true } },
+      properties = { tag = "1", switchtotag = true }
+    },
+
+    -- Rule to spawn terminal when wirelessStatus widget is pressed
+    {
+        rule = { instance = "terminal_wirelessStatus_pressed" },
+        properties = {
+            placement = awful.placement.centered ,
+            floating = true,
+            focus = true
+        }
+    },
 }
 -- }}}
 
@@ -1013,18 +1030,28 @@ client.connect_signal("manage",
                       end
 )
 
-beautiful.useless_gap = 2
+----------------------------------------------------------------------------------------------------
+-- Custom widget functions
+----------------------------------------------------------------------------------------------------
+-- wirelessStatus widget pressed function - open terminal and start `nmtui`
+beautiful.wirelessStatus.pressed = function(button)
+    if button == 1 then
+        awful.spawn(terminal.." --class terminal_wirelessStatus_pressed -e nmtui")
+    end
+end
 
-local wallpapersCollectionPath = string.format("%s/wallpapers-collection", os.getenv("HOME"))
 
+
+----------------------------------------------------------------------------------------------------
 -- Autostart Applications
+----------------------------------------------------------------------------------------------------
 awful.spawn.with_shell("picom")
 --awful.spawn.with_shell("nitrogen --restore")
 --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
 awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
 
-cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
-cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
+local cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
+local cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
 awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
     function(out)
         if(out == "1" or out == "2" or out == "") then
