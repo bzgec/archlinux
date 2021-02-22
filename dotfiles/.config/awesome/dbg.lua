@@ -1,5 +1,5 @@
 
---n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="stdout: "..stdout})
+n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="stdout: "..stdout})
 -- Opens a file in append mode
 file = io.open("/home/bzgec/tmp.txt", "a")
 

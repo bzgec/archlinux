@@ -13,8 +13,9 @@ sudo pacman $pacmanParams amd-ucode
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
-sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv
-sudo pacman $pacmanParams rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper
+sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
+                          rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper \
+                          iw
 
 echo "####################################################################################"
 echo "Copying xorg keyboard configuration files"
@@ -100,7 +101,7 @@ echo "##########################################################################
 echo "Other GUI apps"
 echo "####################################################################################"
 sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord \
-                          qalculate-gtk libreoffice-fresh
+                          qalculate-gtk libreoffice-fresh gimp
 
 # Compress and archive apps
 # https://wiki.archlinux.org/index.php/Archiving_and_compression
