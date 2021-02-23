@@ -179,25 +179,24 @@ theme.titlebar_maximized_button_normal_inactive = theme.icon_dir .. "/titlebar/m
 local markup = lain.util.markup
 local separators = lain.util.separators
 
-local arrowColor1 = theme.bg_focus
-local arrowColor2 = "alpha"
---local arrowColor1 = "#7197E7"
---local arrowColor2 = "#A77AC4"
+--local arrowColor1 = theme.bg_focus
+--local arrowColor2 = "alpha"
+local arrowColor1 = "#7197E7"
+local arrowColor2 = "#A77AC4"
 --local arrowColor1 = "#140303"
 --local arrowColor2 = "#6e2c0f"
 --local arrowColor2 = "#204009"
 --local arrowColor2 = "#b55400"
 
 -- Textclock
-local clockicon = wibox.widget.imagebox(theme.widget_clock)
 local clock = awful.widget.watch(
     --"date +'%a %d %b %R'", 60,
     "date +'%H:%M:%S  %d/%m/%Y'", 0.5,
     function(widget, stdout)
-        widget:set_markup(" " .. markup.font(theme.font, stdout))
+        widget:set_markup(markup.font(theme.font, stdout))
     end
 )
-local widget_
+local widget_clock = wibox.widget { nil, clock, layout = wibox.layout.align.horizontal }
 
 -- Keyboard map indicator and switcher
 mykeyboardlayout = awful.widget.keyboardlayout()
@@ -244,12 +243,6 @@ theme.mail = lain.widget.imap({
     end
 })
 --]]
-
--- ALSA volume
-theme.volume = lain.widget.alsabar({
-    --togglechannel = "IEC958,3",
-    notification_preset = { font = theme.font, fg = theme.fg_normal },
-})
 
 -- MPD
 local musicplr = "urxvt -title Music -g 130x34-320+16 -e ncmpcpp"
@@ -306,16 +299,6 @@ local cpu = lain.widget.cpu({
 })
 local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }
 
---[[ Coretemp (lm_sensors, per core)
-local tempwidget = awful.widget.watch({awful.util.shell, '-c', 'sensors | grep Core'}, 30,
-function(widget, stdout)
-    local temps = ""
-    for line in stdout:gmatch("[^\r\n]+") do
-        temps = temps .. line:match("+(%d+).*°C")  .. "° " -- in Celsius
-    end
-    widget:set_markup(markup.font(theme.font, " " .. temps))
-end)
---]]
 -- Coretemp (lain, average)
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
@@ -420,10 +403,11 @@ local widget_mic = wibox.widget { nil, theme.mic.widget, layout = wibox.layout.a
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
-        widget:set_markup(markup.font(theme.font,
-                          markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
-                          .. " " ..
-                          markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
+        widget:set_markup(markup.fontfg(theme.font, "#FEFEFE", " " .. net_now.received .. " ↓↑ " .. net_now.sent .. " "))
+        --widget:set_markup(markup.font(theme.font,
+        --                  markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
+        --                  .. " " ..
+        --                  markup("#46A8C3", " " .. string.format("%06.1f", net_now.sent) .. " ")))
     end
 })
 local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }
@@ -433,9 +417,6 @@ theme.wirelessStatus = lain.widget.wirelessStatus({
     notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
 
     settings = function()
-        --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="status: "..wirelessStatus_now.status})
-        --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="perc: "..wirelessStatus_now.perc})
-        --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="interface: "..wirelessStatus_now.interface})
         if wirelessStatus_now.status == "1" or wirelessStatus_now.status == "" then
             widget:set_image(theme.wifidisc)
         else
@@ -455,43 +436,13 @@ theme.wirelessStatus = lain.widget.wirelessStatus({
 })
 local widget_wirelessStatus = wibox.widget { nil, theme.wirelessStatus.widget, layout = wibox.layout.align.horizontal }
 
-
---theme.wirelessStatusTest = wibox.widget({
---    icon = wibox.widget.imagebox()
---    icon:set_image(theme.wifidisc)
---})
---local widget_wirelessStatusTest = wibox.widget { nil, theme.wirelessStatusTest.icon, layout = wibox.layout.align.horizontal }
-
 -- Separators
 local arrow = separators.arrow_left
 
-function theme.powerline_rl(cr, width, height)
-    local arrow_depth, offset = height/2, 0
-
-    -- Avoid going out of the (potential) clip area
-    if arrow_depth < 0 then
-        width  =  width + 2*arrow_depth
-        offset = -arrow_depth
-    end
-
-    cr:move_to(offset + arrow_depth         , 0        )
-    cr:line_to(offset + width               , 0        )
-    cr:line_to(offset + width - arrow_depth , height/2 )
-    cr:line_to(offset + width               , height   )
-    cr:line_to(offset + arrow_depth         , height   )
-    cr:line_to(offset                       , height/2 )
-
-    cr:close_path()
-end
-
-local function pl(widget, bgcolor, padding)
-    return wibox.container.background(wibox.container.margin(widget, 16, 16), bgcolor, theme.powerline_rl)
-end
-
 function theme.at_screen_connect(s)
     -- Quake application
-   -- s.quake = lain.util.quake({ app = awful.util.terminal })
-   s.quake = lain.util.quake({ app = "termite", height = 0.50, argname = "--name %s" })
+    s.quake = lain.util.quake({ app = awful.util.terminal })
+   --s.quake = lain.util.quake({ app = "termite", height = 0.50, argname = "--name %s" })
 
     -- If wallpaper is a function, call it with the screen
     local wallpaper = theme.wallpaper
@@ -522,7 +473,7 @@ function theme.at_screen_connect(s)
                                          awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = 20, bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(16), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -539,47 +490,33 @@ function theme.at_screen_connect(s)
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
             mykeyboardlayout,
-            --[[ using shapes
-            pl(wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layout.align.horizontal }, "#343434"),
-            pl(task, "#343434"),
-            --pl(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, "#343434"),
-            pl(wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }, "#777E76"),
-            pl(wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }, "#4B696D"),
-            pl(wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }, "#4B3B51"),
-            pl(wibox.widget { fsicon, theme.fs.widget, layout = wibox.layout.align.horizontal }, "#CB755B"),
-            pl(wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }, "#8DAA9A"),
-            pl(wibox.widget { neticon, net.widget, layout = wibox.layout.align.horizontal }, "#C0C0A2"),
-            pl(binclock.widget, "#777E76"),
-            --]]
 
             -- using separators
-            --arrow(theme.bg_normal, "#343434"),
            -- wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
-            wibox.container.background(wibox.container.margin(widget_wirelessStatusTest, 3, 3), arrowColor1),
             arrow("alpha", arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_net, 3, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_net, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_mpd, 3, 6), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_mpd, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_mem, 2, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             -- TODO: add GPU status
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_cpu, 3, 4), arrowColor1),
-            arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_temp, 4, 4), arrowColor2),
-            arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_weather, 3, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_cpu, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_bat, 3, 3), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_temp, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_wirelessStatus, 3, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_weather, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_mic, 2, 3), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_bat, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_vol, 2, 3), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_wirelessStatus, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(clock, 4, 8), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_mic, dpi(3), dpi(3)), arrowColor2),
+            arrow(arrowColor2, arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_vol, dpi(3), dpi(3)), arrowColor1),
+            arrow(arrowColor1, arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8)), arrowColor2),
             arrow(arrowColor2, "alpha"),
             --]]
             s.mylayoutbox,
