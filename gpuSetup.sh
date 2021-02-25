@@ -27,4 +27,3 @@ sudo cp optimus-manager.conf /etc/optimus-manager/
 #sudo cp display_setup.sh /etc/lightdm/
 #sudo chmod +x /etc/lightdm/display_setup.sh
 #sudo sed -i 's/#display-setup-script=/display-setup-script=\/etc\/lightdm\/display_setup.sh/' /etc/lightdm/lightdm.conf
-<

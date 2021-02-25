@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # https://wiki.archlinux.org/index.php/steam
 # https://github.com/lutris/docs/blob/master/InstallingDrivers.md
 # https://www.youtube.com/watch?v=2_rLPVGGPAs
