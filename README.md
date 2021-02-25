@@ -165,6 +165,8 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
   - `-d`: skips dependency checks during package removal
   -  [AUR helpers](https://wiki.archlinux.org/index.php/AUR_helpers) which automate installation
      of AUR packages (yay, paru)
+#### Removing unused packages (orphans)
+For recursively removing orphans and their configuration files: `pacman -Qtdq | pacman -Rns -`
 #### References
 - [wiki.archlinux.org - pacman](https://wiki.archlinux.org/index.php/pacman)
 - [wiki.archlinux.org - System maintenance](https://wiki.archlinux.org/index.php/System_maintenance)

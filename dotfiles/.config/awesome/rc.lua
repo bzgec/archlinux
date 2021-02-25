@@ -1044,6 +1044,34 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Autostart Applications
 ----------------------------------------------------------------------------------------------------
+function checkIfAppIsRunning(app, appStartCmd, restartAppFlag)
+    local cmd_getNumbOfActiveApps = string.format("ps aux | grep -o %s | wc -l", app)
+    local cmd_getActiveAppPID = string.format("ps aux | pgrep -o %s", app)
+
+    awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveApps,
+        function(out)
+            if(tonumber(out) == 1 or tonumber(out) == 2 or out == "") then
+                -- App not active -> start it
+                awful.spawn.with_shell(appStartCmd)
+            else
+                -- App is running
+                if restartAppFlag == true then
+                    -- Active redshift-gtk - kill old one and start new
+                    -- Get PID
+                    awful.spawn.easy_async_with_shell(cmd_getActiveAppPID,
+                        function(out)
+                            -- Kill old redshift
+                            print("kill "..out)
+                            awful.spawn.with_shell("kill "..out)
+                        end
+                    )
+                    awful.spawn.with_shell(appStartCmd)
+                end
+            end
+        end
+    )
+end
+
 awesome.connect_signal(
     'startup',
     function(args)
@@ -1056,27 +1084,8 @@ awesome.connect_signal(
         --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
 
-        local cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
-        local cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
-        awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
-            function(out)
-                if(out == "1" or out == "2" or out == "") then
-                    -- No active redshift-gtk
-                else
-                    -- Active redshift-gtk - kill old one and start new
-                    -- Get PID
-                    awful.spawn.easy_async_with_shell(cmd_getActiveRedshiftPID,
-                        function(out)
-                            -- Kill old redshift
-                            print("kill "..out)
-                            awful.spawn.with_shell("kill "..out)
-                        end
-                    )
-                end
-
-                awful.spawn.with_shell("redshift-gtk -P")
-            end
-        )
+        checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
+        checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
 
     end
 )
