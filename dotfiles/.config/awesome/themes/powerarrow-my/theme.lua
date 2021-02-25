@@ -117,9 +117,19 @@ theme.layout_floating                           = theme.icon_dir .. "/layouts/fl
 --theme.layout_magnifier                          = theme.dir .. "/icons/magnifier.png"
 --theme.layout_floating                           = theme.dir .. "/icons/floating.png"
 theme.widget_ac                                 = theme.icon_dir .. "/ac.png"
-theme.widget_battery                            = theme.icon_dir .. "/battery.png"
-theme.widget_battery_low                        = theme.icon_dir .. "/battery_low.png"
-theme.widget_battery_empty                      = theme.icon_dir .. "/battery_empty.png"
+theme.widget_bat_000_charging                   = theme.icon_dir .. "/bat-000-charging.png"
+theme.widget_bat_000                            = theme.icon_dir .. "/bat-000.png"
+theme.widget_bat_020_charging                   = theme.icon_dir .. "/bat-020-charging.png"
+theme.widget_bat_020                            = theme.icon_dir .. "/bat-020.png"
+theme.widget_bat_040_charging                   = theme.icon_dir .. "/bat-040-charging.png"
+theme.widget_bat_040                            = theme.icon_dir .. "/bat-040.png"
+theme.widget_bat_060_charging                   = theme.icon_dir .. "/bat-060-charging.png"
+theme.widget_bat_060                            = theme.icon_dir .. "/bat-060.png"
+theme.widget_bat_080_charging                   = theme.icon_dir .. "/bat-080-charging.png"
+theme.widget_bat_080                            = theme.icon_dir .. "/bat-080.png"
+theme.widget_bat_100_charging                   = theme.icon_dir .. "/bat-100-charging.png"
+theme.widget_bat_100                            = theme.icon_dir .. "/bat-100.png"
+theme.widget_bat_charged                        = theme.icon_dir .. "/bat-charged.png"
 theme.widget_mem                                = theme.icon_dir .. "/mem.png"
 theme.widget_cpu                                = theme.icon_dir .. "/cpu.png"
 theme.widget_temp                               = theme.icon_dir .. "/temp.png"
@@ -129,10 +139,6 @@ theme.widget_music                              = theme.icon_dir .. "/note.png"
 theme.widget_music_on                           = theme.icon_dir .. "/note.png"
 theme.widget_music_pause                        = theme.icon_dir .. "/pause.png"
 theme.widget_music_stop                         = theme.icon_dir .. "/stop.png"
-theme.widget_vol                                = theme.icon_dir .. "/vol.png"
-theme.widget_vol_low                            = theme.icon_dir .. "/vol_low.png"
-theme.widget_vol_no                             = theme.icon_dir .. "/vol_no.png"
-theme.widget_vol_mute                           = theme.icon_dir .. "/vol_mute.png"
 theme.widget_mail                               = theme.icon_dir .. "/mail.png"
 theme.widget_mail_on                            = theme.icon_dir .. "/mail_on.png"
 theme.widget_task                               = theme.icon_dir .. "/task.png"
@@ -188,12 +194,12 @@ local arrowColor2 = "#A77AC4"
 --local arrowColor2 = "#204009"
 --local arrowColor2 = "#b55400"
 
-local textMarginTop = dpi(4)
+local textMarginTop = dpi(2)
 
 -- Textclock
 local clock = awful.widget.watch(
     --"date +'%a %d %b %R'", 60,
-    "date +'%H:%M:%S  %d/%m/%Y'", 0.5,
+    "date +'%H:%M:%S  %d/%m/%Y'", 0.3,
     function(widget, stdout)
         widget:set_markup(markup.font(theme.font, stdout))
     end
@@ -342,29 +348,57 @@ theme.fs = lain.widget.fs({
 --]]
 
 -- Battery
-local baticon = wibox.widget.imagebox(theme.widget_battery)
-local bat = lain.widget.bat({
+local baticon = wibox.widget.imagebox(theme.widget_bat_000)
+theme.bat = lain.widget.bat({
+    timeout = 30,
     settings = function()
-        if bat_now.status and bat_now.status ~= "N/A" then
-            if bat_now.ac_status == 1 then
-                widget:set_markup(markup.font(theme.font, " AC "))
-                baticon:set_image(theme.widget_ac)
-                return
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
-                baticon:set_image(theme.widget_battery_empty)
-            elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
-                baticon:set_image(theme.widget_battery_low)
-            else
-                baticon:set_image(theme.widget_battery)
-            end
-            widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
-        else
-            widget:set_markup()
-            baticon:set_image(theme.widget_ac)
+        local index, perc = "widget_bat_", tonumber(bat_now.perc) or 0
+        local batStatusString = "N/A"
+
+        if perc <= 7 then
+            index = index .. "000"
+        elseif perc <= 20 then
+            index = index .. "020"
+        elseif perc <= 40 then
+            index = index .. "040"
+        elseif perc <= 60 then
+            index = index .. "060"
+        elseif perc <= 80 then
+            index = index .. "080"
+        elseif perc <= 100 then
+            index = index .. "100"
         end
+
+        if bat_now.ac_status == 1 then
+            index = index .. "_charging"
+            batStatusString = string.format("%s%%", perc)
+        else
+            batStatusString = string.format("%s%%, %s", perc, bat_now.time)
+        end
+
+        baticon:set_image(theme[index])
+        widget:set_markup(markup.font(theme.font, batStatusString))
+
+        --if bat_now.status and bat_now.status ~= "N/A" then
+        --    if bat_now.ac_status == 1 then
+        --        widget:set_markup(markup.font(theme.font, " AC "))
+        --        baticon:set_image(theme.widget_ac)
+        --        return
+        --    elseif not bat_now.perc and tonumber(bat_now.perc) <= 5 then
+        --        baticon:set_image(theme.widget_battery_empty)
+        --    elseif not bat_now.perc and tonumber(bat_now.perc) <= 15 then
+        --        baticon:set_image(theme.widget_battery_low)
+        --    else
+        --        baticon:set_image(theme.widget_battery)
+        --    end
+        --    widget:set_markup(markup.font(theme.font, " " .. bat_now.perc .. "% "))
+        --else
+        --    widget:set_markup()
+        --    baticon:set_image(theme.widget_ac)
+        --end
     end
 })
-local widget_bat = wibox.widget { baticon, bat.widget, layout = wibox.layout.align.horizontal }
+local widget_bat = wibox.widget { baticon, theme.bat.widget, layout = wibox.layout.align.horizontal }
 
 -- ALSA volume
 local volicon = wibox.widget.imagebox(theme.widget_vol)
@@ -522,8 +556,8 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(theme.weather.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             --wibox.container.background(wibox.container.margin(widget_bat, dpi(3), dpi(3)), arrowColor2),
-            wibox.container.background(wibox.container.margin(baticon, dpi(3), dpi(0), dpi(0)), arrowColor2),
-            wibox.container.background(wibox.container.margin(bat.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
+            wibox.container.background(wibox.container.margin(baticon, dpi(3), dpi(3), dpi(0)), arrowColor2),
+            wibox.container.background(wibox.container.margin(theme.bat.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
             arrow(arrowColor2, arrowColor1),
             wibox.container.background(wibox.container.margin(widget_wirelessStatus, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
@@ -533,12 +567,23 @@ function theme.at_screen_connect(s)
             wibox.container.background(wibox.container.margin(volicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
             wibox.container.background(wibox.container.margin(theme.volume.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8), dpi(4)), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8), textMarginTop), arrowColor2),
             arrow(arrowColor2, "alpha"),
             --]]
             s.mylayoutbox,
         },
     }
 end
+
+-- Update battery status on startup
+function theme.onStartup()
+    theme.bat.update()
+            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="ON STARTUP"})
+    theme.bat.update()
+    theme.bat.update()
+    theme.bat.update()
+    theme.bat.update()
+end
+--beautiful.bat:emit_signal("timeout")
 
 return theme

@@ -1044,33 +1044,42 @@ end
 ----------------------------------------------------------------------------------------------------
 -- Autostart Applications
 ----------------------------------------------------------------------------------------------------
-awful.spawn.with_shell("picom")
---awful.spawn.with_shell("nitrogen --restore")
---awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
-awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
+awesome.connect_signal(
+    'startup',
+    function(args)
+        --if beautiful.onStartup then
+            --beautiful.onStartup()
+            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="ON STARTUP"})
 
-local cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
-local cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
-awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
-    function(out)
-        if(out == "1" or out == "2" or out == "") then
-            -- No active redshift-gtk
-        else
-            -- Active redshift-gtk - kill old one and start new
-            -- Get PID
-            awful.spawn.easy_async_with_shell(cmd_getActiveRedshiftPID,
-                function(out)
-                    -- Kill old redshift
-                    print("kill "..out)
-                    awful.spawn.with_shell("kill "..out)
+        awful.spawn.with_shell("picom")
+        --awful.spawn.with_shell("nitrogen --restore")
+        --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
+        awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
+
+        local cmd_getNumbOfActiveRedshifts = "ps aux | grep -o redshift-gtk | wc -l"
+        local cmd_getActiveRedshiftPID = "ps aux | pgrep -o redshift-gtk"
+        awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveRedshifts,
+            function(out)
+                if(out == "1" or out == "2" or out == "") then
+                    -- No active redshift-gtk
+                else
+                    -- Active redshift-gtk - kill old one and start new
+                    -- Get PID
+                    awful.spawn.easy_async_with_shell(cmd_getActiveRedshiftPID,
+                        function(out)
+                            -- Kill old redshift
+                            print("kill "..out)
+                            awful.spawn.with_shell("kill "..out)
+                        end
+                    )
                 end
-            )
-        end
 
-        awful.spawn.with_shell("redshift-gtk -P")
+                awful.spawn.with_shell("redshift-gtk -P")
+            end
+        )
+
     end
 )
-
 
 -- possible workaround for tag preservation when switching back to default screen:
 -- https://github.com/lcpz/awesome-copycats/issues/251
