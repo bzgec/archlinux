@@ -188,6 +188,8 @@ local arrowColor2 = "#A77AC4"
 --local arrowColor2 = "#204009"
 --local arrowColor2 = "#b55400"
 
+local textMarginTop = dpi(4)
+
 -- Textclock
 local clock = awful.widget.watch(
     --"date +'%a %d %b %R'", 60,
@@ -491,32 +493,47 @@ function theme.at_screen_connect(s)
             wibox.widget.systray(),
             mykeyboardlayout,
 
+
             -- using separators
            -- wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
             arrow("alpha", arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_net, dpi(3), dpi(3)), arrowColor1),
+            --wibox.container.background(wibox.container.margin(widget_net, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(neticon, dpi(3), dpi(0), dpi(0)), arrowColor1),
+            wibox.container.background(wibox.container.margin(net.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             wibox.container.background(wibox.container.margin(widget_mpd, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor1),
+            --wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(memicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
+            wibox.container.background(wibox.container.margin(mem.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             -- TODO: add GPU status
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_cpu, dpi(3), dpi(3)), arrowColor1),
+            --wibox.container.background(wibox.container.margin(widget_cpu, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(cpuicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
+            wibox.container.background(wibox.container.margin(cpu.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_temp, dpi(3), dpi(3)), arrowColor2),
+            --wibox.container.background(wibox.container.margin(widget_temp, dpi(3), dpi(3)), arrowColor2),
+            wibox.container.background(wibox.container.margin(tempicon, dpi(3), dpi(0), dpi(0)), arrowColor2),
+            wibox.container.background(wibox.container.margin(temp.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_weather, dpi(3), dpi(3)), arrowColor1),
+            --wibox.container.background(wibox.container.margin(widget_weather, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(weathericon, dpi(3), dpi(0), dpi(0)), arrowColor1),
+            wibox.container.background(wibox.container.margin(theme.weather.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_bat, dpi(3), dpi(3)), arrowColor2),
+            --wibox.container.background(wibox.container.margin(widget_bat, dpi(3), dpi(3)), arrowColor2),
+            wibox.container.background(wibox.container.margin(baticon, dpi(3), dpi(0), dpi(0)), arrowColor2),
+            wibox.container.background(wibox.container.margin(bat.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
             arrow(arrowColor2, arrowColor1),
             wibox.container.background(wibox.container.margin(widget_wirelessStatus, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             wibox.container.background(wibox.container.margin(widget_mic, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_vol, dpi(3), dpi(3)), arrowColor1),
+            --wibox.container.background(wibox.container.margin(widget_vol, dpi(3), dpi(3), dpi(4)), arrowColor1),
+            wibox.container.background(wibox.container.margin(volicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
+            wibox.container.background(wibox.container.margin(theme.volume.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8)), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8), dpi(4)), arrowColor2),
             arrow(arrowColor2, "alpha"),
             --]]
             s.mylayoutbox,

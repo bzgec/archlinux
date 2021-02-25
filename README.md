@@ -193,6 +193,8 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
 - Fix bad DPI
 - Display GPU temperature
 - Widget for volume control, and play buttons
+- Dropdown menus in applications are transparent
+- Panel/wibox visible if window is in full screen mode (VLC)
 
 ### Done
 - Microphone ON/OFF
