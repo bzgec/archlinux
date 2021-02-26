@@ -101,7 +101,7 @@ local gui_editor   = os.getenv("GUI_EDITOR") or "gvim"
 local browser      = os.getenv("BROWSER") or "brave"
 local scrlocker    = "slock"
 
-beautiful.useless_gap = dpi(1)
+--beautiful.useless_gap = dpi(0)
 
 awful.util.terminal = terminal
 awful.util.tagnames = { "1", "2", "3", "4", "5" }
@@ -912,7 +912,10 @@ awful.rules.rules = {
       properties = { floating = true }
     },
     { rule = { instance = "Steam" },
-      properties = { floating = true, tag = "5", switchtotag = false }
+      properties = { floating = false, tag = "5", switchtotag = true }
+    },
+    { rule = { instance = "discord" },
+      properties = { floating = false, tag = "5", switchtotag = true }
     },
     { rule = { instance = "vscodium" },
       properties = { tag = "2", switchtotag = true }
