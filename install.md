@@ -101,10 +101,40 @@ Note that for installation you need internet connection
 25. Create user: `useradd -mG wheel bzgec`, `passwd bzgec`, enter password
 26. Add user to groups: `usermod -aG wheel,audio,video,optical,storage bzgec`
 27. Add user to use sudo privileges: `EDITOR=vim visudo`, uncomment line `%wheel ALL=(ALL) ALL`
-28. `exit`
-29. `unmount -R /mnt`
-30. `reboot`
-31. Connecto to WiFi:
+28. Enable hibernation:
+    1. Add kernel parameter (add `resume=` parameter):
+        1. Edit `/etc/default/grub` and append your kernel options between the quotes in the
+          `GRUB_CMDLINE_LINUX_DEFAULT` line:
+          ```
+          /etc/default/grub
+          -------------------------------------------------------------------------
+          GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet resume=/dev/nvme0n1p6"
+          ```
+        2. And then automatically re-generate the `grub.cfg` file with:
+           `grub-mkconfig -o /boot/grub/grub.cfg`
+    2. Configure the `initramfs` (add `resume` hook). Whether by label or by UUID, the swap
+       partition is referred to with a udev device node, so the `resume` hook must go after the
+       `udev` hook. This example was made starting from the default hook configuration:
+       ```
+       /etc/mkinitcpio.conf
+       --------------------------------------------------------------------------
+       HOOKS=(base udev autodetect modconf block filesystems keyboard resume)
+       ```
+       [Kernel parameters](https://wiki.archlinux.org/index.php/kernel_parameters)
+       [Power management - suspend and hibernate](https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate#Hibernation)
+29. Change options for closing the laptop lid, power button press -
+    [Power management](https://wiki.archlinux.org/index.php/Power_management#ACPI_events).
+    Edit `/etc/systemd/logind.conf`:
+    ```
+    /etc/systemd/logind.conf
+    --------------------------------------------------
+    HandlePowerKey=hibernate
+    HandleLidSwitch=hibernate
+    ```
+30. `exit`
+31. `unmount -R /mnt`
+32. `reboot`
+33. Connecto to WiFi:
     1. List available WiFis: `nmcli device wifi list`
     2. Connect: `nmcli device wifi connect [SSID] password [PASSWORD]`
     3. List all the connected networks: `nmcli connection show`
@@ -113,7 +143,7 @@ Note that for installation you need internet connection
     6. Re-connect with a network: `nmcli connection show`
     7. Disable WiFi: `nmcli radio wifi off`
     You could also use `nmtui` - ncurses based interface
-32. Clone other automated Arch linux setup: `git clone https://github.com/bzgec/archlinux.git && cd archlinux && git submodule update --init --recursive`
+34. Clone other automated Arch linux setup: `git clone https://github.com/bzgec/archlinux.git && cd archlinux && git submodule update --init --recursive`
 
 ### References
 - [video - Arch Linux Installation Guide 2020](https://www.youtube.com/watch?v=PQgyW10xD8s)
