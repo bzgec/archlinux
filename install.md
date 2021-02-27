@@ -129,7 +129,10 @@ Note that for installation you need internet connection
     /etc/systemd/logind.conf
     --------------------------------------------------
     HandlePowerKey=hibernate
-    HandleLidSwitch=hibernate
+    HandleLidSwitch=suspend-then-hibernate
+    HandleLidSwitchExternalPower=suspend-then-hibernate
+    IdleAction=suspend-then-hibernate
+    IdleActionSec=10min
     ```
 30. `exit`
 31. `unmount -R /mnt`
