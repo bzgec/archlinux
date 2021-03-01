@@ -1086,6 +1086,7 @@ awesome.connect_signal(
         --awful.spawn.with_shell("nitrogen --restore")
         --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
+        awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)

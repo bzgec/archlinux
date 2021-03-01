@@ -63,6 +63,14 @@ makepkg -si
 # Go back to starting directory
 cd -
 
+# Handle inactivity stuff
+echo "####################################################################################"
+echo "Handle inactivity stuff"
+echo "####################################################################################"
+sudo pacman $pacmanParams xss-lock
+paru $pacmanParams i3lock-color
+sudo chmod +x ./dotfiles/.config/lock.sh
+
 # Terminal code editor - nigltly neovim
 echo "####################################################################################"
 echo "Terminal code editor - nightly neovim"

@@ -134,6 +134,12 @@ Note that for installation you need internet connection
     IdleAction=suspend-then-hibernate
     IdleActionSec=10min
     ```
+    You can also change delay between suspend and hibernate, edit `/etc/systemd/sleep.conf`:
+    ```
+    /etc/systemd/sleep.conf
+    --------------------------------------------------
+    HibernateDelaySec=120min
+    ```
 30. `exit`
 31. `unmount -R /mnt`
 32. `reboot`
