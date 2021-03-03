@@ -1053,22 +1053,32 @@ function checkIfAppIsRunning(app, appStartCmd, restartAppFlag)
 
     awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveApps,
         function(out)
+            -- TODO: Figure out why `easy_async_with_shell` returns 2 when it is not active, but regular terminal returns only 1
+            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=cmd_getNumbOfActiveApps})
+            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=out})
             if(tonumber(out) == 1 or tonumber(out) == 2 or out == "") then
                 -- App not active -> start it
                 awful.spawn.with_shell(appStartCmd)
             else
                 -- App is running
                 if restartAppFlag == true then
-                    -- Active redshift-gtk - kill old one and start new
-                    -- Get PID
+                    -- Kill old app and start a new one
+                    -- First get PID of running app
                     awful.spawn.easy_async_with_shell(cmd_getActiveAppPID,
                         function(out)
-                            -- Kill old redshift
-                            print("kill "..out)
-                            awful.spawn.with_shell("kill "..out)
+                            -- Kill old program
+                            -- We could do it with `awful.spawn.with_shell()`
+                            -- but then later we would start a new app before the previously
+                            -- running app closed correctly
+                            awful.easy_async_with_shell.with_shell("kill "..out,
+                                function(out)
+                                    -- Don't care for output, just wait a bit in order for
+                                    -- program to close before starting a new one
+                                    awful.spawn.with_shell(appStartCmd)
+                                end
+                            )
                         end
                     )
-                    awful.spawn.with_shell(appStartCmd)
                 end
             end
         end
@@ -1082,12 +1092,13 @@ awesome.connect_signal(
             --beautiful.onStartup()
             --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="ON STARTUP"})
 
-        awful.spawn.with_shell("picom")
+        --awful.spawn.with_shell("picom")
         --awful.spawn.with_shell("nitrogen --restore")
         --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
         awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
+        checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
 
