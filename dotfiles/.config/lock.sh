@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# https://github.com/Raymo111/i3lock-color/blob/master/examples/lock.sh
+
 B='#00000000'  # blank
 C='#ffffff22'  # clear ish
 D='#ff00ffcc'  # default

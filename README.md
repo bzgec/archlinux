@@ -196,6 +196,7 @@ For recursively removing orphans and their configuration files: `pacman -Qtdq | 
 - Display GPU temperature
 - Widget for volume control, and play buttons
 - Panel/wibox visible if window is in full screen mode (VLC)
+- First screen OFF after `x` min and then suspend after `y` min
 
 ### Done
 - Microphone ON/OFF

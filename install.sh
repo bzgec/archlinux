@@ -68,6 +68,7 @@ echo "##########################################################################
 echo "Handle inactivity stuff"
 echo "####################################################################################"
 sudo pacman $pacmanParams xss-lock
+# https://github.com/Raymo111/i3lock-color
 paru $pacmanParams i3lock-color
 sudo chmod +x ./dotfiles/.config/lock.sh
 
