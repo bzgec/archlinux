@@ -895,7 +895,7 @@ awful.rules.rules = {
 
     -- Titlebars
     { rule_any = { type = { "dialog", "normal" } },
-      properties = { titlebars_enabled = true } },
+      properties = { titlebars_enabled = false } },
 
     -- Set Firefox to always map on the first tag on screen 1.
     { rule = { class = "Firefox" },
@@ -1021,15 +1021,14 @@ client.connect_signal("unfocus",
 )
 
 -- Show titlebar only for floating windows
---client.connect_signal("property::floating", function(c)
-client.connect_signal("manage",
-                      function(c)
-                          if c.floating then
-                              awful.titlebar.show(c)
-                          else
-                              awful.titlebar.hide(c)
-                          end
-                      end
+client.connect_signal("property::floating",
+    function(c)
+        if c.floating then
+            awful.titlebar.show(c)
+        else
+            awful.titlebar.hide(c)
+        end
+    end
 )
 
 ----------------------------------------------------------------------------------------------------
@@ -1054,8 +1053,8 @@ function checkIfAppIsRunning(app, appStartCmd, restartAppFlag)
     awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveApps,
         function(out)
             -- TODO: Figure out why `easy_async_with_shell` returns 2 when it is not active, but regular terminal returns only 1
-            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=cmd_getNumbOfActiveApps})
-            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=out})
+            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=cmd_getNumbOfActiveApps})
+            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=out})
             if(tonumber(out) == 1 or tonumber(out) == 2 or out == "") then
                 -- App not active -> start it
                 awful.spawn.with_shell(appStartCmd)
