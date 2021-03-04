@@ -1,0 +1,43 @@
+[user]
+	email =
+	name =
+[core]
+	editor = nvim
+    pager = delta
+	autocrlf = false
+
+[delta]
+    #plus-color = "#012800"
+    #minus-color = "#340001"
+    #syntax-theme = Monokai Extended
+    features = my-feature
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta "my-feature"]
+    # Default colors:
+    #   plus:
+    #     background = "#012800"
+    #   minus:
+    #     background = "#340001"
+    #syntax-theme = gruvbox-light
+    syntax-theme = gruvbox
+    file-style = 'auto bold auto'
+    file-decoration-style = '"#b35900" ul ol'
+    plus-style = 'syntax "#013300"'
+    minus-style = 'syntax "#4d0001"'
+    #line-numbers = true
+
+[delta "my-feature-side-by-side"]
+    # Wide lines in the left or right panel are currently truncated (v0.6.0). If the truncation
+    # is a problem, one approach is to set the width of Delta's output to be larger
+    # than your terminal (e.g. delta --width 250) and ensure that less doesn't wrap
+    # long lines (e.g. export LESS=-RS); then one can scroll right to view the full
+    # content. (Another approach is to decrease font size in your terminal.)
+    side-by-side = true
+    line-numbers-left-format = ""
+    line-numbers-right-format = "│ "
+    width = 130
+
+

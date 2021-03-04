@@ -72,20 +72,17 @@ sudo pacman $pacmanParams xss-lock
 paru $pacmanParams i3lock-color
 sudo chmod +x ./dotfiles/.config/lock.sh
 
-# Terminal code editor - nigltly neovim
+# Terminal stuff
+# Neovim - (terminal) editor
+# Delta - A viewer for git and diff output
+# Starship - customizable prompt for any shell
 echo "####################################################################################"
-echo "Terminal code editor - nightly neovim"
+echo "Terminal suff"
 echo "####################################################################################"
-paru $pacmanParams neovim-nightly-bin
+paru $pacmanParams neovim-nightly-bin git-delta-bin starship
 
 # Set git editor to be nvim
 git config --global core.editor nvim
-
-# Shell prompt
-echo "####################################################################################"
-echo "Shell prompt"
-echo "####################################################################################"
-paru $pacmanParams starship
 
 # Browser
 echo "####################################################################################"
