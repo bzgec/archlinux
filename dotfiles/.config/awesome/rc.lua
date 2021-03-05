@@ -680,6 +680,20 @@ globalkeys = my_table.join(
               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
     ),
 
+    -- Select light or dark theme with `themeSwitcher.py`
+    awful.key({ modkey, "Shift" }, "Home",
+              function ()
+                  os.execute("~/.config/themeSwitcher.py --light")
+              end,
+              {description = "Switch to light theme", group = "Hotkeys"}
+    ),
+    awful.key({ modkey, "Shift" }, "End",
+              function ()
+                  os.execute("~/.config/themeSwitcher.py --dark")
+              end,
+              {description = "Switch to dark theme", group = "Hotkeys"}
+    ),
+
     awful.key({ modkey }, "g",
               function ()
                   awful.prompt.run {
@@ -1097,7 +1111,7 @@ awesome.connect_signal(
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
         awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
-        checkIfAppIsRunning("picom", "picom", true)
+        -- checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
 

@@ -32,3 +32,6 @@ git_log() {
 
 # Set `w` to set new background picture
 alias w='nitrogen --set-zoom-fill --random ~/wallpapers-collection'
+
+alias light="~/.config/themeSwitcher.py --light"
+alias dark="~/.config/themeSwitcher.py --dark"
