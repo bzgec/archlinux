@@ -15,7 +15,7 @@ echo "Random stuff"
 echo "####################################################################################"
 sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
                           rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper \
-                          iw
+                          iw man nodejs npm python-pip
 
 echo "####################################################################################"
 echo "Copying xorg keyboard configuration files"
@@ -83,6 +83,9 @@ paru $pacmanParams neovim-nightly-bin git-delta-bin starship
 
 # Set git editor to be nvim
 git config --global core.editor nvim
+
+# Install python neovim module
+pip install --user neovim
 
 # Browser
 echo "####################################################################################"

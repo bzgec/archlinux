@@ -11,6 +11,9 @@ PS1='[\u@\h \W\$ '
 # Enable starship prompt
 eval "$(starship init bash)"
 
+# Set nvim as a MANPAGER
+export MANPAGER="nvim -c 'set ft=man' -"
+
 # Custom gcc path
 #export PATH=$PATH:/home/bzgec/gcc-arm-none-eabi/bin
 
