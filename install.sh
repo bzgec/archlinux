@@ -51,6 +51,7 @@ sudo sed -i 's/#logind-check-graphical=false/logind-check-graphical=true/' /etc/
 sudo sed -i 's/#greeter-setup-script=/greeter-setup-script=\/usr\/bin\/numlockx on/' /etc/lightdm/lightdm.conf
 # Change clock format on login screen
 sudo sed -i 's/time_format         = LT/time_format         = HH:mm/' /etc/lightdm/lightdm-webkit2-greeter.conf
+sudo sed -i 's/\nwebkit_theme/\nwebkit_theme        = litarvan/' /etc/lightdm/lightdm-webkit2-greeter.conf
 
 # AUR helper
 echo "####################################################################################"
