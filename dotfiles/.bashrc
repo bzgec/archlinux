@@ -8,6 +8,26 @@
 alias ls='ls --color=auto'
 PS1='[\u@\h \W\$ '
 
+###################################################################################################
+# Default .bashrc for ubuntu
+#   Copied from: https://gist.github.com/marioBonales/1637696
+###################################################################################################
+# don't put duplicate lines in the history. See bash(1) for more options
+# ... or force ignoredups and ignorespace
+HISTCONTROL=ignoredups:ignorespace
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+###################################################################################################
+
 # Enable starship prompt
 eval "$(starship init bash)"
 
