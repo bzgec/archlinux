@@ -1120,6 +1120,7 @@ awesome.connect_signal(
         -- checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
+        checkIfAppIsRunning("udiskie", "udiskie", false)  -- automount USB disks
 
     end
 )

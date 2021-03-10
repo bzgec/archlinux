@@ -10,12 +10,13 @@ sudo pacman $pacmanParams base-devel
 sudo pacman $pacmanParams amd-ucode
 
 # Random stuff
+# udiskie - automount USB disks
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
 sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
                           rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper \
-                          iw man nodejs npm python-pip
+                          iw man nodejs npm python-pip udiskie
 
 # Enable colors for pacman
 sudo sed -i 's/#Color/Color/' /etc/pacman.conf/
