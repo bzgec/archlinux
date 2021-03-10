@@ -1113,6 +1113,10 @@ awesome.connect_signal(
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
         awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
+        -- Mute microphone on boot
+        awful.util.spawn("amixer set Capture nocap")
+        beautiful.volume.update()
+
         -- checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
