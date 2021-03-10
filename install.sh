@@ -17,6 +17,9 @@ sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
                           rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper \
                           iw man nodejs npm python-pip
 
+# Enable colors for pacman
+sudo sed -i 's/#Color/Color/' /etc/pacman.conf/
+
 echo "####################################################################################"
 echo "Copying xorg keyboard configuration files"
 echo "####################################################################################"
