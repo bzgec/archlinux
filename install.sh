@@ -133,6 +133,12 @@ echo "Compress and archive apps"
 echo "####################################################################################"
 sudo pacman $pacmanParams p7zip xarchiver
 
+
+echo "####################################################################################"
+echo "Fix Windows and Linux showing different times"
+echo "####################################################################################"
+timedatectl set-local-rtc 1 --adjust-system-clock
+
 # Copy wallpapers collection
 echo "####################################################################################"
 echo "Copy wallpapers collection"
