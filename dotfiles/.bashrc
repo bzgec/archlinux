@@ -58,3 +58,5 @@ alias w='nitrogen --set-zoom-fill --random ~/wallpapers-collection'
 
 alias light="~/.config/themeSwitcher.py --light"
 alias dark="~/.config/themeSwitcher.py --dark"
+
+alias UPDATE_MIRRORLIST="sudo reflector --latest 20 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
