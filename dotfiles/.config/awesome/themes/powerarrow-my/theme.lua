@@ -330,11 +330,11 @@ theme.weather = lain.widget.weather({
     city_id = 3196359, -- placeholder (Ljubljana)
     --city_id = 3202781, -- placeholder (Celje)
     notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
-    weather_na_markup = markup.fontfg(theme.font, "#ffffff", "N/A "),
+    weather_na_markup = markup.font(theme.font, " N/A "),
     settings = function()
         descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.fontfg(theme.font, "#ffffff", descr .. " @ " .. units .. "°C "))
+        widget:set_markup(markup.font(theme.font, " " .. units .. "°C "))
     end
 })
 local widget_weather = wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }
