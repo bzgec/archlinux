@@ -21,9 +21,8 @@ theme.wallpaper                                 = theme.dir .. "/starwars.jpg"
 theme.font                                      = "Mononoki Nerd Font 9"
 theme.taglist_font                              = "Droid Sans Bold 7"
 
-theme.fg_normal                                 = "#DDDDFF"
---theme.fg_focus                                  = "#EA6F81"
-theme.fg_focus                                  = "#ebe7e6"
+theme.fg_normal                                 = "#E6E6FF"
+theme.fg_focus                                  = "#EBE7E6"
 theme.fg_urgent                                 = "#CC9393"
 theme.bg_normal                                 = "#1A1A1A"
 --theme.bg_focus                                  = "#313131"
@@ -294,12 +293,13 @@ local widget_mpd = wibox.widget { mpdicon, theme.mpd.widget, layout = wibox.layo
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
-local mem = lain.widget.mem({
+theme.mem = lain.widget.mem({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. mem_now.used .. "MB "))
+        -- widget:set_markup(markup.font(theme.font, string.format(" %0.1fGB, %d%% ", mem_now.used/1e3, mem_now.perc)))
+        widget:set_markup(markup.font(theme.font, string.format(" %0.1fGB ", mem_now.used/1e3)))
     end
 })
-local widget_mem = wibox.widget { memicon, mem.widget, layout = wibox.layout.align.horizontal }
+local widget_mem = wibox.widget { memicon, theme.mem.widget, layout = wibox.layout.align.horizontal }
 
 -- CPU
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
@@ -332,7 +332,6 @@ theme.weather = lain.widget.weather({
     notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
     weather_na_markup = markup.font(theme.font, " N/A "),
     settings = function()
-        descr = weather_now["weather"][1]["description"]:lower()
         units = math.floor(weather_now["main"]["temp"])
         widget:set_markup(markup.font(theme.font, " " .. units .. "°C "))
     end
@@ -442,7 +441,8 @@ local widget_mic = wibox.widget { nil, theme.mic.widget, layout = wibox.layout.a
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
-        widget:set_markup(markup.fontfg(theme.font, "#FEFEFE", " " .. net_now.received .. " ↓↑ " .. net_now.sent .. " "))
+        -- widget:set_markup(markup.fontfg(theme.font, "#FEFEFE", " " .. net_now.received .. " ↓↑ " .. net_now.sent .. " "))
+        widget:set_markup(markup.font(theme.font, " " .. net_now.received .. "kB ↓↑ " .. net_now.sent .. "kB "))
         --widget:set_markup(markup.font(theme.font,
         --                  markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
         --                  .. " " ..
@@ -534,17 +534,17 @@ function theme.at_screen_connect(s)
             -- using separators
            -- wibox.container.background(wibox.container.margin(wibox.widget { mailicon, mail and mail.widget, layout = wibox.layout.align.horizontal }, 4, 7), "#343434"),
             arrow("alpha", arrowColor1),
+            -- TODO: add GPU status
+            -- arrow(arrowColor1, arrowColor2),
+            -- wibox.container.background(wibox.container.margin(widget_mpd, dpi(3), dpi(3)), arrowColor1),
+            -- arrow(arrowColor2, arrowColor1),
             --wibox.container.background(wibox.container.margin(widget_net, dpi(3), dpi(3)), arrowColor1),
             wibox.container.background(wibox.container.margin(neticon, dpi(3), dpi(0), dpi(0)), arrowColor1),
             wibox.container.background(wibox.container.margin(net.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_mpd, dpi(3), dpi(3)), arrowColor2),
-            arrow(arrowColor2, arrowColor1),
-            --wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor1),
-            wibox.container.background(wibox.container.margin(memicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
-            wibox.container.background(wibox.container.margin(mem.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
-            arrow(arrowColor1, arrowColor2),
-            -- TODO: add GPU status
+            --wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor2),
+            wibox.container.background(wibox.container.margin(memicon, dpi(3), dpi(0), dpi(0)), arrowColor2),
+            wibox.container.background(wibox.container.margin(theme.mem.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
             arrow(arrowColor2, arrowColor1),
             --wibox.container.background(wibox.container.margin(widget_cpu, dpi(3), dpi(3)), arrowColor1),
             wibox.container.background(wibox.container.margin(cpuicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
