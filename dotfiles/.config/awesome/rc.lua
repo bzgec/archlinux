@@ -1112,10 +1112,6 @@ end
 awesome.connect_signal(
     'startup',
     function(args)
-        --if beautiful.onStartup then
-            --beautiful.onStartup()
-            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="ON STARTUP"})
-
         --awful.spawn.with_shell("picom")
         --awful.spawn.with_shell("nitrogen --restore")
         --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")

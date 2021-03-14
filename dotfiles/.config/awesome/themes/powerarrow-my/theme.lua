@@ -578,15 +578,4 @@ function theme.at_screen_connect(s)
     }
 end
 
--- Update battery status on startup
-function theme.onStartup()
-    theme.bat.update()
-            n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text="ON STARTUP"})
-    theme.bat.update()
-    theme.bat.update()
-    theme.bat.update()
-    theme.bat.update()
-end
---beautiful.bat:emit_signal("timeout")
-
 return theme
