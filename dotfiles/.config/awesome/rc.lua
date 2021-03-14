@@ -937,6 +937,9 @@ awful.rules.rules = {
     { rule = { instance = "brave-browser" },
       properties = { tag = "1", switchtotag = true }
     },
+    { rule = { instance = "pavucontrol" },
+      properties = { floating = true, placement = awful.placement.centered }
+    },
 
     -- Rule to spawn terminal when wirelessStatus widget is pressed
     {
@@ -1057,6 +1060,12 @@ beautiful.wirelessStatus.pressed = function(button)
     end
 end
 
+-- voulme/alsa widget pressed function - start pavucontrol application
+beautiful.volume.pressed = function(button)
+    if button == 1 then
+        awful.util.spawn("pavucontrol")
+    end
+end
 
 
 ----------------------------------------------------------------------------------------------------

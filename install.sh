@@ -15,8 +15,15 @@ echo "##########################################################################
 echo "Random stuff"
 echo "####################################################################################"
 sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
-                          rsync htop bluez bluez-utils pulseaudio-bluetooth reflector snapper \
+                          rsync htop bluez bluez-utils reflector snapper \
                           iw man nodejs npm python-pip udiskie
+
+# Audio stuff
+# pavucontrol - PulseAudio Volume Control
+echo "####################################################################################"
+echo "Audio stuff"
+echo "####################################################################################"
+sudo pacman $pacmanParams pavucontrol pulseaudio-bluetooth
 
 # Enable colors for pacman
 sudo sed -i 's/#Color/Color/' /etc/pacman.conf/
