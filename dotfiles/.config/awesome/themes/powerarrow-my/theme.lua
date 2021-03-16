@@ -316,7 +316,7 @@ local temp = lain.widget.temp({
     timeout = 10,
     tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- AMD CPU
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
+        widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
     end
 })
 local widget_temp = wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }
@@ -429,14 +429,14 @@ local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.l
 -- Microphone
 theme.mic = lain.widget.mic({
     settings = function()
-        if mic_now.state == "muted" then
-            widget:set_image(theme.widget_micMuted)
+        if theme.mic.state == "muted" then
+            theme.mic.widget_imageBox:set_image(theme.widget_micMuted)
         else
-            widget:set_image(theme.widget_micUnmuted)
+            theme.mic.widget_imageBox:set_image(theme.widget_micUnmuted)
         end
     end
 })
-local widget_mic = wibox.widget { nil, theme.mic.widget, layout = wibox.layout.align.horizontal }
+local widget_mic = wibox.widget { theme.mic.widget_imageBox, layout = wibox.layout.align.horizontal }
 
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
