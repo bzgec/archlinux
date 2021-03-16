@@ -316,7 +316,7 @@ local temp = lain.widget.temp({
     timeout = 10,
     tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- AMD CPU
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. coretemp_now .. "°C "))
+        widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
     end
 })
 local widget_temp = wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }
