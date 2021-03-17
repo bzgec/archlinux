@@ -427,7 +427,7 @@ theme.volume = lain.widget.alsa({
 local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
 
 -- Microphone
-theme.mic = lain.widget.mic({
+theme.mic = lain.widget.contrib.mic({
     settings = function()
         if theme.mic.state == "muted" then
             theme.mic.widget_imageBox:set_image(theme.widget_micMuted)
