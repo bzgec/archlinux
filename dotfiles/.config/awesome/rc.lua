@@ -770,6 +770,23 @@ clientkeys = my_table.join(
               {description = "swap with right client", group = "client"}
     ),
 
+    -- Move to other screen
+    -- TODO: test on multiple monitor setup (not just with 2 monitors)
+    -- Code is taken from: https://github.com/awesomeWM/awesome/issues/2437
+    awful.key({ modkey, "Shift" }, "y",
+        function (c)
+            c:move_to_screen(c.screen.index-1)
+        end,
+        {description = "move to screen on left", group = "screen"}
+    ),
+    awful.key({ modkey, "Shift" }, "x",
+        function (c)
+            c:move_to_screen()
+        end,
+        {description = "move to screen on right", group = "screen"}
+    ),
+
+
     -- Resize windows
     awful.key({ modkey, "Control" }, "k",
               function (c)
