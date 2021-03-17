@@ -675,7 +675,7 @@ globalkeys = my_table.join(
               function ()
                   os.execute("amixer set Capture toggle")
                   --lain.widget.mic.update()
-                  beautiful.mic.update()
+                  beautiful.mic:update()
               end,
               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
     ),
@@ -1054,15 +1054,15 @@ client.connect_signal("property::floating",
 -- Custom widget functions
 ----------------------------------------------------------------------------------------------------
 -- wirelessStatus widget pressed function - open terminal and start `nmtui`
-beautiful.wirelessStatus.pressed = function(button)
-    if button == 1 then
+beautiful.wirelessStatus.pressed = function(self, button)
+    if button == 1 then  -- left mouse click
         awful.spawn(terminal.." --class terminal_wirelessStatus_pressed -e nmtui")
     end
 end
 
 -- voulme/alsa widget pressed function - start pavucontrol application
 beautiful.volume.pressed = function(button)
-    if button == 1 then
+    if button == 1 then  -- left mouse click
         awful.util.spawn("pavucontrol")
     end
 end
