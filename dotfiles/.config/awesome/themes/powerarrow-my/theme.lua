@@ -427,16 +427,17 @@ theme.volume = lain.widget.alsa({
 local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
 
 -- Microphone
-theme.mic = lain.widget.mic({
-    settings = function()
-        if mic_now.state == "muted" then
-            widget:set_image(theme.widget_micMuted)
+theme.mic = lain.widget.contrib.mic({
+    timeout = 10,
+    settings = function(self)
+        if self.state == "muted" then
+            self.widget:set_image(theme.widget_micMuted)
         else
-            widget:set_image(theme.widget_micUnmuted)
+            self.widget:set_image(theme.widget_micUnmuted)
         end
     end
 })
-local widget_mic = wibox.widget { nil, theme.mic.widget, layout = wibox.layout.align.horizontal }
+local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
 
 -- Net
 local neticon = wibox.widget.imagebox(theme.widget_net)
@@ -453,23 +454,23 @@ local net = lain.widget.net({
 local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }
 
 -- Wireless Quality link (converted quality link to percentages) and status
-theme.wirelessStatus = lain.widget.wirelessStatus({
+theme.wirelessStatus = lain.widget.contrib.wirelessStatus({
     notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
-
-    settings = function()
-        if wirelessStatus_now.status == "1" or wirelessStatus_now.status == "" then
-            widget:set_image(theme.wifidisc)
+    timeout = 10,
+    settings = function(self)
+        if self.status == "1" or self.status == "" then
+            self.widget:set_image(theme.wifidisc)
         else
-            if wirelessStatus_now.perc <= 5 then
-                widget:set_image(theme.wifinone)
-            elseif wirelessStatus_now.perc <= 25 then
-                widget:set_image(theme.wifilow)
-            elseif wirelessStatus_now.perc <= 50 then
-                widget:set_image(theme.wifimed)
-            elseif wirelessStatus_now.perc <= 75 then
-                widget:set_image(theme.wifihigh)
+            if self.perc <= 5 then
+                self.widget:set_image(theme.wifinone)
+            elseif self.perc <= 25 then
+                self.widget:set_image(theme.wifilow)
+            elseif self.perc <= 50 then
+                self.widget:set_image(theme.wifimed)
+            elseif self.perc <= 75 then
+                self.widget:set_image(theme.wifihigh)
             else
-                widget:set_image(theme.wififull)
+                self.widget:set_image(theme.wififull)
             end
         end
     end,
