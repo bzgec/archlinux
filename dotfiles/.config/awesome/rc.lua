@@ -274,11 +274,11 @@ root.buttons(my_table.join(
 globalkeys = my_table.join(
     -- Take a screenshot
     -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() os.execute("screenshot") end,
+    awful.key({ altkey }, "p", function() awful.spawn.with_shell("screenshot") end,
               {description = "take a screenshot", group = "Hotkeys"}),
 
     -- X screen locker
-    awful.key({ altkey, "Control" }, "l", function () os.execute(scrlocker) end,
+    awful.key({ altkey, "Control" }, "l", function () awful.spawn.with_shell(scrlocker) end,
               {description = "lock screen", group = "Hotkeys"}),
 
     -- Hotkeys
@@ -461,21 +461,21 @@ globalkeys = my_table.join(
     --awful.key({ altkey }, "Up",
     awful.key({ modkey }, "Prior",
               function ()
-                  os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
+                  awful.spawn.with_shell(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "Volume control - increase (amixer)", group = "Hotkeys"}
     ),
     awful.key({ modkey }, "Next",
               function ()
-                  os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
+                  awful.spawn.with_shell(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "Volume control - decrease (amixer)", group = "Hotkeys"}
     ),
     --awful.key({ altkey }, "m",
     --    function ()
-    --        os.execute(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
+    --        awful.spawn.with_shell(string.format("amixer -q set %s toggle", beautiful.volume.togglechannel or beautiful.volume.channel))
     --        beautiful.volume.update()
     --    end,
     --    {description = "Volume control - toggle mute", group = "Hotkeys"}),
@@ -484,7 +484,7 @@ globalkeys = my_table.join(
                   awful.util.spawn("amixer set Master unmute")
                   awful.util.spawn("amixer set Speaker unmute")
                   awful.util.spawn("amixer set Headphone unmute")
-                  --os.execute(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
+                  --awful.spawn.with_shell(string.format("amixer -q set %s 100%%", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "Volume control - unmute (amixer)", group = "Hotkeys"}
@@ -495,28 +495,28 @@ globalkeys = my_table.join(
                   -- it mutes all other channels
                   --awful.util.spawn("amixer set Speaker mute")
                   --awful.util.spawn("amixer set Headphone mute")
-                  --os.execute(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
+                  --awful.spawn.with_shell(string.format("amixer -q set %s 0%%", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "Volume control - mute (amixer)", group = "Hotkeys"}
     ),
     awful.key({ }, "XF86AudioRaiseVolume",
               function ()
-                  os.execute(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
+                  awful.spawn.with_shell(string.format("amixer -q set %s 1%%+", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "+1%", group = "Hotkeys"}
     ),
     awful.key({ }, "XF86AudioLowerVolume",
               function ()
-                  os.execute(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
+                  awful.spawn.with_shell(string.format("amixer -q set %s 1%%-", beautiful.volume.channel))
                   beautiful.volume.update()
               end,
               {description = "-1%", group = "Hotkeys"}
     ),
     -- TODO add other controls
     -- https://www.reddit.com/r/awesomewm/comments/7wlej1/newbie_media_keys_and_audio_managment_problems/
-    --awful.key({}, "XF86AudioMute", function() os.execute("pactl set-sink-mute 0 toggle") end),
+    --awful.key({}, "XF86AudioMute", function() awful.spawn.with_shell("pactl set-sink-mute 0 toggle") end),
     --awful.key({ }, "XF86AudioNext", function () awful.spawn("cmus-remote -n") end),
     --awful.key({ }, "XF86AudioPrev", function () awful.spawn("cmus-remote -r") end),
     --awful.key({ }, "XF86AudioPlay", function () awful.spawn("dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause") end),
@@ -552,28 +552,28 @@ globalkeys = my_table.join(
     -- MPD control
     awful.key({ altkey, "Control" }, "Up",
         function ()
-            os.execute("mpc toggle")
+            awful.spawn.with_shell("mpc toggle")
             beautiful.mpd.update()
         end,
         {description = "mpc toggle", group = "widgets"}
     ),
     awful.key({ altkey, "Control" }, "Down",
         function ()
-            os.execute("mpc stop")
+            awful.spawn.with_shell("mpc stop")
             beautiful.mpd.update()
         end,
         {description = "mpc stop", group = "widgets"}
     ),
     awful.key({ altkey, "Control" }, "Left",
         function ()
-            os.execute("mpc prev")
+            awful.spawn.with_shell("mpc prev")
             beautiful.mpd.update()
         end,
         {description = "mpc prev", group = "widgets"}
     ),
     awful.key({ altkey, "Control" }, "Right",
         function ()
-            os.execute("mpc next")
+            awful.spawn.with_shell("mpc next")
             beautiful.mpd.update()
         end,
         {description = "mpc next", group = "widgets"}
@@ -613,7 +613,7 @@ globalkeys = my_table.join(
     --]]
     --[[ dmenu
     awful.key({ modkey }, "x", function ()
-            os.execute(string.format("dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
+            awful.spawn.with_shell(string.format("dmenu_run -i -fn 'Monospace' -nb '%s' -nf '%s' -sb '%s' -sf '%s'",
             beautiful.bg_normal, beautiful.fg_normal, beautiful.bg_focus, beautiful.fg_focus))
         end,
         {description = "show dmenu", group = "launcher"})
@@ -622,7 +622,7 @@ globalkeys = my_table.join(
     -- check https://github.com/DaveDavenport/rofi for more details
     --[[ rofi
     awful.key({ modkey }, "x", function ()
-            os.execute(string.format("rofi -show %s -theme %s",
+            awful.spawn.with_shell(string.format("rofi -show %s -theme %s",
             'run', 'dmenu'))
         end,
         {description = "show rofi", group = "launcher"}),
@@ -673,9 +673,7 @@ globalkeys = my_table.join(
     -- Toggle microphone state
     awful.key({ modkey, "Shift" }, "m",
               function ()
-                  os.execute("amixer set Capture toggle")
-                  --lain.widget.mic.update()
-                  beautiful.mic:update()
+                  beautiful.mic:toggle()
               end,
               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
     ),
@@ -683,13 +681,13 @@ globalkeys = my_table.join(
     -- Select light or dark theme with `themeSwitcher.py`
     awful.key({ modkey, "Shift" }, "Home",
               function ()
-                  os.execute("~/.config/themeSwitcher.py --light")
+                  awful.spawn.with_shell("~/.config/themeSwitcher.py --light")
               end,
               {description = "Switch to light theme", group = "Hotkeys"}
     ),
     awful.key({ modkey, "Shift" }, "End",
               function ()
-                  os.execute("~/.config/themeSwitcher.py --dark")
+                  awful.spawn.with_shell("~/.config/themeSwitcher.py --dark")
               end,
               {description = "Switch to dark theme", group = "Hotkeys"}
     ),
@@ -769,6 +767,23 @@ clientkeys = my_table.join(
               end,
               {description = "swap with right client", group = "client"}
     ),
+
+    -- Move to other screen
+    -- TODO: test on multiple monitor setup (not just with 2 monitors)
+    -- Code is taken from: https://github.com/awesomeWM/awesome/issues/2437
+    awful.key({ modkey, "Shift" }, "y",
+        function (c)
+            c:move_to_screen(c.screen.index-1)
+        end,
+        {description = "move to screen on left", group = "screen"}
+    ),
+    awful.key({ modkey, "Shift" }, "x",
+        function (c)
+            c:move_to_screen()
+        end,
+        {description = "move to screen on right", group = "screen"}
+    ),
+
 
     -- Resize windows
     awful.key({ modkey, "Control" }, "k",
