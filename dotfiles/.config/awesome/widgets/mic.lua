@@ -61,22 +61,31 @@ local function factory(args)
         settings = args.settings or function(self) end,
         timeout  = args.timeout or 10,
         timer    = gears.timer,
-        state    = "mute",
+        state    = "",
     }
 
     function mic:mute()
-        awful.spawn.with_shell("amixer set Capture nocap")
-        self:update()
+        awful.spawn.easy_async_with_shell("amixer set Capture nocap",
+            function()
+                self:update()
+            end
+        )
     end
 
     function mic:unmute()
-        awful.spawn.with_shell("amixer set Capture cap")
-        self:update()
+        awful.spawn.easy_async_with_shell("amixer set Capture cap",
+            function()
+                self:update()
+            end
+        )
     end
 
     function mic:toggle()
-        awful.spawn.with_shell("amixer set Capture toggle")
-        self:update()
+        awful.spawn.easy_async_with_shell("amixer set Capture toggle",
+            function()
+                self:update()
+            end
+        )
     end
 
     function mic:pressed(button)
@@ -86,7 +95,10 @@ local function factory(args)
     end
 
     function mic:update()
-        self.timer:emit_signal("timeout")
+        -- Check that timer has started
+        if self.timer.started then
+            self.timer:emit_signal("timeout")
+        end
     end
 
     -- Read `amixer get Capture` command and try to `grep` all "[on]" lines.
