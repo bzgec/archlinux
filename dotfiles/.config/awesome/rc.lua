@@ -673,9 +673,7 @@ globalkeys = my_table.join(
     -- Toggle microphone state
     awful.key({ modkey, "Shift" }, "m",
               function ()
-                  awful.spawn.with_shell("amixer set Capture toggle")
-                  --lain.widget.mic.update()
-                  beautiful.mic:update()
+                  beautiful.mic:toggle()
               end,
               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
     ),
