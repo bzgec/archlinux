@@ -16,7 +16,7 @@ This widget can be used to display the current microphone status.
 - Add widget to `theme.lua`:
   ```lua
   local widgets = {
-      mic = require("widgets/mic")
+      mic = require("widgets/mic"),
   }
   theme.mic = widgets.mic({
       timeout = 10,
