@@ -11,6 +11,10 @@ local awful = require("awful")
 local wibox = require("wibox")
 local dpi   = require("beautiful.xresources").apply_dpi
 
+local widgets = {
+    mic = require("mic")
+}
+
 local math, string, os = math, string, os
 local my_table = awful.util.table or gears.table -- 4.{0,1} compatibility
 
@@ -427,7 +431,7 @@ theme.volume = lain.widget.alsa({
 local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
 
 -- Microphone
-theme.mic = lain.widget.contrib.mic({
+theme.mic = widgets.mic({
     timeout = 10,
     settings = function(self)
         if self.state == "muted" then
