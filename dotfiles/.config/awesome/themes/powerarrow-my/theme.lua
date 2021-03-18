@@ -12,7 +12,7 @@ local wibox = require("wibox")
 local dpi   = require("beautiful.xresources").apply_dpi
 
 local widgets = {
-    mic = require("mic")
+    mic = require("widgets/mic")
 }
 
 local math, string, os = math, string, os

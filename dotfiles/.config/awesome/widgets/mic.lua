@@ -12,7 +12,7 @@ local gears   = require("gears")
 local wibox   = require("wibox")
 
 --[[
-# Microphone state widget
+# Microphone state widget/watcher
 
 ## Requirements
   - `amixer` - this command is used to get and toggle microphone state
@@ -53,79 +53,94 @@ local wibox   = require("wibox")
     beautiful.volume.update()
     ```
 --]]
+local function factory(args)
+    local args     = args or {}
 
-local mic = {
-    widget   = args.widget or wibox.widget.imagebox(),
-    settings = args.settings or function(self) end,
-    timeout  = args.timeout or 10,
-    timer    = gears.timer,
-    state    = "unmute",
-}
+    local mic = {
+        widget   = args.widget or wibox.widget.imagebox(),
+        settings = args.settings or function(self) end,
+        timeout  = args.timeout or 10,
+        timer    = gears.timer,
+        state    = "mute",
+    }
 
-function mic:toggle()
-    awful.spawn.with_shell("amixer set Capture toggle")
-    self:update()
-end
-
-function mic:pressed(button)
-    if button == 1 then
-        self:toggle()
+    function mic:mute()
+        awful.spawn.with_shell("amixer set Capture nocap")
+        self:update()
     end
-end
 
-function mic:update()
-    self.timer:emit_signal("timeout")
-end
+    function mic:unmute()
+        awful.spawn.with_shell("amixer set Capture cap")
+        self:update()
+    end
 
--- Read `amixer get Capture` command and try to `grep` all "[on]" lines.
---   - If there are lines with "[on]" then assume microphone is "unmuted".
---   - If there are NO lines with "[on]" then assume microphone is "muted".
-mic, mic.timer = awful.widget.watch(
-    "bash -c \"amixer get Capture | grep '\\[on\\]'\"",
-    mic.timeout,
-    function(self, stdout, stderr, exitreason, exitcode)
-        local current_micState = "error"
+    function mic:toggle()
+        awful.spawn.with_shell("amixer set Capture toggle")
+        self:update()
+    end
 
-        if exitcode == 1 then
-            -- Exit code 1 - no line selected
-            current_micState = "muted"
-        elseif exitcode == 0 then
-            -- Exit code 0 - a line is selected
-            current_micState = "unmuted"
-        else
-            -- Other exit code (2) - error occurred
-            current_micState = "error"
+    function mic:pressed(button)
+        if button == 1 then
+            self:toggle()
         end
+    end
 
-        -- Compare new and old state
-        if current_micState ~= self.state then
-            if current_micState == "muted" then
-                naughty.notify({preset=naughty.config.presets.normal,
-                                title="mic widget info",
-                                text='muted'})
-            elseif current_micState == "unmuted" then
-                naughty.notify({preset=naughty.config.presets.normal,
-                                title="mic widget info",
-                                text='unmuted'})
+    function mic:update()
+        self.timer:emit_signal("timeout")
+    end
+
+    -- Read `amixer get Capture` command and try to `grep` all "[on]" lines.
+    --   - If there are lines with "[on]" then assume microphone is "unmuted".
+    --   - If there are NO lines with "[on]" then assume microphone is "muted".
+    mic, mic.timer = awful.widget.watch(
+        "bash -c \"amixer get Capture | grep '\\[on\\]'\"",
+        mic.timeout,
+        function(self, stdout, stderr, exitreason, exitcode)
+            local current_micState = "error"
+
+            if exitcode == 1 then
+                -- Exit code 1 - no line selected
+                current_micState = "muted"
+            elseif exitcode == 0 then
+                -- Exit code 0 - a line is selected
+                current_micState = "unmuted"
             else
-                naughty.notify({preset=naughty.config.presets.critical,
-                                title="mic widget error",
-                                text='Error on "amixer get Capture | grep \'\\[on\\]\'"'})
+                -- Other exit code (2) - error occurred
+                current_micState = "error"
             end
 
-            -- Store new microphone state
-            self.state = current_micState
-        end
+            -- Compare new and old state
+            if current_micState ~= self.state then
+                if current_micState == "muted" then
+                    naughty.notify({preset=naughty.config.presets.normal,
+                                    title="mic widget info",
+                                    text='muted'})
+                elseif current_micState == "unmuted" then
+                    naughty.notify({preset=naughty.config.presets.normal,
+                                    title="mic widget info",
+                                    text='unmuted'})
+                else
+                    naughty.notify({preset=naughty.config.presets.critical,
+                                    title="mic widget error",
+                                    text='Error on "amixer get Capture | grep \'\\[on\\]\'"'})
+                end
 
-        -- Call user/theme defined function
-        self:settings()
-    end,
-    mic  -- base_widget (passed in callback function as first parameter)
-)
+                -- Store new microphone state
+                self.state = current_micState
+            end
 
--- add mouse click
-mic.widget:connect_signal("button::press", function(c, _, _, button)
-    mic:pressed(button)
-end)
+            -- Call user/theme defined function
+            self:settings()
+        end,
+        mic  -- base_widget (passed in callback function as first parameter)
+    )
 
-return mic
+    -- add mouse click
+    mic.widget:connect_signal("button::press", function(c, _, _, button)
+        mic:pressed(button)
+    end)
+
+    return mic
+end
+
+return factory

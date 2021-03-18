@@ -1119,8 +1119,7 @@ awesome.connect_signal(
         awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
         -- Mute microphone on boot
-        awful.util.spawn("amixer set Capture nocap")
-        beautiful.volume.update()
+        beautiful.mic:mute()
 
         -- checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
