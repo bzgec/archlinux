@@ -41,7 +41,7 @@ Get wireless Quality link (converted to percentages) and wireless status.
       end,
   })
   local widget_wirelessStatus = wibox.widget { nil, theme.wirelessStatus.widget, layout = wibox.layout.align.horizontal }
- ```
+  ```
 - Set which application to run on widget press (add to `rc.lua`):
   ```lua
   -- wirelessStatus widget pressed function - open terminal and start `nmtui`
