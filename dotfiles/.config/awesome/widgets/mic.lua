@@ -14,6 +14,7 @@ This widget can be used to display the current microphone status.
 - Download [mic.lua](https://awesomewm.org/recipes/mic.lua) file and put it into awesome's
   folder (like `~/.config/awesome/widgets/mic.lua`)
 - Add widget to `theme.lua`:
+
   ```lua
   local widgets = {
       mic = require("widgets/mic"),
@@ -30,7 +31,9 @@ This widget can be used to display the current microphone status.
   })
   local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
   ```
+
 - Create a shortcut to toggle microphone state (add to `rc.lua`):
+
   ```lua
   -- Toggle microphone state
   awful.key({ modkey, "Shift" }, "m",
@@ -40,7 +43,9 @@ This widget can be used to display the current microphone status.
             {description = "Toggle microphone (amixer)", group = "Hotkeys"}
   ),
   ```
+
 - You can also add a command to mute the microphone state on boot. Add this to your `rc.lua`:
+
   ```lua
   -- Mute microphone on boot
   beautiful.mic:mute()

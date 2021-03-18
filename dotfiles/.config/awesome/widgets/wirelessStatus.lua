@@ -14,6 +14,7 @@ Get wireless Quality link (converted to percentages) and wireless status.
 - Download [wirelessStatus.lua](https://awesomewm.org/recipes/wirelessStatus.lua) file and put it
   into awesome's folder (like `~/.config/awesome/widgets/wirelessStatus.lua`)
 - Add widget to `theme.lua`:
+
   ```lua
   local widgets = {
       wirelessStatus = require("widgets/wirelessStatus"),
@@ -42,7 +43,9 @@ Get wireless Quality link (converted to percentages) and wireless status.
   })
   local widget_wirelessStatus = wibox.widget { nil, theme.wirelessStatus.widget, layout = wibox.layout.align.horizontal }
   ```
+
 - Set which application to run on widget press (add to `rc.lua`):
+
   ```lua
   -- wirelessStatus widget pressed function - open terminal and start `nmtui`
   beautiful.wirelessStatus.pressed = function(self, button)
