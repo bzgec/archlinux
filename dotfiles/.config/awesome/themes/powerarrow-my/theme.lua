@@ -12,7 +12,8 @@ local wibox = require("wibox")
 local dpi   = require("beautiful.xresources").apply_dpi
 
 local widgets = {
-    mic = require("widgets/mic")
+    mic = require("widgets/mic"),
+    wirelessStatus = require("widgets/wirelessStatus"),
 }
 
 local math, string, os = math, string, os
@@ -457,8 +458,8 @@ local net = lain.widget.net({
 })
 local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }
 
--- Wireless Quality link (converted quality link to percentages) and status
-theme.wirelessStatus = lain.widget.contrib.wirelessStatus({
+-- Wireless status widget
+theme.wirelessStatus = widgets.wirelessStatus({
     notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
     timeout = 10,
     settings = function(self)
