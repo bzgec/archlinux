@@ -4,25 +4,20 @@
         Licensed under GNU General Public License v2
         * (c) 2021, bzgec
 
---]]
 
-local awful   = require("awful")
-local naughty = require("naughty")
-local gears   = require("gears")
-local wibox   = require("wibox")
-
---[[
 # Microphone state widget/watcher
+This widget can be used to display the current microphone status.
 
 ## Requirements
   - `amixer` - this command is used to get and toggle microphone state
 
 ## Usage
-  - Download this file and put it into awesome's folder (like `~/.config/awesome/widgets/mic.lua`)
+  - Download [mic.lua](https://awesomewm.org/recipes/mic.lua) file and put it into awesome's
+    folder (like `~/.config/awesome/widgets/mic.lua`)
   - Add widget to `theme.lua`:
     ```lua
     local widgets = {
-        mic = require("mic")
+        mic = require("widgets/mic")
     }
     theme.mic = widgets.mic({
         timeout = 10,
@@ -36,7 +31,7 @@ local wibox   = require("wibox")
     })
     local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
     ```
-  - Add shortcut to toggle microphone state. Add to `rc.lua`:
+  - Create a shortcut to toggle microphone state (add to `rc.lua`):
     ```lua
     -- Toggle microphone state
     awful.key({ modkey, "Shift" }, "m",
@@ -46,15 +41,22 @@ local wibox   = require("wibox")
               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
     ),
     ```
-  - You can also add command to mute microphone state on boot. Add this to your `rc.lua`:
+  - You can also add a command to mute the microphone state on boot. Add this to your `rc.lua`:
     ```lua
     -- Mute microphone on boot
-    awful.spawn.with_shell("amixer set Capture nocap")
-    beautiful.volume.update()
+    beautiful.mic:mute()
     ```
+
 --]]
+
+
+local awful   = require("awful")
+local naughty = require("naughty")
+local gears   = require("gears")
+local wibox   = require("wibox")
+
 local function factory(args)
-    local args     = args or {}
+    local args = args or {}
 
     local mic = {
         widget   = args.widget or wibox.widget.imagebox(),
