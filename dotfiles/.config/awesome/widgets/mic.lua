@@ -5,43 +5,54 @@
         * (c) 2021, bzgec
 
 --]]
-local awful = require("awful")
+
+local awful   = require("awful")
 local naughty = require("naughty")
-local gears    = require("gears")
-local wibox    = require("wibox")
+local gears   = require("gears")
+local wibox   = require("wibox")
 
--- Microphone state
--- Requirements:
---   - `amixer`
--- Usage:
---   - `theme.lua`:
---     ```lua
---     local widgets = {
---         mic = require("mic")
---     }
---     theme.mic = widgets.mic({
---         timeout = 10,
---         settings = function(self)
---             if self.state == "muted" then
---                 self.widget:set_image(theme.widget_micMuted)
---             else
---                 self.widget:set_image(theme.widget_micUnmuted)
---             end
---         end
---     })
---     local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
---     ```
---   - `rc.lua`:
---     ```lua
---     -- Toggle microphone state
---     awful.key({ modkey, "Shift" }, "m",
---               function ()
---                   beautiful.mic:toggle()
---               end,
---               {description = "Toggle microphone (amixer)", group = "Hotkeys"}
---     ),
---     ```
+--[[
+# Microphone state widget
 
+## Requirements
+  - `amixer` - this command is used to get and toggle microphone state
+
+## Usage
+  - Download this file and put it into awesome's folder (like `~/.config/awesome/widgets/mic.lua`)
+  - Add widget to `theme.lua`:
+    ```lua
+    local widgets = {
+        mic = require("mic")
+    }
+    theme.mic = widgets.mic({
+        timeout = 10,
+        settings = function(self)
+            if self.state == "muted" then
+                self.widget:set_image(theme.widget_micMuted)
+            else
+                self.widget:set_image(theme.widget_micUnmuted)
+            end
+        end
+    })
+    local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
+    ```
+  - Add shortcut to toggle microphone state. Add to `rc.lua`:
+    ```lua
+    -- Toggle microphone state
+    awful.key({ modkey, "Shift" }, "m",
+              function ()
+                  beautiful.mic:toggle()
+              end,
+              {description = "Toggle microphone (amixer)", group = "Hotkeys"}
+    ),
+    ```
+  - You can also add command to mute microphone state on boot. Add this to your `rc.lua`:
+    ```lua
+    -- Mute microphone on boot
+    awful.spawn.with_shell("amixer set Capture nocap")
+    beautiful.volume.update()
+    ```
+--]]
 
 local mic = {
     widget   = args.widget or wibox.widget.imagebox(),
@@ -89,11 +100,17 @@ mic, mic.timer = awful.widget.watch(
         -- Compare new and old state
         if current_micState ~= self.state then
             if current_micState == "muted" then
-                naughty.notify({preset=naughty.config.presets.normal, title="mic widget info", text='muted'})
+                naughty.notify({preset=naughty.config.presets.normal,
+                                title="mic widget info",
+                                text='muted'})
             elseif current_micState == "unmuted" then
-                naughty.notify({preset=naughty.config.presets.normal, title="mic widget info", text='unmuted'})
+                naughty.notify({preset=naughty.config.presets.normal,
+                                title="mic widget info",
+                                text='unmuted'})
             else
-                naughty.notify({preset=naughty.config.presets.critical, title="mic widget error", text='Error on "amixer get Capture | grep \'\\[on\\]\'"'})
+                naughty.notify({preset=naughty.config.presets.critical,
+                                title="mic widget error",
+                                text='Error on "amixer get Capture | grep \'\\[on\\]\'"'})
             end
 
             -- Store new microphone state
