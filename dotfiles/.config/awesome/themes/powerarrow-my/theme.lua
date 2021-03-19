@@ -337,6 +337,7 @@ theme.weather = lain.widget.weather({
     --city_id = 3202781, -- placeholder (Celje)
     notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
     weather_na_markup = markup.font(theme.font, " N/A "),
+    APPID = "2b7e7acd0b69526b00dec2188e55c446",  -- bzgec awesomewm_public
     settings = function()
         units = math.floor(weather_now["main"]["temp"])
         widget:set_markup(markup.font(theme.font, " " .. units .. "°C "))
