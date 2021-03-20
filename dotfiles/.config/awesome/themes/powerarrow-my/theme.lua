@@ -338,6 +338,7 @@ theme.weather = lain.widget.weather({
     notification_preset = { font = "Mononoki Nerd Font 11", fg = theme.fg_normal },
     weather_na_markup = markup.font(theme.font, " N/A "),
     APPID = "2b7e7acd0b69526b00dec2188e55c446",  -- bzgec awesomewm_public
+    showCurrentWeatherNotification = "on",
     settings = function()
         units = math.floor(weather_now["main"]["temp"])
         widget:set_markup(markup.font(theme.font, " " .. units .. "°C "))
@@ -459,7 +460,7 @@ local net = lain.widget.net({
 })
 local widget_net = wibox.widget { nil, neticon, net.widget, layout = wibox.layout.align.horizontal }
 
--- Wireless status widget
+-- Wireless status widget (`status` is presumably device dependent)
 theme.wirelessStatus = widgets.wirelessStatus({
     notification_preset = { font = "Mononoki Nerd Font 10", fg = theme.fg_normal },
     timeout = 10,
