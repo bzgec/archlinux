@@ -130,7 +130,7 @@ echo "##########################################################################
 echo "Other GUI apps"
 echo "####################################################################################"
 sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord \
-                          qalculate-gtk libreoffice-fresh gimp okular
+                          qalculate-gtk libreoffice-fresh gimp okular calibre
 
 # Compress and archive apps
 # https://wiki.archlinux.org/index.php/Archiving_and_compression
