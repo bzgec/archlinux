@@ -86,13 +86,14 @@ sudo chmod +x ./dotfiles/.config/lock.sh
 
 # Terminal stuff
 # Neovim - (terminal) editor
-# Delta - A viewer for git and diff output
+# Delta    - A viewer for git and diff output
 # Starship - customizable prompt for any shell
-# HSTR - Navigate and search your command history (replacement for `CTRL+R`)
+# HSTR     - Navigate and search your command history (replacement for `CTRL+R`)
+# lazygit  - A simple terminal UI for git commands
 echo "####################################################################################"
 echo "Terminal suff"
 echo "####################################################################################"
-paru $pacmanParams neovim-nightly-bin git-delta-bin starship hstr
+paru $pacmanParams neovim-nightly-bin git-delta-bin starship hstr lazygit
 
 # Set git editor to be nvim
 git config --global core.editor nvim
