@@ -1087,15 +1087,12 @@ end
 -- Autostart Applications
 ----------------------------------------------------------------------------------------------------
 function checkIfAppIsRunning(app, appStartCmd, restartAppFlag)
-    local cmd_getNumbOfActiveApps = string.format("ps aux | grep -o %s | wc -l", app)
-    local cmd_getActiveAppPID = string.format("ps aux | pgrep -o %s", app)
+    local cmd_getNumbOfActiveApps = string.format("pgrep -f -c %s", app)
+    local cmd_getActiveAppPID = string.format("pgrep -f -o %s", app)
 
     awful.spawn.easy_async_with_shell(cmd_getNumbOfActiveApps,
         function(out)
-            -- TODO: Figure out why `easy_async_with_shell` returns 2 when it is not active, but regular terminal returns only 1
-            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=cmd_getNumbOfActiveApps})
-            --n = require("naughty"); n.notify({preset=n.config.presets.normal, title="debug", text=out})
-            if(tonumber(out) == 1 or tonumber(out) == 2 or out == "") then
+            if(tonumber(out) == 0 or out == "") then
                 -- App not active -> start it
                 awful.spawn.with_shell(appStartCmd)
             else
