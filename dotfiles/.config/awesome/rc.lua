@@ -1075,14 +1075,6 @@ beautiful.wirelessStatus.pressed = function(self, button)
     end
 end
 
--- voulme/alsa widget pressed callback function - start pavucontrol application
-beautiful.volume.pressed = function(button)
-    if button == 1 then  -- left mouse click
-        awful.spawn.with_shell("pavucontrol")
-    end
-end
-
-
 ----------------------------------------------------------------------------------------------------
 -- Autostart Applications
 ----------------------------------------------------------------------------------------------------

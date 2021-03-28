@@ -431,6 +431,14 @@ theme.volume = lain.widget.alsa({
         widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
     end
 })
+function volumeWidgetPressed(c, _, _, button)
+    if button == 1 then  -- left mouse click
+        awful.spawn.with_shell("pavucontrol")
+    end
+end
+volicon:connect_signal("button::press", volumeWidgetPressed)
+theme.volume.widget:connect_signal("button::press", volumeWidgetPressed)
+
 local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
 
 -- Microphone
