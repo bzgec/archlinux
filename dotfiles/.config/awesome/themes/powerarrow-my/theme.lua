@@ -319,6 +319,7 @@ local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.ali
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     timeout = 10,
+    -- Run: `find /sys/devices -type f -name *temp*`
     tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- AMD CPU
     settings = function()
         widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
