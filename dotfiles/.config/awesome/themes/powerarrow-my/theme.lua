@@ -301,7 +301,7 @@ local memicon = wibox.widget.imagebox(theme.widget_mem)
 theme.mem = lain.widget.mem({
     settings = function()
         -- widget:set_markup(markup.font(theme.font, string.format(" %0.1fGB, %d%% ", mem_now.used/1e3, mem_now.perc)))
-        widget:set_markup(markup.font(theme.font, string.format(" %0.1fGB ", mem_now.used/1e3)))
+        widget:set_markup(markup.font(theme.font, string.format(" %0.1fGiB ", mem_now.used/1024)))
     end
 })
 local widget_mem = wibox.widget { memicon, theme.mem.widget, layout = wibox.layout.align.horizontal }
