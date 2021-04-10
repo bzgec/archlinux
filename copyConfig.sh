@@ -1,4 +1,4 @@
 #!/bin/sh
 
 mkdir -p ~/.config
-cp dotfiles/* ~/
+cp -a ./dotfiles/. ~/
