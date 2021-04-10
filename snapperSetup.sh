@@ -6,6 +6,25 @@
 
 AUR_HELPER="paru"
 
+if [ "$1" != "no-gui" ]; then
+    echo "Installing for GUI setup"
+else
+    echo "Installing for terminal setup"
+fi
+
+# Add user + change limits for snapshots to keep
+read -p "Enter user: " user
+echo $user
+
+read -r -p "Continue? [y/N] " response
+response=${response,,}    # tolower
+if [[ "$response" =~ ^(yes|y)$ ]]; then
+    echo "Executing script..."
+else
+    echo "Exiting script..."
+    exit 0
+fi
+
 sudo pacman -S snapper
 
 # Snapper stuff
@@ -19,11 +38,8 @@ sudo chmod 750 /.snapshots
 
 # Enable users to view snapshots
 sudo chmod a+rx /.snapshots
-sudo chown :bzgec /.snapshots
+sudo chown :$user /.snapshots
 
-# Add user + change limits for snapshots to keep
-read -p "Enter user: " user
-echo $user
 addUserSedCmd="s/ALLOW_USERS=\"\"/ALLOW_USERS=\"${user}\"/"
 echo $addUserSedCmd
 sudo sed -i $addUserSedCmd /etc/snapper/configs/root
@@ -36,8 +52,13 @@ sudo sed -i 's/TIMELINE_LIMIT_YEARLY="10"/TIMELINE_LIMIT_YEARLY="0"/' /etc/snapp
 sudo systemctl enable --now snapper-timeline.timer
 sudo systemctl enable --now snapper-cleanup.timer
 
-echo "Install 'snap-pac-grub' and 'snapper-gui' from AUR"
-$AUR_HELPER -S snap-pac-grub snapper-gui
+if [ "$1" != "no-gui" ]; then
+    echo "Install 'snap-pac-grub' and 'snapper-gui' from AUR"
+    $AUR_HELPER -S snap-pac-grub snapper-gui
+else
+    echo "Install 'snap-pac-grub' from AUR"
+    $AUR_HELPER -S snap-pac-grub
+fi
 
 sudo mkdir /etc/pacman.d/hooks
 sudo echo '''
@@ -65,9 +86,6 @@ case $yn in
     * ) echo "Please anwser yes or no.";;
 esac
 sudo vim /etc/mkinitcpio.conf
-
-
-
 
 # Enable snapshots for /home subvolume
 sudo snapper -c home create-config /home
