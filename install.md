@@ -364,6 +364,14 @@ Check for IP with: `ip addr`
 
 - [Reference](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04)
 
+### 42.5 Install and enable crontab
+
+1. Install `crontab`: `sudo pacman -S cronie`
+2. Enable service: `sudo systemctl enable cronie.service`
+3. Start service: `sudo systemctl start cronie.service`
+4. Check that service is running: `systemctl status cronie.service`
+
+- [wiki.archlinux.org - cron](https://wiki.archlinux.org/index.php/cron)
 
 ## References
 
