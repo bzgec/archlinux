@@ -1,0 +1,367 @@
+= Install
+:sectnums:
+:sectnumlevels: 4
+
+* Dualboot with Windows 10 - https://www.youtube.com/watch?v=L1B1O0R1IHA[video]
+* Btrfs with snapper - https://www.youtube.com/watch?v=Xynotc9BKe8[video]
+* Installation guide - https://wiki.archlinux.org/index.php/installation_guide[wiki.archlinux.org]
+
+Note that for installation you need internet connection
+
+== Set up the correct keyboard
+`ls /usr/share/kbd/keymaps/**/*.map.gz | less`
+
+== Select keyboard
+`loadkeys slovene.map.gz`
+
+== Check if wireless card is not blocked
+`rfkill list`
+
+== Connect to WiFi
+. `iwctl`
+. First, if you do not know your wireless device name, list all Wi-Fi devices: `device list`
+. Then, to scan for networks: `station [device] scan`
+. You can then list all available networks: `station [device] get-networks`
+. Finally, to connect to a network: `iwctl --passphrase [passphrase] station [device] connect [SSID]`
+. Done
+
+== Plug in ethernet cable and check if you have connection
+`ping google.com`
+
+== Update the system clock
+`timedatectl set-ntp true`
+
+You can verify it with: `timedatectl status`
+
+== Update the mirrors
+`sudo pacman -Syy`
+
+== Get best mirrors
+`sudo pacman -S reflector && reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist`
+
+== Update the mirrors
+`sudo pacman -Syy`
+
+== Partition the disks
+- https://wiki.archlinux.org/index.php/Partitioning[wiki.archlinux.org]
+
+=== Verify if you have BIOS or UEFI
+`ls /sys/firmware/efi/efivars` (if no error than you have UEFI)
+
+=== Identify devices
+`lsblk`
+
+=== Open selected disk
+`fdisk /dev/sda` or `fdisk /dev/nvme0n1`
+
+=== Partition
+
+==== BIOS with MBR
+. Select MBR/DOS partition table: `o`
+. List free unpartitioned space: `F`
+. Create new partition: `n`
+. Set partition type to primary: `p`
+. Set partition number to 1: `1`
+. Set first sector (where to start first sector) - leave default (just hit enter)
+. Set swap size (equals to RAM size): `+2G`
+. If some error occurs about type just ignore it
+. Set rest of the disk size: `n`, `p`, `2`, default, default (all remaining memory)
+. Change swap partition type: `t`, `1`, `82` (this should be checked with `L`
+. Enable boot from linux partition: `a`, `2`
+. Write table to disk: `w`
+
+==== UEFI with GPT
+. `g` to select GPT partition table (skip if Windows 10 is already installed)
+. Create efi partition: `n`, `1`, default, `+550M`  TODO: is EFI partition really necessary if Windows 10 is already installed?
+. Create swap partition: `n`, `2`, default, `+16G` (size of RAM)
+. Create Linux partition: `n`, `3`, default, default
+. Change partitions type:
+.. `t`, `1`, `1` (check with `l` - EFI)
+.. `t`, `2`, `19` (check with `l` - swap)
+.. Already Linux file system
+. Write table to disk: `w`
+
+== Make file systems
+. EFI: `mkfs.fat -F32 /dev/sda1` (only if using UEFI)
+. swap:
+.. Create swap: `mkswap /dev/sda1` or `mkswap /dev/sda2`
+.. Turn on swap: `swapon /dev/sda1` or `swapon /dev/sda2`
+
+. Big partition: `mkfs.ext4 /dev/sda2` or `mkfs.ext4 /dev/sda3` or `mkfs.btrfs /dev/nvme0n1p7`
++
+
+If you want to create ntfs: `mkfs.ntfs /dev/sda3` or `mkfs.ntfs -f /dev/sda3`
+(`-f` - perform quick (fast) format. This will skip both zeroing of the volume and
+bad sector checking.)
+
+== Mound the big partition
+`mount /dev/sda2 /mnt` or `mount /dev/sda3 /mnt`
+
+== Btrfs only:
+. Create *root* subvolume: `btrfs su cr /mnt/@`
+. Create *home* subvolume: `btrfs su cr /mnt/@home`
+. Create *snapshots* subvolume: `btrfs su cr /mnt/@snapshots`
+. Create *var_log* subvolume: `btrfs su cr /mnt/@var_log`
+. Unmount `/mnt`: `umount /mnt`
+. Mount *root* subvolume with btrfs:`mount -o noatime,compress=lzo,space_cache=v2,subvol=@ /dev/nvme0n1p7 /mnt`
+. Make directories: `mkdir -p /mnt/{boot,home,.snapshots,var_log}`
+. Mount other subvmolumes:
+.. `mount -o noatime,compress=lzo,space_cache=v2,subvol=@home /dev/nvme0n1p7 /mnt/home`
+.. `mount -o noatime,compress=lzo,space_cache=v2,subvol=@snapshots /dev/nvme0n1p7 /mnt/.snapshots`
+.. `mount -o noatime,compress=lzo,space_cache=v2,subvol=@var_log /dev/nvme0n1p7 /mnt/var_log`
+.. `mount /dev/nvme0n1p5 /mnt/boot` (EFI ONLY)
+. Mount Windows 10: `mkdir /mnt/win10 && mount /dev/nvme0n1p3 /mnt/win10`
+
+== Install essential packages (base system)
+`pacstrap /mnt base linux linux-firmware vim amd-ucode`
+
+== Generate file system table
+`genfstab -U /mnt >> /mnt/etc/fstab`
+
+We can check if everything is ok with: `cat /mnt/etc/fstab`
+
+== Change root into the new system
+`arch-chroot /mnt`
+
+== Set timezone
+`ln -sf /usr/share/zoneinfo/Europe/Ljubljana /etc/localtime` (you can help
+yourself with `ls /usr/share/zoneinfo`)
+
+== Set hardware clock
+`hwclock --systohc`
+
+== Select locale
+`vim /etc/locale.gen`, uncomment `en_US.UTF-8 UTF-8` and `sl_SI.UTF-8 UTF-8`
+
+== Generate the locales
+`locale-gen`
+
+== Set the `LANG` variable
+`vim /etc/locale.conf`, enter `LANG=en_US.UTF-8` (or simpler just:
+`echo "LANG=en_US.UTF-8" >> /etc/locale.conf`)
+
+== Make Arch Linux remember keyboard layout
+`vim /etc/vconsole.conf`, enter `KEYMAP=slovene.map.gz`
+(or simpler: `echo "KEYMAP=slovene.map.gz" >> /etc/vconsole.conf`)
+
+== Create hostname
+`vim /etc/hostname`, input just the hostname: `arch` (or simpler:
+`echo "arch" >> /etc/hostname`)
+
+== Add hostname to hosts
+`vim /etc/hosts`, add this lines:
+
+[source]
+----
+/etc/hosts
+--------------------------------------
+127.0.0.1    localhost
+::1          localhost
+127.0.1.1    arch.localdomain arch
+----
+
+== Create root password
+`passwd`, enter root password
+
+== Install other packages
+`pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bash-completion reflector`
+
+Note that `os-prober` is needed only for multiboot setups.
+
+== Set `EDITOR` environment variable
+`echo "export EDITOR=vim" >> /etc/profile`
+
+== Btrfs only
+. Add `btrfs` into modules in `vim /etc/mkinitcpio.conf` file (`MODULES=(btrfs)`)
+. Recreate kernel image with btrfs module included: `mkinitcpio -p linux`
+
+== Init grub
+
+* BIOS: `grub-install --target=i386-pc /dev/sda`
+* EFI: `grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB`
+
+== Generate grub configuration
+`grub-mkconfig -o /boot/grub/grub.cfg` (you should see Linux and Windows 10 images)
+
+== Enable previously installed packages
+. `systemctl enable NetworkManager`
+. `systemctl enable bluetooth`
+. `systemctl enable wpa_supplicant`
+
+== Create user
+`useradd -mG wheel bzgec`, `passwd bzgec`, enter password
+
+== Add user to groups
+`usermod -aG wheel,audio,video,optical,storage bzgec`
+
+== Add user to use sudo privileges
+`EDITOR=vim visudo`, uncomment line `%wheel ALL=(ALL) ALL`
+
+== Enable hibernation
+. Add kernel parameter (add `resume=` parameter):
+.. Edit `/etc/default/grub` and append your kernel options between the quotes in the
++
+
+`GRUB_CMDLINE_LINUX_DEFAULT` line:
++
+
+[source]
+----
+/etc/default/grub
+-------------------------------------------------------------------------
+GRUB_CMDLINE_LINUX_DEFAULT="loglevel=3 quiet resume=/dev/nvme0n1p6"
+----
+
+.. And then automatically re-generate the `grub.cfg` file with:
+       `grub-mkconfig -o /boot/grub/grub.cfg`
+
+. Configure the `initramfs` (add `resume` hook). Whether by label or by UUID, the swap
+partition is referred to with a udev device node, so the `resume` hook must go after the
+`udev` hook. This example was made starting from the default hook configuration:
++
+
+[source]
+----
+/etc/mkinitcpio.conf
+--------------------------------------------------------------------------
+HOOKS=(base udev autodetect modconf block filesystems keyboard resume)
+----
+
+* https://wiki.archlinux.org/index.php/kernel_parameters)[Kernel parameters]
+* https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate#Hibernation[Power management - suspend and hibernate]
+
+== Change options for closing the laptop lid, power button press
+- https://wiki.archlinux.org/index.php/Power_management#ACPI_events[Power management].
+
+Edit `/etc/systemd/logind.conf`:
+
+[source]
+----
+/etc/systemd/logind.conf
+--------------------------------------------------
+HandlePowerKey=hibernate
+HandleLidSwitch=suspend-then-hibernate
+HandleLidSwitchExternalPower=suspend-then-hibernate
+IdleAction=suspend-then-hibernate
+IdleActionSec=10min
+----
+
+You can also change delay between suspend and hibernate, edit `/etc/systemd/sleep.conf`:
+
+[source]
+----
+/etc/systemd/sleep.conf
+--------------------------------------------------
+HibernateDelaySec=120min
+----
+
+== `exit`
+
+== `umount -R /mnt`
+
+== `reboot`
+
+== Connect to WiFi
+. List available WiFis: `nmcli device wifi list`
+. Connect: `nmcli device wifi connect [SSID] password [PASSWORD]`
+. List all the connected networks: `nmcli connection show`
+. Check status of network devices: `nmcli device`
+. Disconnect network: `nmcli device disconnect [DEVICE]`
+. Re-connect with a network: `nmcli connection show`
+. Disable WiFi: `nmcli radio wifi off`
+
+You could also use `nmtui` - ncurses based interface
+
+== Clone other automated Arch linux setup
+`git clone https://github.com/bzgec/archlinux.git && cd archlinux && git submodule update --init --recursive`
+
+== Setup for servers
+
+=== Set static IP
+Open `nmtui`:
+
+. Edit connection for selected WiFi
+. Set IPv4 configuration to `<Manual>`
+. *Address*: Put your static IP address - `192.168.64.3/24`
+. *Gateway*: Router gateway - `192.168.64.1`
+. *DNS servers*: ... - `8.8.8.8`
+
+Restart WiFi service...
+
+Check for IP with: `ip addr`
+
+- https://www.tecmint.com/nmtui-configure-network-connection/[Reference]
+
+=== Setup SSH
+. Install `openssh`: `sudo pacman -S openssh`
+. Enable service: `sudo systemctl enable sshd.service`
+. Start service: `sudo systemctl start sshd.service`
+. Check that service is running: `systemctl status sshd.service`
+
+=== Set Up SSH Keys
+
+* If you already have RSA key pair you can just send public key to remote:
+
+//-
+
+[source,bash]
+----
+cat ~/.ssh/id_rsa.pub | ssh USERNAME@REMOTE_HOST "mkdir -p ~/.ssh && \
+  touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+----
+
+. Generate private and public RSA key pair: `ssh-keygen -b 4096`
+
+. Select name that is not the same as default if you want to use multiple/different keys.
+
+. Create also a password
+
+. Key pair should now be generated, copy it to `~/.ssh/` folder
+
+. Run this command to copy public RSA key to client/remote host:
++
+`cat ~/.ssh/RSA_KEY.pub | ssh USERNAME@REMOTE_HOST "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"`
+
+. You can now login to remote host with `ssh USERNAME@REMOTE_HOST -i ~/.ssh/RSA_KEY`
+
+//-
+
+* Note that if you use the default RSA key there is no need to pass `-i RSA_KEY`
+* https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04[Reference]
+
+=== Disabling Password Authentication on remote host
+* Edit `sudo vim /etc/ssh/sshd_config`
+* Uncomment and set to `no`:
++
+[source]
+----
+/etc/ssh/sshd_config
+-----------------------------------------------
+PasswordAuthentication no
+----
+
+* https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-on-ubuntu-20-04[Reference]
+
+=== Install and enable crontab
+. Install `crontab`: `sudo pacman -S cronie`
+. Enable service: `sudo systemctl enable cronie.service`
+. Start service: `sudo systemctl start cronie.service`
+. Check that service is running: `systemctl status cronie.service`
+
+* https://wiki.archlinux.org/index.php/cron[wiki.archlinux.org - cron]
+
+
+== References
+
+* https://www.youtube.com/watch?v=PQgyW10xD8s[video - Arch Linux Installation Guide 2020]
+* https://arcolinuxd.com/5-the-actual-installation-of-arch-linux-phase-1-bios/[arcolinuxd.com - 5 THE ACTUAL INSTALLATION OF ARCH LINUX PHASE 1 BIOS]
+* https://wiki.archlinux.org/index.php/Installation_guide[wiki.archlinux.org- Installation guide]
+
+
+== Wifi setup
+
+=== References
+* https://wiki.archlinux.org/index.php/Iwd#iwctl[wiki.archlinux.org - iwctl]
+* https://wiki.archlinux.org/index.php/Network_configuration/Wireless[wiki.archlinux.org - Wireless]
+* https://wiki.archlinux.org/index.php/Network_configuration/Wireless#Rfkill_caveat[wiki.archlinux.org - Wireless#Rfkill_caveat]
+

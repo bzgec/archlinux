@@ -1,0 +1,265 @@
+= ArchLinux
+:toc:
+:sectnums:
+:sectnumlevels: 4
+
+My ArchLinux setup:
+
+* link:scripts/nvim/README.md[nvim]
+* https://github.com/Morganamilo/paru[paru] - AUR helper and pacman wrapper
+* https://github.com/alacritty/alacritty[Alacritty] - terminal emulator
+* https://starship.rs[Starship] - shell prompt - config/starship.toml[config]
+* Window Managers:
+** Bare bone:
+*** https://dwm.suckless.org/[dwm] - C
+** Not so bare bone:
+*** http://www.qtile.org/[qtile] - Python
+*** **https://awesomewm.org/[awesomewm] - Lua**
+* Display manager (login manager):
+** https://wiki.archlinux.org/index.php/LightDM[LightDM]
+* Application launcher
+** https://github.com/davatorium/rofi[rofi] - A window switcher, Application launcher and dmenu replacement
+https://wiki.archlinux.org/index.php/Rofi[wiki.archlinux.org])
+
+** https://wiki.archlinux.org/index.php/dmenu[dmenu] - dynamic menu for X
+
+== CPU
+* https://wiki.archlinux.org/index.php/Ryzen[Ryzen - wiki.archlinux.org]
+* https://wiki.archlinux.org/index.php/microcode[microcode - wiki.wrchlinux.org]
+
+== GPU
+* https://wiki.archlinux.org/index.php/NVIDIA[NVIDIA]
+* https://github.com/Askannz/optimus-manager[optimus manager]
+(https://wiki.archlinux.org/index.php/NVIDIA_Optimus[wiki.archlinux.org])
+
+== Media programs
+* vlc
+* obs-studio
+* https://github.com/phw/peek[peek] - animated GIF recorder
+* https://github.com/flameshot-org/flameshot[flameshot] - screenshot software
+
+== Other
+* https://wiki.archlinux.org/index.php/reflector[reflector] - retrieve the latest mirror list from
+the Arch Linux Mirror Status page, filter the most up-to-date mirrors, sort them by speed and
+overwrite the file `/etc/pacman.d/mirrorlist`
+
+* https://wiki.archlinux.org/index.php/snapper[snapper]
+
+* https://archlinux.org/packages/community/x86_64/qbittorrent/[qbittorrent] - BitTorrent client
+
+* https://github.com/jonls/redshift[Redshift] - link:config/redshift.toml[config]
+(https://wiki.archlinux.org/index.php/redshift[wiki.archlinux.org])
+
+* https://element.io/[Element] - messaging app
+
+* https://discord.com/[Discord] (https://wiki.archlinux.org/index.php/Discord[wiki.archlinux.org])
+
+* link:scripts/backupScript/README.md[backup to external hard drive]
+
+* DistroTube https://www.youtube.com/watch?v=FX26s8INUYo[video] explaining what you typically need
+
+* Copy configuration files to `~/.config/` folder: `bash copyConfig.sh`
+
+=== Map `caps lock` to `backspace`
+* `setxkbmap -option caps:backspace`
+* automatically ran on startup
+
+=== Second keyboard doesn't have the same layout
+* get the device number: `libinput list-devices` (the number after `/dev/input/event`)
+
+* set new keyboard layout: `setxkbmap -device [device_number] si`
+
+=== Get key events/codes
+* `xev` (xorg-xev package)
+
+=== Touchpad reverse scrolling direction
+* Edit `/usr/share/X11/xorg.conf.d/40-libinput.conf` and add
+Option "NaturalScrolling" "true"` to touchpad setting:
++
+
+[source]
+----
+/usr/share/X11/xorg.conf.d/40-libinput.conf
+---------------------------------------------------
+Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+        Option "NaturalScrolling" "true"
+        Option "Tapping" "on"
+        Option "DisableWhileTyping" "on"
+EndSection
+----
+
+=== Brightness control with xbacklight
+If you don't have permission check https://wiki.archlinux.org/index.php/Backlight[arch wiki]
+(know that user must be in `video` group (`usermod -aG video <user>`))
+
+If you get `No outputs have backlight property` error when running it `xbacklight`.
+
+Add to `/usr/share/X11/xorg.conf.d/50-backlight.conf`:
+
+[source]
+----
+/usr/share/X11/xorg.conf.d/50-backlight.conf
+-----------------------------------------------
+```
+Section "Device"
+    Identifier  "Intel Graphics"
+    Driver      "intel"
+    Option      "Backlight"  "intel_backlight"
+EndSection
+----
+
+https://askzorin.com/t/error-while-setting-up-custom-brightness-keys-with-xbacklight/105/3[This] link helped me.
+I had `/sys/class/backlight/intel_backlight`.
+
+=== Can't control sound with amixer
+My error was: `amixer: Unable to find simple control 'Master',0`
+
+. Print available cards: `cat /proc/asound/cards`
++
+--
+[source]
+----
+/proc/asound/cards
+---------------------------------------------------------------
+ 0 [NVidia         ]: HDA-Intel - HDA NVidia
+                      HDA NVidia at 0xd1000000 irq 96
+ 1 [Generic        ]: HDA-Intel - HD-Audio Generic
+                      HD-Audio Generic at 0xd15c0000 irq 97
+----
+
+We can see that our card is `1` and not `0`
+--
+
+. Edit `/usr/share/alsa/alsa.conf` and change `defaults.ctl.card` and `defaults.pcm.card`:
+(previously it was `0` now set it to `1`)
++
+
+[source]
+----
+/usr/share/alsa/alsa.conf
+----------------------------------
+defaults.ctl.card 1
+defaults.pcm.card 1
+----
+
+==== Resources
+* https://askubuntu.com/a/673334[askubuntu.com]
+* https://bbs.archlinux.org/viewtopic.php?id=200806[bss.asrchlinux.org - Alsa audio won't work]
+
+
+=== Mount disk at boot
+We are doing the right way - with `fstab`
+
+. Get UUID of the disk: `ls -al /dev/disk/by-uuid/`
+. Get file system format of the partition: `file -sL /dev/sd*`
+. Configure `fstab` file: `sudo vim /etc/fstab`
++
+[source]
+----
+/etc/fstab
+----------------------------------------------------------------------------------------------------
+# Static information about the filesystems.
+# See fstab(5) for details.
+
+# <file system> <dir> <type> <options> <dump> <pass>
+# /dev/nvme0n1p3
+UUID=C25684FB5684F189	/win10    	ntfs      	rw,nosuid,nodev,user_id=0,group_id=0,allow_other,blksize=4096	0 0
+
+# /dev/nvme0n1p7
+UUID=20cce99b-5a1f-4e98-9a1e-351f31df1c4c	/home     	btrfs     	rw,noatime,compress=lzo,ssd,space_cache=v2,subvolid=257,subvol=/@home,subvol=@home	0 0
+
+# /dev/nvme0n1p6
+UUID=eb530593-0307-4678-a1f2-9c9065574950	none      	swap      	defaults  	0 0
+
+# /dev/sda1
+UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
+----
+
+==== Resources
+- https://confluence.jaytaala.com/display/TKB/Mount+drive+in+linux+and+set+auto-mount+at+boot[random post]
+- https://unix.stackexchange.com/a/60783[get partition (fs) format - unix.stackexchange.com]
+
+
+=== Disable microphone
+* https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture[ALSA - Advanced Linux Sound Architecture]
+* Toggle microphone: `amixer set Capture toggle`
+
+== Usage
+
+=== pacman
+
+* `--needed`: Do not reinstall the targets that are already up-to-date.
+
+* `-S`: Install packages.
+
+* `-R`: Remove a package (keep dependencies).
+
+* `-Rs`: Remove a package and remove dependencies which are not required by any other installed
+package. If it fails on a group try `-Rsu`.
+
+* `-Qtd`: check for packages that were installed as a dependency but now, no other packages depend
+on them
+
+* Generally avoid using:
+** `--overwrite`: pacman will bypass file conflict checks
+** `-Sy`: partial upgrades (use `-Syu`)
+** `-d`: skips dependency checks during package removal
+**  https://wiki.archlinux.org/index.php/AUR_helpers[AUR helpers] which automate installation
+     of AUR packages (yay, paru)
+
+==== Removing unused packages (orphans)
+For recursively removing orphans and their configuration files: `pacman -Qtdq | pacman -Rns -`
+
+==== References
+- https://wiki.archlinux.org/index.php/pacman[wiki.archlinux.org - pacman]
+- https://wiki.archlinux.org/index.php/System_maintenance[wiki.archlinux.org - System maintenance]
+
+== KDE (Plasma)
+- https://wiki.archlinux.org/index.php/KDE[wiki.archlinux.org - KDE]
+- https://wiki.archlinux.org/index.php/Display_manager#Loading_the_display_manager[Display manager]
+
+`sudo pacman -S xorg plasma kde-applications`
+
+`sudo systemctl enable sddm.service`
+
+Check the default target to boot into: `systemctl get-default`, it should return `graphical.target`
+
+KDE (Plasma) should now work.
+
+== Random
+
+* *linux-lts* long term support kernel
+
+* https://wiki.archlinux.org/index.php/Multihead[Multi-head, multi-screen, multi-display or multi-monitor]
+
+* Keyboard configuration:
+** https://wiki.archlinux.org/index.php/Xorg/Keyboard_configuration[Xorg] - only for Desktop
+  Environment
+** https://wiki.archlinux.org/index.php/Linux_console/Keyboard_configuration[Linux console] -
+only for virtual console
+
+* Connect to WiFI - https://wiki.archlinux.org/index.php/NetworkManager[Network Manager]
+** `nmcli` - command line interface
+** `nmtui` - ncurses base interface
+
+== TODO
+* [ ] Fix bad DPI
+
+* [ ] Display GPU temperature (do you really need this? - could cause problems
+when GPU should be sleeping but is not because of temperature readings...)
+
+* [ ] Widget for volume control, and play buttons
+
+* [ ] Panel/wibox visible if window is in full screen mode (VLC)
+
+* [ ] First screen OFF after `x` min and then suspend after `y` min
+
+* [x] closing the lid, pressing power button
+
+* [x] Microphone ON/OFF
+
+* [x] Dropdown menus in applications are transparent
