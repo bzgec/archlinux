@@ -186,6 +186,23 @@ if [ "$1" != "no-gui" ]; then
     timedatectl set-local-rtc 1 --adjust-system-clock
 fi
 
+echo "####################################################################################"
+echo "Touchpad: change scrolling direction, enable tapping..."
+echo "####################################################################################"
+if [ "$1" != "no-gui" ]; then
+    FILE="/usr/share/X11/xorg.conf.d/40-libinput.conf"
+    SEARCH_STRING='Identifier "libinput touchpad catchall"'
+
+    APPEND_STRING='        Option "NaturalScrolling" "true"'
+    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
+
+    APPEND_STRING='        Option "Tapping" "on"'
+    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
+
+    APPEND_STRING='        Option "DisableWhileTyping" "on"'
+    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
+fi
+
 # Copy wallpapers collection
 echo "####################################################################################"
 echo "Copy wallpapers collection"
