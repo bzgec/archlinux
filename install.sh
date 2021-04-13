@@ -167,7 +167,7 @@ echo "Other GUI apps"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord \
-                              qalculate-gtk libreoffice-fresh gimp okular calibre
+                              qalculate-gtk libreoffice-fresh gimp okular calibre gparted
 fi
 
 # Compress and archive apps
