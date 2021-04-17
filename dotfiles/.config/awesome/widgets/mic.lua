@@ -5,51 +5,55 @@
 
 
 # Microphone state widget/watcher
+
 This widget can be used to display the current microphone status.
 
 ## Requirements
+
 - `amixer` - this command is used to get and toggle microphone state
 
 ## Usage
+
 - Download [mic.lua](https://awesomewm.org/recipes/mic.lua) file and put it into awesome's
   folder (like `~/.config/awesome/widgets/mic.lua`)
+
 - Add widget to `theme.lua`:
 
-  ```lua
-  local widgets = {
-      mic = require("widgets/mic"),
-  }
-  theme.mic = widgets.mic({
-      timeout = 10,
-      settings = function(self)
-          if self.state == "muted" then
-              self.widget:set_image(theme.widget_micMuted)
-          else
-              self.widget:set_image(theme.widget_micUnmuted)
-          end
-      end
-  })
-  local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
-  ```
+```lua
+local widgets = {
+    mic = require("widgets/mic"),
+}
+theme.mic = widgets.mic({
+    timeout = 10,
+    settings = function(self)
+        if self.state == "muted" then
+            self.widget:set_image(theme.widget_micMuted)
+        else
+            self.widget:set_image(theme.widget_micUnmuted)
+        end
+    end
+})
+local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.horizontal }
+```
 
 - Create a shortcut to toggle microphone state (add to `rc.lua`):
 
-  ```lua
-  -- Toggle microphone state
-  awful.key({ modkey, "Shift" }, "m",
-            function ()
-                beautiful.mic:toggle()
-            end,
-            {description = "Toggle microphone (amixer)", group = "Hotkeys"}
-  ),
-  ```
+```lua
+-- Toggle microphone state
+awful.key({ modkey, "Shift" }, "m",
+          function ()
+              beautiful.mic:toggle()
+          end,
+          {description = "Toggle microphone (amixer)", group = "Hotkeys"}
+),
+```
 
 - You can also add a command to mute the microphone state on boot. Add this to your `rc.lua`:
 
-  ```lua
-  -- Mute microphone on boot
-  beautiful.mic:mute()
-  ```
+```lua
+-- Mute microphone on boot
+beautiful.mic:mute()
+```
 
 --]]
 
@@ -71,7 +75,7 @@ local function factory(args)
     }
 
     function mic:mute()
-        awful.spawn.easy_async_with_shell("amixer set Capture nocap",
+        awful.spawn.easy_async({"amixer", "set", "Capture", "nocap"},
             function()
                 self:update()
             end
@@ -79,7 +83,7 @@ local function factory(args)
     end
 
     function mic:unmute()
-        awful.spawn.easy_async_with_shell("amixer set Capture cap",
+        awful.spawn.easy_async({"amixer", "set", "Capture", "cap"},
             function()
                 self:update()
             end
@@ -87,7 +91,7 @@ local function factory(args)
     end
 
     function mic:toggle()
-        awful.spawn.easy_async_with_shell("amixer set Capture toggle",
+        awful.spawn.easy_async({"amixer", "set", "Capture", "toggle"},
             function()
                 self:update()
             end
@@ -111,7 +115,7 @@ local function factory(args)
     --   - If there are lines with "[on]" then assume microphone is "unmuted".
     --   - If there are NO lines with "[on]" then assume microphone is "muted".
     mic, mic.timer = awful.widget.watch(
-        "bash -c \"amixer get Capture | grep '\\[on\\]'\"",
+        {"bash", "-c", "amixer get Capture | grep '\\[on\\]'"},
         mic.timeout,
         function(self, stdout, stderr, exitreason, exitcode)
             local current_micState = "error"
