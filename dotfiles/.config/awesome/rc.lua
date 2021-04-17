@@ -1120,7 +1120,7 @@ awesome.connect_signal(
         --awful.spawn.with_shell("nitrogen --restore")
         --awful.spawn.with_shell("nitrogen --set-zoom-fill --random /usr/share/backgrounds")
         awful.spawn.with_shell(string.format("nitrogen --set-zoom-fill --random %s", wallpapersCollectionPath))
-        awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
+        -- awful.spawn.with_shell("xss-lock -- ~/.config/lock.sh &")
 
         -- Mute microphone on boot
         beautiful.mic:mute()
