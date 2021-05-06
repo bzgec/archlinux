@@ -1,5 +1,7 @@
 #!/bin/sh
-pacmanParams="-S --needed --noconfirm"
+
+pacman_install() { sudo pacman -S --needed --noconfirm "$@"; }
+AUR_helper_install() { paru -S --needed --noconfirm "$@"; }
 
 if [ "$1" != "no-gui" ]; then
     echo "Installing for GUI setup"
@@ -7,9 +9,10 @@ else
     echo "Installing for terminal setup"
 fi
 
-read -r -p "Continue? [y/N] " response
-response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]]; then
+printf "Continue? [y/N] "
+read -r response
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]')  # tolower
+if [ "$response" = "y"  ] || [ "$response" = "yes" ]; then
     echo "Executing script..."
 else
     echo "Exiting script..."
@@ -18,7 +21,7 @@ fi
 
 sudo pacman -Syy
 
-sudo pacman $pacmanParams base-devel
+pacman_install base-devel
 
 # Random stuff
 # udiskie - automount USB disks
@@ -26,13 +29,13 @@ echo "##########################################################################
 echo "Random stuff"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams rofi openssh xclip nitrogen acpilight picom sxiv  \
-                              rsync htop bluez bluez-utils snapper \
-                              iw man nodejs npm python-pip udiskie
+    pacman_install rofi openssh xclip nitrogen acpilight picom sxiv  \
+                   rsync htop bluez bluez-utils snapper \
+                   iw man nodejs npm python-pip udiskie shellcheck
 else
-    sudo pacman $pacmanParams openssh xclip \
-                              rsync htop snapper \
-                              iw man nodejs npm python-pip udiskie
+    pacman_install openssh xclip \
+                   rsync htop snapper \
+                   iw man nodejs npm python-pip udiskie shellcheck
 fi
 
 # Audio stuff
@@ -41,7 +44,7 @@ echo "##########################################################################
 echo "Audio stuff"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams pavucontrol pulseaudio-bluetooth
+    pacman_install pavucontrol pulseaudio-bluetooth
 fi
 
 # Enable colors for pacman
@@ -60,22 +63,22 @@ echo "##########################################################################
 echo "Window manager"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams xorg-server awesome
+    pacman_install xorg-server awesome
 fi
 
 # Terminal emulator - Alacritty
 echo "####################################################################################"
 echo "Terminal emulator"
 echo "####################################################################################"
-sudo pacman $pacmanParams alacritty
+pacman_install alacritty
 
 # Display manager (login manager) - LightDM
 echo "####################################################################################"
 echo "Display manager"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan \
-                              numlockx
+    pacman_install xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan \
+                   numlockx
     systemctl enable lightdm
     sudo sed -i 's/#greeter-sesstoin=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
     # https://wiki.archlinux.org/index.php/LightDM#LightDM_does_not_appear_or_monitor_only_displays_TTY_output
@@ -94,20 +97,20 @@ echo "##########################################################################
 echo "AUR helper"
 echo "####################################################################################"
 git clone https://aur.archlinux.org/paru.git ~/paru
-cd ~/paru
-makepkg -si
-
-# Go back to starting directory
-cd -
+# Use a ( subshell ) to avoid having to cd back.
+(
+    cd ~/paru || exit
+    makepkg -si
+)
 
 # Handle inactivity stuff
 echo "####################################################################################"
 echo "Handle inactivity stuff"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams xss-lock
+    pacman_install xss-lock
     # https://github.com/Raymo111/i3lock-color
-    paru $pacmanParams i3lock-color
+    AUR_helper_install i3lock-color
     sudo chmod +x ./dotfiles/.config/lock.sh
 fi
 
@@ -120,7 +123,7 @@ fi
 echo "####################################################################################"
 echo "Terminal suff"
 echo "####################################################################################"
-paru $pacmanParams neovim-nightly-bin git-delta-bin starship hstr lazygit
+AUR_helper_install neovim-nightly-bin git-delta-bin starship hstr lazygit
 
 # Set git editor to be nvim
 git config --global core.editor nvim
@@ -133,7 +136,7 @@ echo "##########################################################################
 echo "Browser"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    paru $pacmanParams brave-bin
+    AUR_helper_install brave-bin
 fi
 
 # GUI file manager
@@ -141,7 +144,7 @@ echo "##########################################################################
 echo "GUI file manager"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams pcmanfm
+    pacman_install pcmanfm
 fi
 
 # GUI code editor
@@ -149,8 +152,8 @@ echo "##########################################################################
 echo "GUI code editor"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    paru $pacmanParams vscodium-bin
-    sudo pacman $pacmanParams notepadqq
+    AUR_helper_install vscodium-bin
+    pacman_install notepadqq
 fi
 
 # Media programs
@@ -158,7 +161,7 @@ echo "##########################################################################
 echo "Media programs"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams vlc obs-studio peek flameshot
+    pacman_install vlc obs-studio peek flameshot
 fi
 
 # Other (python-gobject is needed by redshift-gtk)
@@ -166,8 +169,8 @@ echo "##########################################################################
 echo "Other GUI apps"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    sudo pacman $pacmanParams redshift python-gobject qbittorrent element-desktop discord \
-                              qalculate-gtk libreoffice-fresh gimp okular calibre gparted
+    pacman_install redshift python-gobject qbittorrent element-desktop discord \
+                   qalculate-gtk libreoffice-fresh gimp okular calibre gparted
 fi
 
 # Compress and archive apps
@@ -177,7 +180,7 @@ fi
 echo "####################################################################################"
 echo "Compress and archive apps"
 echo "####################################################################################"
-sudo pacman $pacmanParams p7zip xarchiver
+pacman_install p7zip xarchiver
 
 echo "####################################################################################"
 echo "Fix Windows and Linux showing different times"

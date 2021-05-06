@@ -9,7 +9,8 @@
 #Include = /etc/pacman.d/mirrorlist
 #sudo sed 's/#\[multilib\]\n#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\nInclude = \/etc\/pacman.d\/mirrorlist/' /etc/pacman.conf
 # https://unix.stackexchange.com/questions/26284/how-can-i-use-sed-to-replace-a-multi-line-string
-cat /etc/pacman.conf | tr '\n' '\f' | tr '\r' '\f' | tr '\f\f' '\f' | sed -e 's/#\[multilib\]\f#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\fInclude = \/etc\/pacman.d\/mirrorlist/' | tr '\f' '\n' | sudo tee /etc/pacman.conf 1>/dev/null
+# cat /etc/pacman.conf | tr '\n' '\f' | tr '\r' '\f' | tr '\f\f' '\f' | sed -e 's/#\[multilib\]\f#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\fInclude = \/etc\/pacman.d\/mirrorlist/' | tr '\f' '\n' > tmpfile && sudo mv tmpfile /etc/pacman.conf 1>/dev/null
+sudo sed -i '/[multilib\]/{n;s/#Include = \/etc\/pacman.d\/mirrorlist/Include = \/etc\/pacman.d\/mirrorlist/}' /etc/pacman.conf
 # cat /etc/pacman.conf | tr '\n' '\f' | tr '\r' '\f' | tr '\f\f' '\f' | sed -e 's/#\[multilib\]\f#Include = \/etc\/pacman.d\/mirrorlist/\[multilib\]\fInclude = \/etc\/pacman.d\/mirrorlist/' | tr '\f' '\n' | tee tmp.txt 1>/dev/null
 
 # Then upgrade the system

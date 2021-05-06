@@ -230,6 +230,14 @@ Check the default target to boot into: `systemctl get-default`, it should return
 
 KDE (Plasma) should now work.
 
+== Development
+
+=== Dependencies
+* `shellcheck`
+
+=== Before commiting
+Run `make check` to check for best coding standards.
+
 == Random
 
 * *linux-lts* long term support kernel

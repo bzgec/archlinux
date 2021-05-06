@@ -6,6 +6,8 @@
 
 AUR_HELPER="paru"
 
+pacman_install() { sudo pacman -S --needed --noconfirm "$@"; }
+
 if [ "$1" != "no-gui" ]; then
     echo "Installing for GUI setup"
 else
@@ -13,19 +15,22 @@ else
 fi
 
 # Add user + change limits for snapshots to keep
-read -p "Enter user: " user
-echo $user
+printf "Enter user: "
+read -r user
+echo "$user"
 
-read -r -p "Continue? [y/N] " response
-response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]]; then
+printf "Continue? [y/N] "
+read -r response
+response=$(echo "$response" | tr '[:upper:]' '[:lower:]')  # tolower
+if [ "$response" = "y"  ] || [ "$response" = "yes" ]; then
+#if [[ "$response" =~ ^(yes|y)$ ]]; then
     echo "Executing script..."
 else
     echo "Exiting script..."
     exit 0
 fi
 
-sudo pacman -S snapper
+pacman_install snapper
 
 # Snapper stuff
 sudo umount /.snapshots
@@ -38,11 +43,11 @@ sudo chmod 750 /.snapshots
 
 # Enable users to view snapshots
 sudo chmod a+rx /.snapshots
-sudo chown :$user /.snapshots
+sudo chown :"$user" /.snapshots
 
 addUserSedCmd="s/ALLOW_USERS=\"\"/ALLOW_USERS=\"${user}\"/"
-echo $addUserSedCmd
-sudo sed -i $addUserSedCmd /etc/snapper/configs/root
+echo "$addUserSedCmd"
+sudo sed -i "$addUserSedCmd" /etc/snapper/configs/root
 sudo sed -i 's/TIMELINE_LIMIT_HOURLY="10"/TIMELINE_LIMIT_HOURLY="5"/' /etc/snapper/configs/root
 sudo sed -i 's/TIMELINE_LIMIT_DAILY="10"/TIMELINE_LIMIT_DAILY="7"/' /etc/snapper/configs/root
 sudo sed -i 's/TIMELINE_LIMIT_WEEKLY="0"/TIMELINE_LIMIT_WEEKLY="0"/' /etc/snapper/configs/root
@@ -61,7 +66,7 @@ else
 fi
 
 sudo mkdir /etc/pacman.d/hooks
-sudo echo '''
+echo '''
 [Trigger]
 Operation = Upgrade
 Operation = Install
@@ -74,12 +79,13 @@ Depends = rsync
 Description = Backing up /boot...
 When = PreTransaction
 Exec = /usr/bin/rsync -a --delete /boot /.bootbackup
-''' >> /etc/pacman.d/hooks/50-bootbackup.hook
+''' | sudo tee -a /etc/pacman.d/hooks/50-bootbackup.hook
 
-sudo pacman -S rsync
+pacman_install rsync
 
 echo "Remove 'fsck' from 'HOOKS'"
-read -p "You understand?" yn
+printf "You understand? [y/N] "
+read -r yn
 case $yn in
     [Yy]* ) ;;
     [Nn]* ) exit;;
