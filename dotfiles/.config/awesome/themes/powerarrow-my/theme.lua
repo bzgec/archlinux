@@ -459,8 +459,21 @@ local widget_mic = wibox.widget { theme.mic.widget, layout = wibox.layout.align.
 local neticon = wibox.widget.imagebox(theme.widget_net)
 local net = lain.widget.net({
     settings = function()
+        function parseNetworkSpeed(kbyps)
+            if kbyps >= 10^6 then
+                -- GB
+                return string.format("%.2f", kbyps/10^6) .. "GB"
+            elseif kbyps >= 10^3 then
+                -- MB
+                return string.format("%.2f", kbyps/10^3) .. "MB"
+            else
+                -- kB
+                return string.format("%.2f", kbyps) .. "kB"
+            end
+        end
+
         -- widget:set_markup(markup.fontfg(theme.font, "#FEFEFE", " " .. net_now.received .. " ↓↑ " .. net_now.sent .. " "))
-        widget:set_markup(markup.font(theme.font, " " .. net_now.received .. "kB ↓↑ " .. net_now.sent .. "kB "))
+        widget:set_markup(markup.font(theme.font, " " .. parseNetworkSpeed(tonumber(net_now.received)) .. " ↓↑ " .. parseNetworkSpeed(tonumber(net_now.sent))))
         --widget:set_markup(markup.font(theme.font,
         --                  markup("#7AC82E", " " .. string.format("%06.1f", net_now.received))
         --                  .. " " ..
