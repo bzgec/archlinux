@@ -20,6 +20,8 @@ My ArchLinux setup:
 * Application launcher
 ** https://github.com/davatorium/rofi[rofi] - A window switcher, Application launcher and dmenu replacement
 https://wiki.archlinux.org/index.php/Rofi[wiki.archlinux.org])
+* Firewall
+** https://wiki.archlinux.org/title/Uncomplicated_Firewall[Uncomplicated Firewall (ufw)]
 
 ** https://wiki.archlinux.org/index.php/dmenu[dmenu] - dynamic menu for X
 
