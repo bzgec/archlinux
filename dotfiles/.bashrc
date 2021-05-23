@@ -79,3 +79,13 @@ alias dark="~/.config/themeSwitcher.py --dark"
 alias UPDATE_MIRRORLIST="sudo reflector --latest 20 --protocol http --protocol https --sort rate --save /etc/pacman.d/mirrorlist"
 
 alias killAllProc="~/.config/killAllProc.sh"
+
+# First parameter is password length
+GEN_PASS () {
+  openssl rand -base64 $1
+}
+
+# First parameter is password length
+GEN_PASS_SIMP () {
+  openssl rand -base64 $1 | tr -dc '[:alnum:]\n\r'
+}
