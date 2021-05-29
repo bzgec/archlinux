@@ -30,11 +30,11 @@ echo "Random stuff"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     pacman_install rofi openssh xclip nitrogen acpilight picom sxiv  \
-                   rsync htop bluez bluez-utils snapper \
+                   rsync htop bluez bluez-utils snapper alsa-utils \
                    iw man nodejs npm python-pip udiskie shellcheck
 else
     pacman_install openssh xclip \
-                   rsync htop snapper \
+                   rsync htop snapper alsa-utils \
                    iw man nodejs npm python-pip udiskie shellcheck
 fi
 
@@ -80,7 +80,7 @@ if [ "$1" != "no-gui" ]; then
     pacman_install xorg-server lightdm-webkit2-greeter lightdm-webkit-theme-litarvan \
                    numlockx
     systemctl enable lightdm
-    sudo sed -i 's/#greeter-sesstoin=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
+    sudo sed -i 's/#greeter-sessoin=example-gtk-gnome/greeter-session=lightdm-webkit2-greeter/' /etc/lightdm/lightdm.conf
     # https://wiki.archlinux.org/index.php/LightDM#LightDM_does_not_appear_or_monitor_only_displays_TTY_output
     sudo sed -i 's/#logind-check-graphical=false/logind-check-graphical=true/' /etc/lightdm/lightdm.conf
     # Enable numlock at boot
