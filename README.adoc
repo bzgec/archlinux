@@ -136,13 +136,14 @@ My error was: `amixer: Unable to find simple control 'Master',0`
 We can see that our card is `1` and not `0`
 --
 
-. Edit `/usr/share/alsa/alsa.conf` and change `defaults.ctl.card` and `defaults.pcm.card`:
+:file:
+. Edit/create `/etc/asound.conf` and change `defaults.ctl.card` and `defaults.pcm.card`:
 (previously it was `0` now set it to `1`)
 +
 
 [source]
 ----
-/usr/share/alsa/alsa.conf
+/etc/asound.conf
 ----------------------------------
 defaults.ctl.card 1
 defaults.pcm.card 1
