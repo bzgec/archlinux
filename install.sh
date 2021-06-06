@@ -185,6 +185,8 @@ pacman_install p7zip xarchiver
 echo "####################################################################################"
 echo "Fix Windows and Linux showing different times"
 echo "####################################################################################"
+sudo timedatectl set-ntp true
+sudo hwclock --systohc
 if [ "$1" != "no-gui" ]; then
     timedatectl set-local-rtc 1 --adjust-system-clock
 fi
