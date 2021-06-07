@@ -38,6 +38,15 @@ else
                    iw man nodejs npm python-pip udiskie shellcheck
 fi
 
+# Gitlab fix for `client_global_hostkeys_private_confirm: server gave bad signature for RSA key 0`
+# https://stackoverflow.com/a/66876321/14246508
+# https://www.reddit.com/r/archlinux/comments/lyazre/openssh_update_causes_problems/
+FILE=~/.ssh/config
+{
+    echo "Host gitlab.com"
+    echo "  UpdateHostKeys no"
+} >> $FILE
+
 # Audio stuff
 # pavucontrol - PulseAudio Volume Control
 echo "####################################################################################"
