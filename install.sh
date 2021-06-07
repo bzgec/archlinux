@@ -34,7 +34,7 @@ if [ "$1" != "no-gui" ]; then
                    iw man nodejs npm python-pip udiskie shellcheck
 else
     pacman_install openssh xclip \
-                   rsync htop snapper alsa-utils \
+                   rsync htop snapper \
                    iw man nodejs npm python-pip udiskie shellcheck
 fi
 
