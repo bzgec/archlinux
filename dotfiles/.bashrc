@@ -8,10 +8,10 @@
 alias ls='ls --color=auto'
 PS1='[\u@\h \W\$ '
 
-###################################################################################################
+################################################################################
 # Default .bashrc for ubuntu
 #   Copied from: https://gist.github.com/marioBonales/1637696
-###################################################################################################
+################################################################################
 # don't put duplicate lines in the history. See bash(1) for more options
 # ... or force ignoredups and ignorespace
 HISTCONTROL=ignoredups:ignorespace
@@ -26,11 +26,11 @@ HISTFILESIZE=2000
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-###################################################################################################
+################################################################################
 
-###################################################################################################
+################################################################################
 # HSTR configuration - add this to ~/.bashrc
-###################################################################################################
+################################################################################
 alias hh=hstr                    # hh to be alias for hstr
 export HSTR_CONFIG=hicolor       # get more colors
 shopt -s histappend              # append new history items to .bash_history
@@ -43,7 +43,7 @@ export PROMPT_COMMAND="history -a; history -n; ${PROMPT_COMMAND}"
 if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
 # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
 if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
-###################################################################################################
+################################################################################
 
 # Enable starship prompt
 eval "$(starship init bash)"
@@ -51,8 +51,12 @@ eval "$(starship init bash)"
 # Set nvim as a MANPAGER
 export MANPAGER="nvim -c 'set ft=man' -"
 
+################################################################################
+# Change path
+################################################################################
 # Custom gcc path
 #export PATH=$PATH:/home/bzgec/gcc-arm-none-eabi/bin
+################################################################################
 
 RM_SSH_KEY () {
   ssh-keygen -f "/home/bzgec/.ssh/known_hosts" -R "192.168.64.2"
