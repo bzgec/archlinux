@@ -204,17 +204,7 @@ echo "##########################################################################
 echo "Touchpad: change scrolling direction, enable tapping..."
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    FILE="/usr/share/X11/xorg.conf.d/40-libinput.conf"
-    SEARCH_STRING='Identifier "libinput touchpad catchall"'
-
-    APPEND_STRING='        Option "NaturalScrolling" "true"'
-    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
-
-    APPEND_STRING='        Option "Tapping" "on"'
-    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
-
-    APPEND_STRING='        Option "DisableWhileTyping" "on"'
-    sudo sed -i "/${SEARCH_STRING}/a\\${APPEND_STRING}" $FILE
+    sudo cp 40-libinput.conf /etc/X11/xorg.conf.d/
 fi
 
 # Copy wallpapers collection
