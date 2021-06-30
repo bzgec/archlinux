@@ -57,7 +57,7 @@ You can verify it with: `timedatectl status`
 === Partition
 
 ==== BIOS with MBR
-. Select MBR/DOS partition table: `o`
+. Select MBR/DOS partition table: `o` (skip if Windows 10 is already installed)
 . List free unpartitioned space: `F`
 . Create new partition: `n`
 . Set partition type to primary: `p`
@@ -69,6 +69,14 @@ You can verify it with: `timedatectl status`
 . Change swap partition type: `t`, `1`, `82` (this should be checked with `L`
 . Enable boot from linux partition: `a`, `2`
 . Write table to disk: `w`
+
+[NOTE]
+====
+If you have dual boot with Windows then you are going to have problem
+with max number of primary partitions.
+You can delete Windows partition with size around 550MB.
+Now you should have two empty partitions (one for SWAP and one for system).
+====
 
 ==== UEFI with GPT
 . `g` to select GPT partition table (skip if Windows 10 is already installed)
@@ -103,7 +111,7 @@ bad sector checking.)
 . Create *snapshots* subvolume: `btrfs su cr /mnt/@snapshots`
 . Create *var_log* subvolume: `btrfs su cr /mnt/@var_log`
 . Unmount `/mnt`: `umount /mnt`
-. Mount *root* subvolume with btrfs:`mount -o noatime,compress=lzo,space_cache=v2,subvol=@ /dev/nvme0n1p7 /mnt`
+. Mount *root* subvolume with btrfs: `mount -o noatime,compress=lzo,space_cache=v2,subvol=@ /dev/nvme0n1p7 /mnt`
 . Make directories: `mkdir -p /mnt/{boot,home,.snapshots,var_log}`
 . Mount other subvmolumes:
 .. `mount -o noatime,compress=lzo,space_cache=v2,subvol=@home /dev/nvme0n1p7 /mnt/home`
@@ -182,6 +190,14 @@ Note that `os-prober` is needed only for multiboot setups.
 
 == Generate grub configuration
 `grub-mkconfig -o /boot/grub/grub.cfg` (you should see Linux and Windows 10 images)
+
+=== If you have problem with detecting OS:
+
+. edit `/etc/default/grub`
+. add or uncomment `GRUB_DISABLE_OS_PROBER=false`
+. save that file then run `grub-mkconfig -o /boot/grub/grub.cfg`
+
+link:https://forum.endeavouros.com/t/warning-os-prober-will-not-be-executed-to-detect-other-bootable-partitions-systems-on-them-will-not-be-added-to-the-grub-boot-configuration-check-grub-disable-os-prober-documentation-entry/13998/2[reference]
 
 == Enable previously installed packages
 . `systemctl enable NetworkManager`
