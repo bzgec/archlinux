@@ -319,8 +319,11 @@ local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.ali
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     timeout = 10,
-    -- Run: `find /sys/devices -type f -name *temp*`
-    tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- AMD CPU
+    -- Run: 
+    --    - `sensors` (lm-sensors package) to see which temperature is for CPU
+    --    - `find /sys/devices -type f -name *temp*`
+    -- tempfile = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",  -- ProBook 4740s - i5-2450M
+    tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- Nitro AN515-44 - Ryzen 7 4800H
     settings = function()
         widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
     end
