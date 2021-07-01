@@ -322,8 +322,8 @@ local temp = lain.widget.temp({
     -- Run: 
     --    - `sensors` (lm-sensors package) to see which temperature is for CPU
     --    - `find /sys/devices -type f -name *temp*`
-    -- tempfile = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",  -- ProBook 4740s - i5-2450M
-    tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- Nitro AN515-44 - Ryzen 7 4800H
+    tempfile = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",  -- ProBook 4740s - i5-2450M
+    -- tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- Nitro AN515-44 - Ryzen 7 4800H
     settings = function()
         widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
     end
@@ -546,7 +546,7 @@ function theme.at_screen_connect(s)
                                          awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(16), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(21), bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
