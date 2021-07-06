@@ -85,8 +85,8 @@ pacman_install rsync
 
 echo "Remove 'fsck' from 'HOOKS'"
 printf "You understand? [y/N] "
-read -r yn
-case $yn in
+read -r response
+case $response in
     [Yy]* ) ;;
     [Nn]* ) exit;;
     * ) echo "Please anwser yes or no.";;

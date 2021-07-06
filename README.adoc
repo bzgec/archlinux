@@ -191,6 +191,39 @@ UUID=7D524647407BEC2A	/home/bzgec/SlimBoi      	ntfs      	defaults  	0 0
 * https://wiki.archlinux.org/index.php/Advanced_Linux_Sound_Architecture[ALSA - Advanced Linux Sound Architecture]
 * Toggle microphone: `amixer set Capture toggle`
 
+=== Fix missing GRUB
+. Boot into live arch USB
+. mount your linux partition:
+** btrfs: `mount -o noatime,compress=lzo,space_cache=v2,subvol=@ /dev/nvme0n1p7 /mnt`
+** other (not tested): `mount -t auto /dev/nvme0n1p7 /mnt`
+. mount EFI partition: `mount /dev/nvme0n1p5 /mnt/boot`
++
+--
+You can check which one is EFI with `fdisk -l`
+--
+. change root into system: `arch-chroot /mnt`
+. recreate kernel image (don't know if necessary): `mkinitcpio -p linux`
+. install grub:
+** EFI: `grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=GRUB`
+. Generate grub configuration: `grub-mkconfig -o /boot/grub/grub.cfg (you should see OS images)`
++
+--
+[NOTE]
+====
+If you have problem with detecting OS:
+
+. edit `/etc/default/grub`
+. add or uncomment `GRUB_DISABLE_OS_PROBER=false`
+. save that file then run `grub-mkconfig -o /boot/grub/grub.cfg`
+
+link:https://forum.endeavouros.com/t/warning-os-prober-will-not-be-executed-to-detect-other-bootable-partitions-systems-on-them-will-not-be-added-to-the-grub-boot-configuration-check-grub-disable-os-prober-documentation-entry/13998/2[reference]
+====
+--
+
+. `exit`
+. `umount -R /mnt`
+. `reboot`
+
 == Usage
 
 === pacman
