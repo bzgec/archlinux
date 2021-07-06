@@ -272,10 +272,10 @@ root.buttons(my_table.join(
 
 -- {{{ Key bindings
 globalkeys = my_table.join(
-    -- Take a screenshot
-    -- https://github.com/lcpz/dots/blob/master/bin/screenshot
-    awful.key({ altkey }, "p", function() awful.spawn.with_shell("screenshot") end,
-              {description = "take a screenshot", group = "Hotkeys"}),
+    -- -- Take a screenshot
+    -- -- https://github.com/lcpz/dots/blob/master/bin/screenshot
+    -- awful.key({ altkey }, "p", function() awful.spawn.with_shell("screenshot") end,
+    --           {description = "take a screenshot", group = "Hotkeys"}),
 
     -- X screen locker
     awful.key({ altkey, "Control" }, "l", function () awful.spawn.with_shell(scrlocker) end,

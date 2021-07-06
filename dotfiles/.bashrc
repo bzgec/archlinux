@@ -55,7 +55,7 @@ export MANPAGER="nvim -c 'set ft=man' -"
 # Change path
 ################################################################################
 # Custom gcc path
-#export PATH=$PATH:/home/bzgec/gcc-arm-none-eabi/bin
+export PATH=$PATH:/home/bzgec/gcc-arm-none-eabi/bin
 ################################################################################
 
 RM_SSH_KEY () {

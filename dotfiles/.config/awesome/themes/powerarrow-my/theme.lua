@@ -364,7 +364,7 @@ theme.fs = lain.widget.fs({
 -- Battery
 local baticon = wibox.widget.imagebox(theme.widget_bat_000)
 theme.bat = lain.widget.bat({
-    timeout = 30,
+    timeout = 3,
     settings = function()
         local index, perc = "widget_bat_", tonumber(bat_now.perc) or 0
         local batStatusString = "N/A"
@@ -385,9 +385,11 @@ theme.bat = lain.widget.bat({
 
         if bat_now.ac_status == 1 then
             index = index .. "_charging"
-            batStatusString = string.format("%s%%", perc)
+            -- batStatusString = string.format("%s%%", perc)
+            batStatusString = string.format("%s%%, %sW, %s%%", perc, bat_now.watt, bat_now.capacity)
         else
-            batStatusString = string.format("%s%%, %s", perc, bat_now.time)
+            -- batStatusString = string.format("%s%%, %s", perc, bat_now.time)
+            batStatusString = string.format("%s%%, %sW, %s%%, %s", perc, bat_now.watt, bat_now.capacity, bat_now.time)
         end
 
         baticon:set_image(theme[index])
