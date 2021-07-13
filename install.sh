@@ -207,6 +207,24 @@ if [ "$1" != "no-gui" ]; then
     sudo cp 40-libinput.conf /etc/X11/xorg.conf.d/
 fi
 
+echo "####################################################################################"
+echo "Setting default applications"
+echo "####################################################################################"
+# https://www.reddit.com/r/linuxquestions/comments/5z3n81/default_applications_in_arch_linux/dev24vo?utm_source=share&utm_medium=web2x&context=3
+# Location: /usr/share/applications/
+# Get default for specific file: xdg-mime query filetype myImage.jpg
+# Set default: xdg-mime default sxiv.desktop image/jpg
+# Get default: xdg-mime query default application/pdf
+if [ "$1" != "no-gui" ]; then
+    xdg-mime default sxiv.desktop image/jpeg
+    xdg-mime default sxiv.desktop image/jpg
+    xdg-mime default sxiv.desktop image/png
+    xdg-mime default sxiv.desktop image/svg+xml
+    xdg-mime default sxiv.desktop image/gif
+    xdg-mime default sxiv.desktop image/bmp
+    xdg-mime query default inode/directory
+fi
+
 # Copy wallpapers collection
 echo "####################################################################################"
 echo "Copy wallpapers collection"
