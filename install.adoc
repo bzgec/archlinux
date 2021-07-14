@@ -172,7 +172,7 @@ yourself with `ls /usr/share/zoneinfo`)
 `passwd`, enter root password
 
 == Install other packages
-`pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bash-completion reflector`
+`pacman -S --noconfirm sudo grub memtest86+ networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bash-completion reflector`
 
 Note that `os-prober` is needed only for multiboot setups.
 
