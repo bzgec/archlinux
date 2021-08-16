@@ -172,7 +172,7 @@ yourself with `ls /usr/share/zoneinfo`)
 `passwd`, enter root password
 
 == Install other packages
-`pacman -S --noconfirm sudo grub networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bash-completion reflector`
+`pacman -S --noconfirm sudo grub memtest86+ networkmanager network-manager-applet wireless_tools wpa_supplicant efibootmgr ntfs-3g dosfstools os-prober mtools base-devel linux-headers git bash-completion reflector`
 
 Note that `os-prober` is needed only for multiboot setups.
 
@@ -243,7 +243,7 @@ partition is referred to with a udev device node, so the `resume` hook must go a
 HOOKS=(base udev autodetect modconf block filesystems keyboard resume)
 ----
 
-* https://wiki.archlinux.org/index.php/kernel_parameters)[Kernel parameters]
+* https://wiki.archlinux.org/index.php/kernel_parameters[Kernel parameters]
 * https://wiki.archlinux.org/index.php/Power_management/Suspend_and_hibernate#Hibernation[Power management - suspend and hibernate]
 
 == Change options for closing the laptop lid, power button press

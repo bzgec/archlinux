@@ -222,7 +222,7 @@ if [ "$1" != "no-gui" ]; then
     xdg-mime default sxiv.desktop image/svg+xml
     xdg-mime default sxiv.desktop image/gif
     xdg-mime default sxiv.desktop image/bmp
-    xdg-mime query default inode/directory
+    xdg-mime default pcmanfm.desktop inode/directory
 fi
 
 # Copy wallpapers collection
