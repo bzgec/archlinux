@@ -15,6 +15,7 @@ sudo pacman -S --needed nvidia nvidia-utils nvidia-settings
 paru -S optimus-manager-git optimus-manager-qt-git
 
 # Copy configuration files
+sudo mkdir /etc/optimus-manager
 sudo cp optimus-manager.conf /etc/optimus-manager/
 
 # Using only nvidia GPU until optimus-manager supports AMD/nvidia on AUR
