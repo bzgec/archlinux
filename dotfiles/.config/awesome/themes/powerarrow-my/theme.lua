@@ -13,6 +13,7 @@ local dpi   = require("beautiful.xresources").apply_dpi
 
 local widgets = {
     mic = require("widgets/mic"),
+    volume = require("widgets/volume"),
     wirelessStatus = require("widgets/wirelessStatus"),
 }
 
@@ -319,7 +320,7 @@ local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.ali
 local tempicon = wibox.widget.imagebox(theme.widget_temp)
 local temp = lain.widget.temp({
     timeout = 10,
-    -- Run: 
+    -- Run:
     --    - `sensors` (lm-sensors package) to see which temperature is for CPU
     --    - `find /sys/devices -type f -name *temp*`
     -- tempfile = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",  -- ProBook 4740s - i5-2450M
@@ -416,36 +417,39 @@ theme.bat = lain.widget.bat({
 })
 local widget_bat = wibox.widget { baticon, theme.bat.widget, layout = wibox.layout.align.horizontal }
 
--- ALSA volume
-local volicon = wibox.widget.imagebox(theme.widget_vol)
-theme.volume = lain.widget.alsa({
-    settings = function()
-        if volume_now.status == "off" then
-            volicon:set_image(theme.volmutedblocked)
-        elseif volume_now.level == 0 then
-            volicon:set_image(theme.volmuted)
-        elseif volume_now.level <= 5 then
-            volicon:set_image(theme.voloff)
-        elseif volume_now.level <= 25 then
-            volicon:set_image(theme.vollow)
-        elseif volume_now.level <= 75 then
-            volicon:set_image(theme.volmed)
+-- Volume
+theme.volume = widgets.volume({
+    timeout = 10,
+    maxPerc = 150,
+    textboxPressCmd = "pavucontrol",
+    settings = function(self)
+        if self.muted == "..." or self.muted == "error" then
+            self.widget.imagebox:set_image(theme.volmutedblocked)
+            -- volicon:set_image(theme.volmutedblocked)
+        elseif self.muted == "yes" then
+            self.widget.imagebox:set_image(theme.volmutedblocked)
+            -- volicon:set_image(theme.volmutedblocked)
+        elseif self.perc == 0 then
+            self.widget.imagebox:set_image(theme.volmuted)
+            -- volicon:set_image(theme.volmuted)
+        elseif self.perc <= 5 then
+            self.widget.imagebox:set_image(theme.voloff)
+            -- volicon:set_image(theme.voloff)
+        elseif self.perc <= 25 then
+            self.widget.imagebox:set_image(theme.vollow)
+            -- volicon:set_image(theme.vollow)
+        elseif self.perc <= 75 then
+            self.widget.imagebox:set_image(theme.volmed)
+            -- volicon:set_image(theme.volmed)
         else
-            volicon:set_image(theme.volhigh)
+            self.widget.imagebox:set_image(theme.volhigh)
+            -- volicon:set_image(theme.volhigh)
         end
 
-        widget:set_markup(markup.font(theme.font, " " .. volume_now.level .. "% "))
+        self.widget.textbox:set_markup(markup.font(theme.font, " " .. self.perc .. "% "))
     end
 })
-function volumeWidgetPressed(c, _, _, button)
-    if button == 1 then  -- left mouse click
-        awful.spawn.with_shell("pavucontrol")
-    end
-end
-volicon:connect_signal("button::press", volumeWidgetPressed)
-theme.volume.widget:connect_signal("button::press", volumeWidgetPressed)
-
-local widget_vol = wibox.widget { volicon, theme.volume.widget, layout = wibox.layout.align.horizontal }
+local widget_volume = wibox.widget { theme.volume.widget.imagebox, theme.volume.widget.textbox, layout = wibox.layout.align.horizontal }
 
 -- Microphone
 theme.mic = widgets.mic({
@@ -602,9 +606,7 @@ function theme.at_screen_connect(s)
             arrow(arrowColor1, arrowColor2),
             wibox.container.background(wibox.container.margin(widget_mic, dpi(3), dpi(3)), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            --wibox.container.background(wibox.container.margin(widget_vol, dpi(3), dpi(3), dpi(4)), arrowColor1),
-            wibox.container.background(wibox.container.margin(volicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
-            wibox.container.background(wibox.container.margin(theme.volume.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_volume, dpi(3), dpi(3)), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8), textMarginTop), arrowColor2),
             arrow(arrowColor2, "alpha"),
