@@ -55,11 +55,14 @@ export MANPAGER="nvim -c 'set ft=man' -"
 # Change path
 ################################################################################
 # Custom gcc path
-export PATH=$PATH:/home/bzgec/gcc-arm-none-eabi/bin
+export PATH="$PATH":~/gcc-arm-none-eabi/bin
+
+# Python pip scripts
+export PATH="$PATH":~/.local/bin
 ################################################################################
 
 RM_SSH_KEY () {
-  ssh-keygen -f "/home/bzgec/.ssh/known_hosts" -R "192.168.64.2"
+  ssh-keygen -f "~/.ssh/known_hosts" -R "192.168.64.2"
 }
 
 SSH_PI () {
