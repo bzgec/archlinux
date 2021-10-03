@@ -132,7 +132,8 @@ fi
 echo "####################################################################################"
 echo "Terminal suff"
 echo "####################################################################################"
-AUR_helper_install neovim-nightly-bin git-delta-bin starship hstr lazygit
+AUR_helper_install neovim-nightly-bin starship hstr lazygit
+pacman_install git-delta
 
 # Set git editor to be nvim
 git config --global core.editor nvim
