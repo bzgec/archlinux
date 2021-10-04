@@ -180,7 +180,8 @@ echo "Other GUI apps"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     pacman_install redshift python-gobject qbittorrent element-desktop discord \
-                   qalculate-gtk libreoffice-fresh gimp okular calibre gparted
+                   qalculate-gtk libreoffice-fresh gimp okular calibre gparted \
+                   screenkey
 fi
 
 # Compress and archive apps
