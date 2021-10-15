@@ -51,6 +51,9 @@ eval "$(starship init bash)"
 # Set nvim as a MANPAGER
 export MANPAGER="nvim -c 'set ft=man' -"
 
+# Set Alacritty as TERM
+export TERM=alacritty
+
 ################################################################################
 # Change path
 ################################################################################
