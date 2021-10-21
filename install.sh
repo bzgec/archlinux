@@ -179,7 +179,7 @@ echo "##########################################################################
 echo "Other GUI apps"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    pacman_install redshift python-gobject qbittorrent element-desktop discord \
+    pacman_install redshift python-gobject qbittorrent discord \
                    qalculate-gtk libreoffice-fresh gimp okular calibre gparted \
                    screenkey
 fi
