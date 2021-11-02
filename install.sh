@@ -163,7 +163,6 @@ echo "GUI code editor"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     AUR_helper_install vscodium-bin
-    pacman_install notepadqq
 fi
 
 # Media programs
