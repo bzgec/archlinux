@@ -193,6 +193,15 @@ echo "##########################################################################
 pacman_install p7zip xarchiver
 
 echo "####################################################################################"
+echo "Battery saving stuff"
+echo "####################################################################################"
+if [ "$1" != "no-gui" ]; then
+    AUR_helper_install auto-cpufreq
+    sudo systemctl enable auto-cpufreq.service
+    sudo systemctl start auto-cpufreq.service
+fi
+
+echo "####################################################################################"
 echo "Fix Windows and Linux showing different times"
 echo "####################################################################################"
 sudo timedatectl set-ntp true
