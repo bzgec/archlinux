@@ -24,8 +24,8 @@ local theme                                     = {}
 theme.dir                                       = os.getenv("HOME") .. "/.config/awesome/themes/powerarrow-my"
 theme.icon_dir                                  = theme.dir .. "/icons"
 theme.wallpaper                                 = theme.dir .. "/starwars.jpg"
-theme.font                                      = "Mononoki Nerd Font 9"
-theme.taglist_font                              = "Droid Sans Bold 7"
+theme.font                                      = "Mononoki Nerd Font 8"
+theme.taglist_font                              = "Droid Sans Bold 6"
 
 theme.fg_normal                                 = "#E6E6FF"
 theme.fg_focus                                  = "#EBE7E6"
@@ -50,7 +50,7 @@ theme.tasklist_bg_normal                        = theme.bg_normal
 theme.tasklist_bg_focus                         = theme.bg_focus
 theme.tasklist_fg_normal                        = theme.fg_normal
 theme.tasklist_fg_focus                         = theme.fg_focus
-theme.menu_height                               = dpi(16)
+theme.menu_height                               = dpi(14)
 theme.menu_width                                = dpi(140)
 theme.tooltip_bg                                = theme.bg_normal
 theme.tooltip_fg                                = theme.fg_normal
@@ -204,6 +204,15 @@ local arrowColor2 = "#A77AC4"
 
 local textMarginTop = dpi(2)
 
+local menu_imL = dpi(0)  -- Icon margin Left
+local menu_imR = dpi(0)  -- Icon margin Right
+local menu_imT = dpi(0)  -- Icon margin Top
+local menu_imB = dpi(0)  -- Icon margin Bottom
+local menu_tmL = dpi(0)  -- Icon margin Left
+local menu_tmR = dpi(2)  -- Icon margin Right
+local menu_tmT = dpi(3)  -- Icon margin Top
+local menu_tmB = dpi(0)  -- Icon margin Bottom
+
 -- Textclock
 local clock = awful.widget.watch(
     --"date +'%a %d %b %R'", 60,
@@ -302,7 +311,7 @@ local memicon = wibox.widget.imagebox(theme.widget_mem)
 theme.mem = lain.widget.mem({
     settings = function()
         -- widget:set_markup(markup.font(theme.font, string.format(" %0.1fGB, %d%% ", mem_now.used/1e3, mem_now.perc)))
-        widget:set_markup(markup.font(theme.font, string.format(" %0.1fGiB ", mem_now.used/1024)))
+        widget:set_markup(markup.font(theme.font, string.format("%0.1fGiB", mem_now.used/1024)))
     end
 })
 local widget_mem = wibox.widget { memicon, theme.mem.widget, layout = wibox.layout.align.horizontal }
@@ -311,7 +320,7 @@ local widget_mem = wibox.widget { memicon, theme.mem.widget, layout = wibox.layo
 local cpuicon = wibox.widget.imagebox(theme.widget_cpu)
 local cpu = lain.widget.cpu({
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. cpu_now.usage .. "% "))
+        widget:set_markup(markup.font(theme.font, "" .. cpu_now.usage .. "%"))
     end
 })
 local widget_cpu = wibox.widget { cpuicon, cpu.widget, layout = wibox.layout.align.horizontal }
@@ -326,7 +335,7 @@ local temp = lain.widget.temp({
     -- tempfile = "/sys/devices/platform/coretemp.0/hwmon/hwmon3/temp1_input",  -- ProBook 4740s - i5-2450M
     tempfile = "/sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon3/temp1_input",  -- Nitro AN515-44 - Ryzen 7 4800H
     settings = function()
-        widget:set_markup(markup.font(theme.font, " " .. math.ceil(coretemp_now) .. "°C "))
+        widget:set_markup(markup.font(theme.font, "" .. math.ceil(coretemp_now) .. "°C"))
     end
 })
 local widget_temp = wibox.widget { tempicon, temp.widget, layout = wibox.layout.align.horizontal }
@@ -346,7 +355,7 @@ theme.weather = lain.widget.weather({
     showCurrentWeatherNotification = "on",
     settings = function()
         units = math.floor(weather_now["main"]["temp"])
-        widget:set_markup(markup.font(theme.font, " " .. units .. "°C "))
+        widget:set_markup(markup.font(theme.font, "" .. units .. "°C"))
     end
 })
 local widget_weather = wibox.widget { weathericon, theme.weather.widget, layout = wibox.layout.align.horizontal }
@@ -387,7 +396,8 @@ theme.bat = lain.widget.bat({
         if bat_now.ac_status == 1 then
             index = index .. "_charging"
             -- batStatusString = string.format("%s%%", perc)
-            batStatusString = string.format("%s%%, %sW, %s%%", perc, bat_now.watt, bat_now.capacity)
+            batStatusString = string.format("%s%%, %s%%", perc, bat_now.capacity)
+            -- batStatusString = string.format("%s%%, %sW, %s%%", perc, bat_now.watt, bat_now.capacity)
         else
             -- batStatusString = string.format("%s%%, %s", perc, bat_now.time)
             batStatusString = string.format("%s%%, %sW, %s%%, %s", perc, bat_now.watt, bat_now.capacity, bat_now.time)
@@ -446,10 +456,10 @@ theme.volume = widgets.volume({
             -- volicon:set_image(theme.volhigh)
         end
 
-        self.widget.textbox:set_markup(markup.font(theme.font, " " .. self.perc .. "% "))
+        self.widget.textbox:set_markup(markup.font(theme.font, " " .. self.perc .. "%"))
     end
 })
-local widget_volume = wibox.widget { theme.volume.widget.imagebox, theme.volume.widget.textbox, layout = wibox.layout.align.horizontal }
+local widget_volume = wibox.widget { theme.volume.widget.imagebox, nil, layout = wibox.layout.align.horizontal }
 
 -- Microphone
 theme.mic = widgets.mic({
@@ -471,13 +481,13 @@ local net = lain.widget.net({
         function parseNetworkSpeed(kbyps)
             if kbyps >= 10^6 then
                 -- GB
-                return string.format("%.2f", kbyps/10^6) .. "GB"
+                return string.format("%.0f", kbyps/10^6) .. "GB"
             elseif kbyps >= 10^3 then
                 -- MB
-                return string.format("%.2f", kbyps/10^3) .. "MB"
+                return string.format("%.0f", kbyps/10^3) .. "MB"
             else
                 -- kB
-                return string.format("%.2f", kbyps) .. "kB"
+                return string.format("%.0f", kbyps) .. "kB"
             end
         end
 
@@ -552,7 +562,7 @@ function theme.at_screen_connect(s)
                                          awful.util.tasklist_buttons)
 
     -- Create the wibox
-    s.mywibox = awful.wibar({ position = "top", screen = s, height = dpi(16), bg = theme.bg_normal, fg = theme.fg_normal })
+    s.mywibox = awful.wibar({ position = "top", screen = s, height = theme.menu_height, bg = theme.bg_normal, fg = theme.fg_normal })
 
     -- Add widgets to the wibox
     s.mywibox:setup {
@@ -579,36 +589,37 @@ function theme.at_screen_connect(s)
             -- wibox.container.background(wibox.container.margin(widget_mpd, dpi(3), dpi(3)), arrowColor1),
             -- arrow(arrowColor2, arrowColor1),
             --wibox.container.background(wibox.container.margin(widget_net, dpi(3), dpi(3)), arrowColor1),
-            wibox.container.background(wibox.container.margin(neticon, dpi(3), dpi(0), dpi(0)), arrowColor1),
-            wibox.container.background(wibox.container.margin(net.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
+            wibox.container.background(wibox.container.margin(neticon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor1),
+            wibox.container.background(wibox.container.margin(net.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             --wibox.container.background(wibox.container.margin(widget_mem, dpi(3), dpi(3)), arrowColor2),
-            wibox.container.background(wibox.container.margin(memicon, dpi(3), dpi(0), dpi(0)), arrowColor2),
-            wibox.container.background(wibox.container.margin(theme.mem.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
+            wibox.container.background(wibox.container.margin(memicon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor2),
+            wibox.container.background(wibox.container.margin(theme.mem.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor2),
             arrow(arrowColor2, arrowColor1),
             --wibox.container.background(wibox.container.margin(widget_cpu, dpi(3), dpi(3)), arrowColor1),
-            wibox.container.background(wibox.container.margin(cpuicon, dpi(3), dpi(0), dpi(0)), arrowColor1),
-            wibox.container.background(wibox.container.margin(cpu.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
+            wibox.container.background(wibox.container.margin(cpuicon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor1),
+            wibox.container.background(wibox.container.margin(cpu.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             --wibox.container.background(wibox.container.margin(widget_temp, dpi(3), dpi(3)), arrowColor2),
-            wibox.container.background(wibox.container.margin(tempicon, dpi(3), dpi(0), dpi(0)), arrowColor2),
-            wibox.container.background(wibox.container.margin(temp.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
+            wibox.container.background(wibox.container.margin(tempicon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor2),
+            wibox.container.background(wibox.container.margin(temp.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor2),
             arrow(arrowColor2, arrowColor1),
             --wibox.container.background(wibox.container.margin(widget_weather, dpi(3), dpi(3)), arrowColor1),
-            wibox.container.background(wibox.container.margin(weathericon, dpi(3), dpi(0), dpi(0)), arrowColor1),
-            wibox.container.background(wibox.container.margin(theme.weather.widget, dpi(0), dpi(3), textMarginTop), arrowColor1),
+            wibox.container.background(wibox.container.margin(weathericon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor1),
+            wibox.container.background(wibox.container.margin(theme.weather.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor1),
             arrow(arrowColor1, arrowColor2),
             --wibox.container.background(wibox.container.margin(widget_bat, dpi(3), dpi(3)), arrowColor2),
-            wibox.container.background(wibox.container.margin(baticon, dpi(3), dpi(3), dpi(0)), arrowColor2),
-            wibox.container.background(wibox.container.margin(theme.bat.widget, dpi(0), dpi(3), textMarginTop), arrowColor2),
+            wibox.container.background(wibox.container.margin(baticon, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor2),
+            wibox.container.background(wibox.container.margin(theme.bat.widget, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_wirelessStatus, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_wirelessStatus, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_mic, dpi(3), dpi(3)), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_mic, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor2),
             arrow(arrowColor2, arrowColor1),
-            wibox.container.background(wibox.container.margin(widget_volume, dpi(3), dpi(3)), arrowColor1),
+            wibox.container.background(wibox.container.margin(widget_volume, menu_imL, menu_imR, menu_imT, menu_imB), arrowColor1),
+            wibox.container.background(wibox.container.margin(theme.volume.widget.textbox, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor1),
             arrow(arrowColor1, arrowColor2),
-            wibox.container.background(wibox.container.margin(widget_clock, dpi(4), dpi(8), textMarginTop), arrowColor2),
+            wibox.container.background(wibox.container.margin(widget_clock, menu_tmL, menu_tmR, menu_tmT, menu_tmB), arrowColor2),
             arrow(arrowColor2, "alpha"),
             --]]
             s.mylayoutbox,
