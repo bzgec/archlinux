@@ -37,6 +37,11 @@ home_symbol = "~"
 [git_branch]
 
 # A format string representing the symbol of git branch.
-#symbol = " "
-symbol = ""
+symbol = " "
+# symbol = ""
 
+###################################################################################################
+# Hostname
+###################################################################################################
+[hostname]
+ssh_only = true

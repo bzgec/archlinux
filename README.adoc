@@ -60,7 +60,7 @@ overwrite the file `/etc/pacman.d/mirrorlist`
 
 * DistroTube https://www.youtube.com/watch?v=FX26s8INUYo[video] explaining what you typically need
 
-* Copy configuration files to `~/.config/` folder: `bash copyConfig.sh`
+* Copy configuration files to `~/.config/` folder: `bash scripts/copyConfig.sh`
 
 === Map `caps lock` to `backspace`
 * `setxkbmap -option caps:backspace`

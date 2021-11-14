@@ -29,6 +29,57 @@ shopt -s checkwinsize
 ################################################################################
 
 ################################################################################
+# Starship
+################################################################################
+##################################################
+# Terminal title
+##################################################
+# Reset prompt command
+PROMPT_COMMAND=''
+
+# Set termTitle to empty string - if set it is used as terminal title
+termTitle=''
+
+# Set tab title funtion
+# https://makandracards.com/makandra/21369-bash-setting-the-title-of-your-terminal-tab
+# https://unix.stackexchange.com/questions/216953/show-only-current-and-parent-directory-in-bash-prompt
+function tabTitleSet {
+  # Check if termTitle var is set
+  if [[ ! "$termTitle" ]]; then
+    # termTitle var not set, check if we are trying to set it
+    if [ -z "$1" ]; then
+      # Set tab title as current directory
+      # title=${PWD##*/}  # Current directory
+      # title=${PWD}  # Current directory - full path
+      title=$(basename $(dirname "$PWD"))/$(basename "$PWD")  # Current dir and parent dirr
+    else
+      # set termTitle var
+      termTitle=$1  # First param
+      title=$1  # first param
+    fi
+  else
+    title=$termTitle
+  fi
+
+  echo -ne "\033]0;$title\007"
+}
+
+function tabTitleReset {
+  termTitle=''
+}
+
+# Set cb function when command is executed in terminal
+# https://starship.rs/advanced-config/#change-window-title
+starship_precmd_user_func="tabTitleSet"
+
+##################################################
+# Enable starship prompt
+##################################################
+eval "$(starship init bash)"
+################################################################################
+
+
+################################################################################
 # HSTR configuration - add this to ~/.bashrc
 ################################################################################
 alias hh=hstr                    # hh to be alias for hstr
@@ -44,9 +95,6 @@ if [[ $- =~ .*i.* ]]; then bind '"\C-r": "\C-a hstr -- \C-j"'; fi
 # if this is interactive shell, then bind 'kill last command' to Ctrl-x k
 if [[ $- =~ .*i.* ]]; then bind '"\C-xk": "\C-a hstr -k \C-j"'; fi
 ################################################################################
-
-# Enable starship prompt
-eval "$(starship init bash)"
 
 # Set nvim as a MANPAGER
 export MANPAGER="nvim -c 'set ft=man' -"
