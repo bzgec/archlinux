@@ -15,8 +15,8 @@ for video in "${videos[@]}"
 do
     echo ${SEPARATOR}
     echo "Downloading ${video}"
-    youtube-dl -u ${userName} -p ${userPass} ${video}
-    if [ $? -eq 0 ]; then
+
+    if youtube-dl -u ${userName} -p ${userPass} "${video}" ; then
         echo ${SEPARATOR}
         echo "Video downloaded successfully: ${video}"
     else

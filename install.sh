@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -euo pipefail  # https://gist.github.com/maxisam/e39efe89455d26b75999418bf60cf56c
 

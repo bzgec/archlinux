@@ -453,23 +453,22 @@ globalkeys = my_table.join(
     -- awful.key({ altkey, }, "w", function () if beautiful.weather then beautiful.weather.show(7) end end,
     --           {description = "show weather", group = "widgets"}),
 
-    -- ALSA volume control
+    -- PulseAudio volume control
     --   - increase - PgUp
     --   - decrease - PgDn
     --   - mute     - End
     --   - unmute   - Home
-    --awful.key({ altkey }, "Up",
     awful.key({ modkey }, "Prior",
               function ()
                   beautiful.volume:inc()
               end,
-              {description = "Volume control - increase (amixer)", group = "Hotkeys"}
+              {description = "Volume control - increase (pactl)", group = "Hotkeys"}
     ),
     awful.key({ modkey }, "Next",
               function ()
                   beautiful.volume:dec()
               end,
-              {description = "Volume control - decrease (amixer)", group = "Hotkeys"}
+              {description = "Volume control - decrease (pactl)", group = "Hotkeys"}
     ),
     --awful.key({ altkey }, "m",
     --    function ()
@@ -481,13 +480,13 @@ globalkeys = my_table.join(
               function ()
                   beautiful.volume:unmute()
               end,
-              {description = "Volume control - unmute (amixer)", group = "Hotkeys"}
+              {description = "Volume control - unmute (pactl)", group = "Hotkeys"}
     ),
     awful.key({ modkey }, "End",
               function ()
                   beautiful.volume:mute()
               end,
-              {description = "Volume control - mute (amixer)", group = "Hotkeys"}
+              {description = "Volume control - mute (pactl)", group = "Hotkeys"}
     ),
     awful.key({ }, "XF86AudioRaiseVolume",
               function ()
