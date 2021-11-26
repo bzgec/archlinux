@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -euo pipefail  # https://gist.github.com/maxisam/e39efe89455d26b75999418bf60cf56c
+
 pacman_install() { sudo pacman -S --needed --noconfirm "$@"; }
 AUR_helper_install() { paru -S --needed --noconfirm "$@"; }
 
@@ -147,6 +149,15 @@ echo "Browser"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     AUR_helper_install brave-bin
+fi
+
+# Monitor setup
+# autorandr - https://github.com/phillipberndt/autorandr
+echo "####################################################################################"
+echo "Monitor setup"
+echo "####################################################################################"
+if [ "$1" != "no-gui" ]; then
+    pacman_install autorandr
 fi
 
 # GUI file manager

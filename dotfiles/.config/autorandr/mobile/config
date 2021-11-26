@@ -1,0 +1,9 @@
+output HDMI-1-0
+off
+output eDP-1
+crtc 0
+gamma 0.769:0.769:0.769
+mode 1920x1080
+pos 0x0
+primary
+rate 144.15
