@@ -435,25 +435,18 @@ theme.volume = widgets.volume({
     settings = function(self)
         if self.muted == "..." or self.muted == "error" then
             self.widget.imagebox:set_image(theme.volmutedblocked)
-            -- volicon:set_image(theme.volmutedblocked)
         elseif self.muted == "yes" then
             self.widget.imagebox:set_image(theme.volmutedblocked)
-            -- volicon:set_image(theme.volmutedblocked)
         elseif self.perc == 0 then
             self.widget.imagebox:set_image(theme.volmuted)
-            -- volicon:set_image(theme.volmuted)
         elseif self.perc <= 5 then
             self.widget.imagebox:set_image(theme.voloff)
-            -- volicon:set_image(theme.voloff)
         elseif self.perc <= 25 then
             self.widget.imagebox:set_image(theme.vollow)
-            -- volicon:set_image(theme.vollow)
         elseif self.perc <= 75 then
             self.widget.imagebox:set_image(theme.volmed)
-            -- volicon:set_image(theme.volmed)
         else
             self.widget.imagebox:set_image(theme.volhigh)
-            -- volicon:set_image(theme.volhigh)
         end
 
         self.widget.textbox:set_markup(markup.font(theme.font, " " .. self.perc .. "%"))

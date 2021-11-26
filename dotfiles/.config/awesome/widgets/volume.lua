@@ -4,13 +4,13 @@
         * (c) 2021, bzgec
 
 
-# Microphone state widget/watcher
+# Volume widget/watcher
 
-This widget can be used to display the current microphone status.
+This widget can be used to display the current volume percentage and mute status.
 
 ## Requirements
 
-- `amixer` - this command is used to get and toggle microphone state
+- `pactl` - this command is used to set and get volume/mute status
 
 ## Usage
 
@@ -23,36 +23,79 @@ This widget can be used to display the current microphone status.
 local widgets = {
     volume = require("widgets/volume"),
 }
+
+-- Volume
 theme.volume = widgets.volume({
     timeout = 10,
+    maxPerc = 150,
+    textboxPressCmd = "pavucontrol",
     settings = function(self)
-        if self.state == "muted" then
-            self.widget:set_image(theme.widget_micMuted)
+        if self.muted == "..." or self.muted == "error" then
+            self.widget.imagebox:set_image(theme.volmutedblocked)
+        elseif self.muted == "yes" then
+            self.widget.imagebox:set_image(theme.volmutedblocked)
+        elseif self.perc == 0 then
+            self.widget.imagebox:set_image(theme.volmuted)
+        elseif self.perc <= 5 then
+            self.widget.imagebox:set_image(theme.voloff)
+        elseif self.perc <= 25 then
+            self.widget.imagebox:set_image(theme.vollow)
+        elseif self.perc <= 75 then
+            self.widget.imagebox:set_image(theme.volmed)
         else
-            self.widget:set_image(theme.widget_micUnmuted)
+            self.widget.imagebox:set_image(theme.volhigh)
         end
+
+        self.widget.textbox:set_markup(markup.font(theme.font, " " .. self.perc .. "%"))
     end
 })
-local widget_mic = wibox.widget { theme.volume.widget, layout = wibox.layout.align.horizontal }
+local widget_volume = wibox.widget { theme.volume.widget.imagebox, nil, layout = wibox.layout.align.horizontal }
 ```
 
-- Create a shortcut to toggle microphone state (add to `rc.lua`):
+- Create a shortcut to mute/unmute volume (add to `rc.lua`):
 
 ```lua
--- Toggle microphone state
-awful.key({ modkey, "Shift" }, "m",
+-- PulseAudio volume control
+--   - increase - PgUp
+--   - decrease - PgDn
+--   - mute     - End
+--   - unmute   - Home
+awful.key({ modkey }, "Prior",
           function ()
-              beautiful.volume:toggle()
+              beautiful.volume:inc()
           end,
-          {description = "Toggle microphone (amixer)", group = "Hotkeys"}
+          {description = "Volume control - increase (pactl)", group = "Hotkeys"}
 ),
-```
-
-- You can also add a command to mute the microphone state on boot. Add this to your `rc.lua`:
-
-```lua
--- Mute microphone on boot
-beautiful.volume:mute()
+awful.key({ modkey }, "Next",
+          function ()
+              beautiful.volume:dec()
+          end,
+          {description = "Volume control - decrease (pactl)", group = "Hotkeys"}
+),
+awful.key({ modkey }, "Home",
+          function ()
+              beautiful.volume:unmute()
+          end,
+          {description = "Volume control - unmute (pactl)", group = "Hotkeys"}
+),
+awful.key({ modkey }, "End",
+          function ()
+              beautiful.volume:mute()
+          end,
+          {description = "Volume control - mute (pactl)", group = "Hotkeys"}
+),
+awful.key({ }, "XF86AudioRaiseVolume",
+          function ()
+              beautiful.volume:inc()
+          end,
+          {description = "+1%", group = "Hotkeys"}
+),
+awful.key({ }, "XF86AudioLowerVolume",
+          function ()
+              beautiful.volume:dec()
+          end,
+          {description = "-1%", group = "Hotkeys"}
+),
 ```
 
 --]]
@@ -81,7 +124,7 @@ local function factory(args)
     }
 
     function volume:mute()
-        awful.spawn.easy_async({"pacmd", "set-sink-mute", "0", "1"},
+        awful.spawn.easy_async({"pactl", "set-sink-mute", "@DEFAULT_SINK@", "1"},
             function()
                 self:update()
             end
@@ -89,7 +132,7 @@ local function factory(args)
     end
 
     function volume:unmute()
-        awful.spawn.easy_async({"pacmd", "set-sink-mute", "0", "0"},
+        awful.spawn.easy_async({"pactl", "set-sink-mute", "@DEFAULT_SINK@", "0"},
             function()
                 self:update()
             end
@@ -104,7 +147,7 @@ local function factory(args)
             newMutedState = "1"
         end
 
-        awful.spawn.easy_async({"pacmd", "set-sink-mute", "0", newMutedState},
+        awful.spawn.easy_async({"pactl", "set-sink-mute", "@DEFAULT_SINK@", newMutedState},
             function()
                 self:update()
             end
@@ -113,7 +156,7 @@ local function factory(args)
 
     function volume:inc()
         if self.perc < self.maxPerc then
-            awful.spawn.easy_async({"pactl", "set-sink-volume", "0", "+1%"},
+            awful.spawn.easy_async({"pactl", "set-sink-volume", "@DEFAULT_SINK@", "+1%"},
                 function()
                     self:update()
                 end
@@ -122,7 +165,7 @@ local function factory(args)
     end
 
     function volume:dec()
-        awful.spawn.easy_async({"pactl", "set-sink-volume", "0", "-1%"},
+        awful.spawn.easy_async({"pactl", "set-sink-volume", "@DEFAULT_SINK@", "-1%"},
             function()
                 self:update()
             end
@@ -144,7 +187,7 @@ local function factory(args)
     end
 
     volume, volume.timer = awful.widget.watch(
-        {"bash", "-c", "pacmd list-sinks | awk '{if ($0 ~ /front-left:/) perc=$5; if ($0 ~ /muted/) muted=$2}{if (perc && muted) print perc, muted;muted=\"\"}'"},
+        {"bash", "-c", "pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' | head -1 && pactl get-sink-mute @DEFAULT_SINK@ | awk '{print $2}'"},
         volume.timeout,
         function(self, stdout, stderr, exitreason, exitcode)
             if exitcode ~= 0 then
