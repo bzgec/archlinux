@@ -13,3 +13,6 @@
 [submodule "dotfiles/.config/alacritty/alacritty-theme"]
 	path = dotfiles/.config/alacritty/alacritty-theme
 	url = https://github.com/eendroroy/alacritty-theme.git
+[submodule "dotfiles/.config/keymap"]
+	path = dotfiles/.config/keymap
+	url = git@github.com:bzgec/keymap.git

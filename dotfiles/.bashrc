@@ -138,6 +138,8 @@ alias UPDATE_MIRRORLIST="sudo reflector --latest 20 --protocol http --protocol h
 
 alias killAllProc="~/.config/killAllProc.sh"
 
+alias keymap="~/.config/keymap/keymap.sh"
+
 # First parameter is password length
 GEN_PASS () {
   openssl rand -base64 $1

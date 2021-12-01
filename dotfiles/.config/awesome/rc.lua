@@ -678,6 +678,14 @@ globalkeys = my_table.join(
               {description = "Switch to dark theme", group = "Hotkeys"}
     ),
 
+    -- Select light or dark theme with `themeSwitcher.py`
+    awful.key({ altkey, "Shift"   }, "w",
+              function ()
+                  awful.spawn.with_shell("~/.config/keymap/keymap.sh")
+              end,
+              {description = "Toggle custom keymap", group = "Hotkeys"}
+    ),
+
     awful.key({ modkey }, "g",
               function ()
                   awful.prompt.run {
