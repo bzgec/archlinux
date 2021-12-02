@@ -680,10 +680,14 @@ globalkeys = my_table.join(
 
     -- Select light or dark theme with `themeSwitcher.py`
     awful.key({ altkey, "Shift"   }, "w",
-              function ()
-                  awful.spawn.with_shell("~/.config/keymap/keymap.sh")
-              end,
-              {description = "Toggle custom keymap", group = "Hotkeys"}
+                function ()
+                    awful.spawn.easy_async_with_shell("~/.config/keymap/keymap.sh",
+                        function(stdout, stderr, exitreason, exitcode)
+                            stdout = stdout:gsub("\n[^\n]*$", "")  -- Remove last newline character
+                            naughty.notify({preset=naughty.config.presets.normal, title="Changing keyboard layout", text=stdout})
+                        end)
+                end,
+                {description = "Toggle custom keymap", group = "Hotkeys"}
     ),
 
     awful.key({ modkey }, "g",
