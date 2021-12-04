@@ -528,6 +528,19 @@ globalkeys = my_table.join(
               function () awful.util.spawn("xbacklight -set 100") end,
               {description = "Bightness control - maximal (xbacklight)", group = "Hotkeys"}
     ),
+    awful.key({ modkey, }, "d",
+                function ()
+                    gears.timer {
+                        timeout   = 0.1,
+                        single_shot = true,
+                        autostart = true,
+                        callback  = function()
+                            awful.util.spawn("xset dpms force off")
+                        end
+                    }
+                end,
+              {description = "Bightness control - turn off backlight (untill any key is pressed)", group = "Hotkeys"}
+    ),
     awful.key({ }, "XF86MonBrightnessUp", function () awful.util.spawn("xbacklight -inc 5") end,
               {description = "+5%", group = "Hotkeys"}
     ),
