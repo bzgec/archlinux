@@ -1,6 +1,6 @@
 configuration {
  modi: "window,drun,ssh,combi";
- theme: "android_notification";
  combi-modi: "window,drun,ssh";
  dpi: 0;
 }
+@theme "/usr/share/rofi/themes/android_notification.rasi"
