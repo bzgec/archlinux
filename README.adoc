@@ -224,6 +224,14 @@ link:https://forum.endeavouros.com/t/warning-os-prober-will-not-be-executed-to-d
 . `umount -R /mnt`
 . `reboot`
 
+=== USB Stick not detected
+* If your USB is not detected you probably updated your system,
+now you need to restart your PC and it should work
+____
+general if your kernel updates, all old modules are removed which in practice means no new hardware is being detected
+____
+* link:https://bbs.archlinux.org/viewtopic.php?id=234335[Reference]
+
 == Usage
 
 === pacman
@@ -298,9 +306,9 @@ when GPU should be sleeping but is not because of temperature readings...)
 
 * [ ] Widget for volume control, and play buttons
 
-* [ ] Panel/wibox visible if window is in full screen mode (VLC)
+* [x] Panel/wibox visible if window is in full screen mode (VLC)
 
-* [ ] First screen OFF after `x` min and then suspend after `y` min
+* [x] First screen OFF after `x` min and then suspend after `y` min
 
 * [x] closing the lid, pressing power button
 
