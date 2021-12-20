@@ -27,17 +27,20 @@ pacman_install base-devel
 
 # Random stuff
 # udiskie - automount USB disks
+# ncdu - is a disk utility (NCurses Disk Usage)
 echo "####################################################################################"
 echo "Random stuff"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
     pacman_install rofi openssh xclip nitrogen acpilight picom sxiv  \
                    rsync htop bluez bluez-utils snapper alsa-utils \
-                   iw man nodejs npm python-pip udiskie shellcheck
+                   iw man nodejs npm python-pip udiskie shellcheck \
+                   ncdu
 else
     pacman_install openssh xclip \
                    rsync htop snapper \
-                   iw man nodejs npm python-pip udiskie shellcheck
+                   iw man nodejs npm python-pip udiskie shellcheck \
+                   ncdu
 fi
 
 # Gitlab fix for `client_global_hostkeys_private_confirm: server gave bad signature for RSA key 0`
