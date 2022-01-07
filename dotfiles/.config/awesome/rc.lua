@@ -937,19 +937,23 @@ awful.rules.rules = {
     { rule_any = { type = { "dialog", "normal" } },
       properties = { titlebars_enabled = false } },
 
-    -- Set Firefox to always map on the first tag on screen 1.
-    { rule = { class = "Firefox" },
-      properties = { screen = 1, tag = awful.util.tagnames[1] } },
-
-    { rule = { class = "Gimp", role = "gimp-image-window" },
-          properties = { maximized = true } },
-
     -- https://awesomewm.org/doc/api/libraries/awful.rules.html
     -- To get `instance` of a window use: `xprop | grep "WM_CLASS(STRING)"`
     -- First string is `instance` and the second is `class`
     -- https://www.reddit.com/r/awesomewm/comments/2kxmph/where_do_you_get_the_instance_name_of_a_client/clpwrdz?utm_source=share&utm_medium=web2x&context=3
-    { rule = { instance = "snappergui" },
-      properties = { floating = true }
+
+    -- Set Firefox to always map on the first tag on screen 1.
+    { rule = { class = "Firefox" },
+      properties = { screen = 1, tag = awful.util.tagnames[1] }
+    },
+    { rule = { instance = "brave-browser" },
+      properties = { tag = "1", switchtotag = true }
+    },
+    { rule = { instance = "vscodium" },
+      properties = { tag = "2", switchtotag = true }
+    },
+    { rule = { instance = "kicad" },
+      properties = { tag = "2", switchtotag = true }
     },
     { rule = { instance = "Steam" },
       properties = { floating = false, tag = "5", switchtotag = true }
@@ -957,11 +961,11 @@ awful.rules.rules = {
     { rule = { instance = "discord" },
       properties = { floating = false, tag = "5", switchtotag = true }
     },
-    { rule = { instance = "vscodium" },
-      properties = { tag = "2", switchtotag = true }
+    { rule = { class = "Gimp", role = "gimp-image-window" },
+      properties = { maximized = true }
     },
-    { rule = { instance = "brave-browser" },
-      properties = { tag = "1", switchtotag = true }
+    { rule = { instance = "snappergui" },
+      properties = { floating = true }
     },
     { rule = { instance = "pavucontrol" },
       properties = { floating = true, placement = awful.placement.centered }
