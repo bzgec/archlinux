@@ -168,7 +168,7 @@ echo "##########################################################################
 echo "GUI file manager"
 echo "####################################################################################"
 if [ "$1" != "no-gui" ]; then
-    pacman_install pcmanfm
+    pacman_install pcmanfm-qt
 fi
 
 # GUI code editor

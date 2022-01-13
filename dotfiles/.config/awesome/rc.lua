@@ -641,8 +641,8 @@ globalkeys = my_table.join(
 
     -- pcmanfm
     awful.key({ modkey }, "e",
-              function () awful.util.spawn("pcmanfm") end,
-              {description = "run file manager (pcmanfm)", group = "Applications"}
+              function () awful.util.spawn("pcmanfm-qt") end,
+              {description = "run file manager (pcmanfm-qt)", group = "Applications"}
     ),
 
     -- GUI code editor
