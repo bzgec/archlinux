@@ -171,6 +171,21 @@ if [ "$1" != "no-gui" ]; then
     pacman_install pcmanfm-qt
 fi
 
+# Android phone connection
+# mtpfs - enable MTP support
+# jmtpfs - `mtpfs` sometimes is not enough to provide MTP
+# gvfs-mtp - integrating the MTP protocol with your File Manager
+#            (file managers that use GVFS (GNOME Files) and not KIO (KDE's Dolphin))
+# Reference: https://linuxhint.com/connect-android-arch-linux/
+echo "####################################################################################"
+echo "GUI file manager"
+echo "####################################################################################"
+pacman_install mtpfs
+AUR_helper_install jmtpfs
+if [ "$1" != "no-gui" ]; then
+    pacman_install gvfs-mtp
+fi
+
 # GUI code editor
 echo "####################################################################################"
 echo "GUI code editor"
