@@ -1140,6 +1140,14 @@ awesome.connect_signal(
         -- Mute microphone on boot
         beautiful.mic:mute()
 
+        -- Set Colemak keyboard layout
+        awful.spawn.easy_async_with_shell("~/.config/keymap/keymap.sh si_colemak",
+            function(stdout, stderr, exitreason, exitcode)
+                stdout = stdout:gsub("\n[^\n]*$", "")  -- Remove last newline character
+                naughty.notify({preset=naughty.config.presets.normal, title="Changing keyboard layout", text=stdout})
+            end)
+
+
         -- checkIfAppIsRunning("picom", "picom", true)
         checkIfAppIsRunning("redshift-gtk", "redshift-gtk -P", false)
         checkIfAppIsRunning("optimus-manager-qt", "optimus-manager-qt", false)
